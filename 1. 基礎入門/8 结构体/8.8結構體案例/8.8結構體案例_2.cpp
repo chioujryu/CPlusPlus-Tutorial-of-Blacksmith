@@ -1,73 +1,79 @@
+//设计一个英雄的结构体，包括成员姓名，年龄，性别;创建结构体数组，数组中存放5名英雄。
+//通过冒泡排序的算法，将数组中的英雄按照年龄进行升序排序，最终打印排序后的结果。
+//五名英雄信息如下：
+//{"刘备",23,"男"},
+//{"关羽",22,"男"},
+//{"张飞",20,"男"},
+//{"赵云",21,"男"},
+//{"貂蝉",19,"女"},
+
 #include<iostream>
 using namespace std;
-#include <ctime> //為了產生亂數而用
 
-//学生结构体定义
-struct student
+//1. 設計英雄結構體
+struct hero
 {
-	//成员列表
-	string name;  //姓名
-	int age;      //年龄
-	int score;    //分数
+	string name;	 //姓名
+	int age;	//年齡
+	string sex;		//性別
 };
 
-//老師結構體定義
-struct teacher
-{
-	string name;
-	struct student sArray[5];
-};
 
-//給老師和學生賦值的函數
-void allocateSpace(struct teacher tArray[], int len)
+//打印所有英雄數據
+void printHeros(struct hero Heros[], int len)
 {
-	string tName = "教师";
-	string sName = "学生";
-	string nameSeed = "ABCDE";	
 	for (int i = 0 ; i < len ; i++)
 	{
-		tArray[i].name = tName + nameSeed[i];
-
-		//通過循環給每名老師所帶的學生賦值
-		for (int j = 0 ; j < 5 ; j++)
-		{
-			tArray[i].sArray[j].name = 	sName + nameSeed[j];
-
-			//隨機賦予學生分數
-			int randomScore = rand() % 101; //產生0~100的隨機數字
-			tArray[i].sArray[j].score = randomScore;
-		}
+		cout << "姓名： " << Heros[i].name 
+				<< " 性别： " << Heros[i].sex 
+				<< " 年龄： " << Heros[i].age << endl;
 	}
-}
+};
 
-
-//打印所有信息的函數
-void printTeachers(teacher tArray[], int len)
+//冒泡排序，實現年齡升序排列
+void bubbleSort(struct hero Heros[], int len)
 {
-	for (int i = 0; i < len; i++)
+	for (int i = 0 ; i < len-1 ; i++)
 	{
-		cout << tArray[i].name << endl;
-		for (int j = 0; j < 5; j++)
+		for (int j = 0 ; j < len-i-1 ; j++)
 		{
-			cout << "\t姓名：" << tArray[i].sArray[j].name 	//  \t可以讓整串字串往右移
-					<< " 分数：" << tArray[i].sArray[j].score << endl;
+			//如果j下標的元素年齡大於j+1下標的元素的年齡，交換兩個元素
+			if(Heros[j].age>Heros[j+1].age)
+			{
+				int temp = Heros[j+1].age;
+				Heros[j+1].age = Heros[j].age;
+				Heros[j].age = temp;
+			}
 		}
 	}
-}
+};
+
+
 
 int main() {
+	//2. 創建數組存放五名英雄
+	struct hero heroArray[5] = 
+	{
+		{"刘备",23,"男"},
+		{"关羽",22,"男"},
+		{"张飞",20,"男"},
+		{"赵云",21,"男"},
+		{"貂蝉",19,"女"},
+	};
 
-	//隨機數種子
-	srand(time(NULL));  //這可以讓每次產生的亂數不同
+	//3. 取得heroArray的長度
+	int len = sizeof(heroArray) / sizeof(heroArray[0]);
 
-	//1. 創建3名老師的數組
-	struct teacher tArray[3];
+	//4. 打印所有英雄信息
+	cout<<"打印所有英雄信息"<<endl;
+	printHeros(heroArray,len);
 
-	//2. 通過函數給3名老師的信息賦值，並給老師帶的學生信息賦值
-	int len = sizeof(tArray) / sizeof(tArray)[0];
-	allocateSpace(tArray, len);
+	//5. 對數組進行排序，按照年齡進行升序排序
+	bubbleSort(heroArray, len);
 
-	//3. 打印所有老師及所帶的學生信息
-	printTeachers(tArray,len);
+	//6. 打印排序後的英雄信息
+	cout<<"打印排序後的所有英雄信息"<<endl;
+	printHeros(heroArray,len);
 
+	return 0;
 }

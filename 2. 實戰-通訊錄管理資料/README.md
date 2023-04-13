@@ -90,17 +90,17 @@
 #include<iostream>
 using namespace std;
 
-//菜单界面
+//build Menu
 void showMenu()
 {
 	cout << "***************************" << endl;
-	cout << "*****  1、添加联系人  *****" << endl;
-	cout << "*****  2、显示联系人  *****" << endl;
-	cout << "*****  3、删除联系人  *****" << endl;
-	cout << "*****  4、查找联系人  *****" << endl;
-	cout << "*****  5、修改联系人  *****" << endl;
-	cout << "*****  6、清空联系人  *****" << endl;
-	cout << "*****  0、退出通讯录  *****" << endl;
+	cout << "*****  1 add contacts  *****" << endl;
+	cout << "*****  2 show contacts  *****" << endl;
+	cout << "*****  3 delete contacts  *****" << endl;
+	cout << "*****  4 find contacts  *****" << endl;
+	cout << "*****  5 modify contacts  *****" << endl;
+	cout << "*****  6 clean all contacts  *****" << endl;
+	cout << "*****  0 shut down machine  *****" << endl;
 	cout << "***************************" << endl;
 }
 
@@ -151,29 +151,32 @@ int main() {
 		
 		switch (select)
 		{
-		case 1:  //添加联系人
+		case 1:  //add contacts
+            addPerson(&abs); //Using address passing, you can modify actual parameters.
 			break;
-		case 2:  //显示联系人
+		case 2:  //show contacts
+            showContacts(&abs);
 			break;
-		case 3:  //删除联系人
+		case 3:  //delete contacts 
+            deleteContact(&abs);
 			break;
-		case 4:  //查找联系人
+		case 4:  //find contacts
+            findContact(&abs);
 			break;
-		case 5:  //修改联系人
+		case 5:  //modify contacts
+            modifyContact(&abs);
 			break;
-		case 6:  //清空联系人
+		case 6:  //empty contacts
+            cleanPerson(&abs);
 			break;
-		case 0:  //退出通讯录
-			cout << "欢迎下次使用" << endl;
-			system("pause");
+		case 0:  //shut down machine
+			cout << "I am happy to serve you" << endl;
 			return 0;
 			break;
 		default:
 			break;
 		}
 	}
-
-	system("pause");
 
 	return 0;
 }
@@ -221,14 +224,14 @@ int main() {
 
 ```C++
 #include <string>  //string头文件
-//联系人结构体
+//bulid Person structure
 struct Person
 {
-	string m_Name; //姓名
-	int m_Sex; //性别：1男 2女
-	int m_Age; //年龄
-	string m_Phone; //电话
-	string m_Addr; //住址
+	string m_Name; //name
+	int m_Sex; //sex
+	int m_Age; //age
+	string m_Phone; //phone
+	string m_Addr; //address
 };
 ```
 
@@ -241,13 +244,12 @@ struct Person
 设计如下
 
 ```C++
-#define MAX 1000 //最大人数
-
-//通讯录结构体
+//build Addressbooks structure
+#define MAX 1000 //Max number of people
 struct Addressbooks
 {
-	struct Person personArray[MAX]; //通讯录中保存的联系人数组
-	int m_Size; //通讯录中人员个数
+    struct Person personArray[MAX]; //The maximum number of contacts that your address book can accommodate
+    int m_Size; //the current number of contacts in your address book
 };
 ```
 
@@ -264,10 +266,12 @@ struct Addressbooks
 ```c++
 mian函数起始位置添加：
 
-	//创建通讯录
-	Addressbooks abs;
-	//初始化通讯录中人数
-	abs.m_Size = 0;
+int main() {
+
+    //build Addressbooks
+    struct Addressbooks abs;
+    abs.m_Size = 0;
+
 ```
 
 
@@ -287,65 +291,69 @@ mian函数起始位置添加：
 
 
 ```C++
-//1、添加联系人信息
-void addPerson(Addressbooks *abs)
+//1. add contacts
+void addPerson(struct Addressbooks * abs)
 {
-	//判断电话本是否满了
-	if (abs->m_Size == MAX)
-	{
-		cout << "通讯录已满，无法添加" << endl;
+    //Check if address book is full, no more adding. 
+    if(abs->m_Size > MAX)
+    {
+        cout << "Sorry, cannot add. Address book already full." << endl;
 		return;
-	}
-	else
-	{
-		//姓名
-		string name;
-		cout << "请输入姓名：" << endl;
-		cin >> name;
-		abs->personArray[abs->m_Size].m_Name = name;
+    }
+    else
+    {
+        //name
+        string name;
+        cout<<"please enter your name"<<endl;
+        cin >> name;
+        abs->personArray[abs->m_Size].m_Name = name;
 
-		cout << "请输入性别：" << endl;
-		cout << "1 -- 男" << endl;
-		cout << "2 -- 女" << endl;
+        //sex
+        cout<<"please enter your sex"<<endl;
+        cout<<"1 -- male"<<endl;
+        cout<<"0 -- female"<<endl;
+        int sex = 0;
+        while(1)
+        {
+            cin>>sex;
+            if (sex == 1 || sex == 0)
+            {
+                abs->personArray[abs->m_Size].m_Sex = sex;
+                break;
+            }
+            else
+            {
+                cout<<"Input error, please enter your sex"<<endl;
+                cout<<"1 -- male"<<endl;
+                cout<<"2 -- female"<<endl;
+            }
+        }
+        
+        //age
+        cout<<"please enter your age"<<endl;
+        int Age;
+        cin>>Age;
+        abs->personArray[abs->m_Size].m_Age = Age;
 
-		//性别
-		int sex = 0;
-		while (true)
-		{
-			cin >> sex;
-			if (sex == 1 || sex == 2)
-			{
-				abs->personArray[abs->m_Size].m_Sex = sex;
-				break;
-			}
-			cout << "输入有误，请重新输入";
-		}
+        //Phone
+        cout<<"please enter your phone"<<endl;
+        string Phone;
+        cin>>Phone;
+        abs->personArray[abs->m_Size].m_Phone = Phone;
 
-		//年龄
-		cout << "请输入年龄：" << endl;
-		int age = 0;
-		cin >> age;
-		abs->personArray[abs->m_Size].m_Age = age;
+        //Address
+        cout<<"please enter your address"<<endl;
+        string Address;
+        cin>>Address;
+        abs->personArray[abs->m_Size].m_Addr = Address;
 
-		//联系电话
-		cout << "请输入联系电话：" << endl;
-		string phone = "";
-		cin >> phone;
-		abs->personArray[abs->m_Size].m_Phone = phone;
+        //update m_Size
+        abs->m_Size++;
 
-		//家庭住址
-		cout << "请输入家庭住址：" << endl;
-		string address;
-		cin >> address;
-		abs->personArray[abs->m_Size].m_Addr = address;
-
-		//更新通讯录人数
-		abs->m_Size++;
-
-		cout << "添加成功" << endl;
-		system("pause");
-		system("cls");
-	}
+        cout<<"Great news! You have successfully added a new contact."<<endl;
+        system("pause"); //pause terminal
+        system("cls"); //clear terminal
+    }   
 }
 ```
 
@@ -364,8 +372,8 @@ void addPerson(Addressbooks *abs)
 在switch case 语句中，case1里添加：
 
 ```C++
-case 1:  //添加联系人
-	addPerson(&abs);
+case 1:  //add contacts
+	addContacts(&abs); //Using address passing, you can modify actual parameters.
 	break;
 ```
 
@@ -405,28 +413,26 @@ case 1:  //添加联系人
 显示联系人代码：
 
 ```C++
-//2、显示所有联系人信息
-void showPerson(Addressbooks * abs)
+//2. show contacts
+void showContacts(struct Addressbooks * abs)
 {
-	if (abs->m_Size == 0)
-	{
-		cout << "当前记录为空" << endl;
-	}
-	else
-	{
-		for (int i = 0; i < abs->m_Size; i++)
-		{
-			cout << "姓名：" << abs->personArray[i].m_Name << "\t";
-			cout << "性别：" << (abs->personArray[i].m_Sex == 1 ? "男" : "女") << "\t";
-			cout << "年龄：" << abs->personArray[i].m_Age << "\t";
-			cout << "电话：" << abs->personArray[i].m_Phone << "\t";
-			cout << "住址：" << abs->personArray[i].m_Addr << endl;
-		}
-	}
-	
-	system("pause");
-	system("cls");
-
+    if (abs->m_Size == 0)
+    {
+        cout<<"Your address boos is empty"<<endl;
+    }
+    else
+    {
+        for (int i = 0 ; i < abs->m_Size ; i++)
+        {
+			cout << "Name:" << abs->personArray[i].m_Name << "\t";
+			cout << "Sex:" << (abs->personArray[i].m_Sex == 1 ? "male" : "female") << "\t";
+			cout << "Age:" << abs->personArray[i].m_Age << "\t";
+			cout << "Phone" << abs->personArray[i].m_Phone << "\t";
+			cout << "Address:" << abs->personArray[i].m_Addr << endl;
+        }
+    }
+    system("pause"); //pause terminal
+    system("cls"); //clear terminal
 }
 ```
 
@@ -441,8 +447,8 @@ void showPerson(Addressbooks * abs)
 在switch case语句中，case 2 里添加
 
 ```C++
-case 2:  //显示联系人
-	showPerson(&abs);
+case 2:  //show contacts
+	showContacts(&abs);
 	break;
 ```
 
@@ -491,17 +497,17 @@ case 2:  //显示联系人
 检测联系人是否存在代码：
 
 ```C++
-//判断是否存在查询的人员，存在返回在数组中索引位置，不存在返回-1
-int isExist(Addressbooks * abs, string name)
+//Checking if contact exists. Return position if exists, else return -1.
+int isExist(struct Addressbooks * abs, string name)
 {
-	for (int i = 0; i < abs->m_Size; i++)
-	{
-		if (abs->personArray[i].m_Name == name)
-		{
-			return i;
-		}
-	}
-	return -1;
+    for (int i = 0 ; i < abs->m_Size ; i++)
+    {
+        if (abs->personArray[i].m_Name == name)
+        {
+            return i;  //found contact, return his index
+        }
+    }
+    return -1;  //if not found iterating, return `-1`
 }
 
 ```
@@ -521,30 +527,29 @@ int isExist(Addressbooks * abs, string name)
 
 
 ```C++
-//3、删除指定联系人信息
-void deletePerson(Addressbooks * abs)
+//3. delete contact
+void deleteContact(struct Addressbooks * abs)
 {
-	cout << "请输入您要删除的联系人" << endl;
-	string name;
-	cin >> name;
-
-	int ret = isExist(abs, name);
-	if (ret != -1)
-	{
-		for (int i = ret; i < abs->m_Size; i++)
-		{
-			abs->personArray[i] = abs->personArray[i + 1];
-		}
-         abs->m_Size--;
-		cout << "删除成功" << endl;
-	}
-	else
-	{
-		cout << "查无此人" << endl;
-	}
-
-	system("pause");
-	system("cls");
+    string name;
+    cout<<"enter a name contact you want to delete"<<endl;
+    cin>>name;
+    int number = isExist(abs, name);
+    if (number == -1)
+    {
+        cout<<"Can't delete, contact not in address book."<<endl;
+    }
+    else
+    {
+        //Contact found, delete contact
+        for (int i = number ; i < abs->m_Size ; i++)
+        {
+            //moving data forward
+            abs->personArray[i] = abs->personArray[i+1];
+        }
+        abs->m_Size--;  //update personnel count in address book
+    }
+    system("pause"); //pause terminal
+    system("cls"); //clear terminal
 }
 ```
 
@@ -555,8 +560,8 @@ void deletePerson(Addressbooks * abs)
 在switch case 语句中，case3里添加：
 
 ```C++
-case 3:  //删除联系人
-	deletePerson(&abs);
+case 3:  //delete contacts 
+	deleteContact(&abs);
 	break;
 ```
 
@@ -594,30 +599,25 @@ case 3:  //删除联系人
 查找联系人代码：
 
 ```C++
-//4、查找指定联系人信息
-void findPerson(Addressbooks * abs)
+//4. find contact
+void findContact(struct Addressbooks * abs)
 {
-	cout << "请输入您要查找的联系人" << endl;
-	string name;
-	cin >> name;
+    cout<<"enter a contact you want to check"<<endl;
+    string name;
+    cin >> name;
 
-	int ret = isExist(abs, name);
-	if (ret != -1)
-	{
-		cout << "姓名：" << abs->personArray[ret].m_Name << "\t";
-		cout << "性别：" << abs->personArray[ret].m_Sex << "\t";
-		cout << "年龄：" << abs->personArray[ret].m_Age << "\t";
-		cout << "电话：" << abs->personArray[ret].m_Phone << "\t";
-		cout << "住址：" << abs->personArray[ret].m_Addr << endl;
-	}
-	else
-	{
-		cout << "查无此人" << endl;
-	}
-
-	system("pause");
-	system("cls");
-
+    //Checking if the specified contact is in the address book.
+    int index = isExist(abs,name);
+    if (index == -1)
+    {
+        cout<<"can not find the specified contact"<<endl;
+    }
+    else
+    {
+        showContactDetail(abs,index);
+    }
+    system("pause"); //pause terminal
+    system("cls"); //clear terminal
 }
 ```
 
@@ -628,8 +628,8 @@ void findPerson(Addressbooks * abs)
 在switch case 语句中，case4里添加：
 
 ```C++
-case 4:  //查找联系人
-	findPerson(&abs);
+case 4:  //find contacts
+	findContact(&abs);
 	break;
 ```
 
@@ -675,67 +675,69 @@ case 4:  //查找联系人
 修改联系人代码：
 
 ```C++
-//5、修改指定联系人信息
-void modifyPerson(Addressbooks * abs)
+//5. modify contact
+void modifyContact(struct Addressbooks * abs)
 {
-	cout << "请输入您要修改的联系人" << endl;
-	string name;
-	cin >> name;
+    cout<<"enter a contact you want to modify"<<endl;
+    string name;
+    cin >> name;
 
-	int ret = isExist(abs, name);
-	if (ret != -1)
-	{
-		//姓名
-		string name;
-		cout << "请输入姓名：" << endl;
-		cin >> name;
-		abs->personArray[ret].m_Name = name;
+    //Checking if the specified contact is in the address book.
+    int index = isExist(abs,name);
+    if (index == -1)
+    {
+        cout<<"can not find the specified contact"<<endl;
+    }
+    else
+    {
+        //modify name
+        cout<<"modify the name"<<endl;
+        string name;
+        cin>>name;
+        abs->personArray[index].m_Name = name;
 
-		cout << "请输入性别：" << endl;
-		cout << "1 -- 男" << endl;
-		cout << "2 -- 女" << endl;
+        //modify sex
+        cout<<"modify the sex"<<endl;
+        cout<<"1 -- male"<<endl;
+        cout<<"0 -- female"<<endl;
+        int sex;
+        cin>>sex;
+        while(true)
+        {
+            if (sex == 0 || sex == 1)
+            {
+                //valid input, exit the loop
+                abs->personArray[index].m_Sex = sex;
+                break;
+            }
+            else
+            {
+                //invalid input
+                cout<<"Invalid input"<<endl;
+                break;
+            }
+        }
 
-		//性别
-		int sex = 0;
-		while (true)
-		{
-			cin >> sex;
-			if (sex == 1 || sex == 2)
-			{
-				abs->personArray[ret].m_Sex = sex;
-				break;
-			}
-			cout << "输入有误，请重新输入";
-		}
+        //modify age
+        cout<<"modify the age"<<endl;
+        int age;
+        cin>>age;
+        abs->personArray[index].m_Age = age;
 
-		//年龄
-		cout << "请输入年龄：" << endl;
-		int age = 0;
-		cin >> age;
-		abs->personArray[ret].m_Age = age;
+        //modify phone
+        cout<<"modify the phone"<<endl;
+        int phone;
+        cin>>phone;
+        abs->personArray[index].m_Phone = phone;
 
-		//联系电话
-		cout << "请输入联系电话：" << endl;
-		string phone = "";
-		cin >> phone;
-		abs->personArray[ret].m_Phone = phone;
-
-		//家庭住址
-		cout << "请输入家庭住址：" << endl;
-		string address;
-		cin >> address;
-		abs->personArray[ret].m_Addr = address;
-
-		cout << "修改成功" << endl;
-	}
-	else
-	{
-		cout << "查无此人" << endl;
-	}
-
-	system("pause");
-	system("cls");
-
+        //modify address
+        cout<<"modify the address"<<endl;
+        string address;
+        cin>>address;
+        abs->personArray[index].m_Addr = address;
+    }
+    system("pause"); //pause terminal
+    system("cls"); //clear terminal
 }
 ```
 
@@ -748,8 +750,8 @@ void modifyPerson(Addressbooks * abs)
 在switch case 语句中，case 5里添加：
 
 ```C++
-case 5:  //修改联系人
-	modifyPerson(&abs);
+case 5:  //modify Contact
+	modifyContact(&abs);
 	break;
 ```
 
@@ -793,13 +795,13 @@ case 5:  //修改联系人
 清空联系人代码：
 
 ```C++
-//6、清空所有联系人
-void cleanPerson(Addressbooks * abs)
+//6. clean all contacts
+void cleanAllcontacts(struct Addressbooks * abs)
 {
-	abs->m_Size = 0;
-	cout << "通讯录已清空" << endl;
-	system("pause");
-	system("cls");
+    abs->m_Size = 0;    //Set the number of current recorded contacts to 0 to logically clear them.
+    cout<<"The address book has been cleared"<<endl;
+    system("pause"); //pause terminal
+    system("cls"); //clear terminal
 }
 ```
 
@@ -810,8 +812,8 @@ void cleanPerson(Addressbooks * abs)
 在switch case 语句中，case 6 里添加：
 
 ```C++
-case 6:  //清空联系人
-	cleanPerson(&abs);
+case 6:  //empty contacts
+	cleanAllcontacts(&abs);
 	break;
 ```
 
@@ -830,3 +832,320 @@ case 6:  //清空联系人
 
 
 **至此，通讯录管理系统完成！**
+
+**我們來查看最後的程式碼**
+```c++
+#include<iostream>
+using namespace std;
+
+//build Menu
+void showMenu()
+{
+	cout << "***************************" << endl;
+	cout << "*****  1 add contacts  *****" << endl;
+	cout << "*****  2 show contacts  *****" << endl;
+	cout << "*****  3 delete contacts  *****" << endl;
+	cout << "*****  4 find contacts  *****" << endl;
+	cout << "*****  5 modify contacts  *****" << endl;
+	cout << "*****  6 clean all contacts  *****" << endl;
+	cout << "*****  0 shut down machine  *****" << endl;
+	cout << "***************************" << endl;
+}
+
+//bulid Person structure
+struct Person
+{
+	string m_Name; //name
+	int m_Sex; //sex
+	int m_Age; //age
+	string m_Phone; //phone
+	string m_Addr; //address
+};
+
+//build Addressbooks structure
+#define MAX 1000 //Max number of people
+struct Addressbooks
+{
+    struct Person personArray[MAX]; //The maximum number of contacts that your address book can accommodate
+    int m_Size; //the current number of contacts in your address book
+};
+
+//1. add contacts
+void addContacts(struct Addressbooks * abs)
+{
+    //Check if address book is full, no more adding. 
+    if(abs->m_Size > MAX)
+    {
+        cout << "Sorry, cannot add. Address book already full." << endl;
+		return;
+    }
+    else
+    {
+        //name
+        string name;
+        cout<<"please enter your name"<<endl;
+        cin >> name;
+        abs->personArray[abs->m_Size].m_Name = name;
+
+        //sex
+        cout<<"please enter your sex"<<endl;
+        cout<<"1 -- male"<<endl;
+        cout<<"0 -- female"<<endl;
+        int sex = 0;
+        while(1)
+        {
+            cin>>sex;
+            if (sex == 1 || sex == 0)
+            {
+                abs->personArray[abs->m_Size].m_Sex = sex;
+                break;
+            }
+            else
+            {
+                cout<<"Input error, please enter your sex"<<endl;
+                cout<<"1 -- male"<<endl;
+                cout<<"2 -- female"<<endl;
+            }
+        }
+        
+        //age
+        cout<<"please enter your age"<<endl;
+        int Age;
+        cin>>Age;
+        abs->personArray[abs->m_Size].m_Age = Age;
+
+        //Phone
+        cout<<"please enter your phone"<<endl;
+        string Phone;
+        cin>>Phone;
+        abs->personArray[abs->m_Size].m_Phone = Phone;
+
+        //Address
+        cout<<"please enter your address"<<endl;
+        string Address;
+        cin>>Address;
+        abs->personArray[abs->m_Size].m_Addr = Address;
+
+        //update m_Size
+        abs->m_Size++;
+
+        cout<<"Great news! You have successfully added a new contact."<<endl;
+        system("pause"); //pause terminal
+        system("cls"); //clear terminal
+    }   
+}
+
+//2. show contacts
+void showContacts(struct Addressbooks * abs)
+{
+    if (abs->m_Size == 0)
+    {
+        cout<<"Your address boos is empty"<<endl;
+    }
+    else
+    {
+        for (int i = 0 ; i < abs->m_Size ; i++)
+        {
+			cout << "Name:" << abs->personArray[i].m_Name << "\t";
+			cout << "Sex:" << (abs->personArray[i].m_Sex == 1 ? "male" : "female") << "\t";
+			cout << "Age:" << abs->personArray[i].m_Age << "\t";
+			cout << "Phone" << abs->personArray[i].m_Phone << "\t";
+			cout << "Address:" << abs->personArray[i].m_Addr << endl;
+        }
+    }
+    system("pause"); //pause terminal
+    system("cls"); //clear terminal
+}
+
+//Checking if contact exists. Return position if exists, else return -1.
+int isExist(struct Addressbooks * abs, string name)
+{
+    for (int i = 0 ; i < abs->m_Size ; i++)
+    {
+        if (abs->personArray[i].m_Name == name)
+        {
+            return i;  //found contact, return his index
+        }
+    }
+    return -1;  //if not found iterating, return `-1`
+}
+
+//3. delete contact
+void deleteContact(struct Addressbooks * abs)
+{
+    string name;
+    cout<<"enter a name contact you want to delete"<<endl;
+    cin>>name;
+    int number = isExist(abs, name);
+    if (number == -1)
+    {
+        cout<<"Can't delete, contact not in address book."<<endl;
+    }
+    else
+    {
+        //Contact found, delete contact
+        for (int i = number ; i < abs->m_Size ; i++)
+        {
+            //moving data forward
+            abs->personArray[i] = abs->personArray[i+1];
+        }
+        abs->m_Size--;  //update personnel count in address book
+    }
+    system("pause"); //pause terminal
+    system("cls"); //clear terminal
+}
+
+void showContactDetail(struct Addressbooks * abs, int index)
+{
+    cout << "Name:" << abs->personArray[index].m_Name << "\t";
+    cout << "Sex:" << (abs->personArray[index].m_Sex == 1 ? "male" : "female") << "\t";
+    cout << "Age:" << abs->personArray[index].m_Age << "\t";
+    cout << "Phone" << abs->personArray[index].m_Phone << "\t";
+    cout << "Address:" << abs->personArray[index].m_Addr << endl;
+}
+
+//4. find contact
+void findContact(struct Addressbooks * abs)
+{
+    cout<<"enter a contact you want to check"<<endl;
+    string name;
+    cin >> name;
+
+    //Checking if the specified contact is in the address book.
+    int index = isExist(abs,name);
+    if (index == -1)
+    {
+        cout<<"can not find the specified contact"<<endl;
+    }
+    else
+    {
+        showContactDetail(abs,index);
+    }
+    system("pause"); //pause terminal
+    system("cls"); //clear terminal
+}
+
+//5. modify contact
+void modifyContact(struct Addressbooks * abs)
+{
+    cout<<"enter a contact you want to modify"<<endl;
+    string name;
+    cin >> name;
+
+    //Checking if the specified contact is in the address book.
+    int index = isExist(abs,name);
+    if (index == -1)
+    {
+        cout<<"can not find the specified contact"<<endl;
+    }
+    else
+    {
+        //modify name
+        cout<<"modify the name"<<endl;
+        string name;
+        cin>>name;
+        abs->personArray[index].m_Name = name;
+
+        //modify sex
+        cout<<"modify the sex"<<endl;
+        cout<<"1 -- male"<<endl;
+        cout<<"0 -- female"<<endl;
+        int sex;
+        cin>>sex;
+        while(true)
+        {
+            if (sex == 0 || sex == 1)
+            {
+                //valid input, exit the loop
+                abs->personArray[index].m_Sex = sex;
+                break;
+            }
+            else
+            {
+                //invalid input
+                cout<<"Invalid input"<<endl;
+                break;
+            }
+        }
+
+        //modify age
+        cout<<"modify the age"<<endl;
+        int age;
+        cin>>age;
+        abs->personArray[index].m_Age = age;
+
+        //modify phone
+        cout<<"modify the phone"<<endl;
+        int phone;
+        cin>>phone;
+        abs->personArray[index].m_Phone = phone;
+
+        //modify address
+        cout<<"modify the address"<<endl;
+        string address;
+        cin>>address;
+        abs->personArray[index].m_Addr = address;
+    }
+    system("pause"); //pause terminal
+    system("cls"); //clear terminal
+}
+
+//6. clean all contacts
+void cleanAllcontacts(struct Addressbooks * abs)
+{
+    abs->m_Size = 0;    //Set the number of current recorded contacts to 0 to logically clear them.
+    cout<<"The address book has been cleared"<<endl;
+    system("pause"); //pause terminal
+    system("cls"); //clear terminal
+}
+
+
+
+int main() {
+
+    //build Addressbooks
+    struct Addressbooks abs;
+    abs.m_Size = 0;
+
+
+	int select = 0;
+
+	while (true)
+	{
+		showMenu();
+
+		cin >> select;
+		
+		switch (select)
+		{
+		case 1:  //add contacts
+            addContacts(&abs); //Using address passing, you can modify actual parameters.
+			break;
+		case 2:  //show contacts
+            showContacts(&abs);
+			break;
+		case 3:  //delete contacts 
+            deleteContact(&abs);
+			break;
+		case 4:  //find contacts
+            findContact(&abs);
+			break;
+		case 5:  //modify contacts
+            modifyContact(&abs);
+			break;
+		case 6:  //empty contacts
+            cleanAllcontacts(&abs);
+			break;
+		case 0:  //shut down machine
+			cout << "I am happy to serve you" << endl;
+			return 0;
+			break;
+		default:
+			break;
+		}
+	}
+
+	return 0;
+}
+
+```
