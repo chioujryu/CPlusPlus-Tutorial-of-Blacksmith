@@ -1,4 +1,7 @@
 # C++课程安排
+[![VSCode](https://img.shields.io/badge/VSCode-any-blue)](https://code.visualstudio.com/)
+[![Replit](https://img.shields.io/badge/Replit-%20-orange)](https://replit.com/)
+
 
 * 明确C++课程学习阶段以及课程内容
 

@@ -537,6 +537,125 @@ int main() {
 ![1545533829184](assets/1545533829184.png)
 
 
+```c++
+//*********練習案例2 - 點和圓的關係*********
+//點到圓的距離 == 圓的半徑，及為點在圓上
+//點到圓的距離 > 圓的半徑，及為點在圓外
+//點到圓的距離 < 圓的半徑，及為點在圓內
+//點到圓的距離 sqrt((x1-x2)^2 + (y1-y2)^2)
+
+#include<iostream>
+using namespace std;
+
+class Point{
+private:
+	float point_X;
+	float point_Y;
+
+public:
+	//設置X，只可寫
+	void setX(float x){
+		point_X = x;
+	}
+
+	//獲取X，只可讀
+	float getX(){
+		return point_X;
+	}
+
+	//設置Y，只可寫
+	void setY(float y){
+		point_Y = y;
+	}
+
+	//獲取Y，只可讀
+	float getY(){
+		return point_Y;
+	}
+};
+
+class Circle {
+private:
+	float radius;
+	//在類中可以讓另一個類變成成圓
+	Point CenterOfCircle;
+
+public:
+	//獲取圓的資訊，只可讀
+	void getCircleDetail(){
+		cout<<"半徑為: "<<radius<<endl;
+	}
+
+	//設半徑，只可寫
+	void setRadius(float r){
+		radius = r;
+	}
+
+	//讀取半徑，只可讀
+	float getRadius(){
+		return radius;
+	}
+	
+	//設圓心，只可寫
+	void setCenterOfCircle(Point center){
+		
+		CenterOfCircle = center;
+	}
+	
+	//獲取圓心
+	Point getCenterOfCircle(){
+		return CenterOfCircle;
+	}
+};
+
+//判斷點和圓的關係
+void isInCircle(Circle & c, Point & p){
+	//計算兩點之間距離的平方
+	float distance = 
+	(c.getCenterOfCircle().getX()-p.getX()) * (c.getCenterOfCircle().getX()-p.getX()) 
+	+ (c.getCenterOfCircle().getY() - p.getY()) * (c.getCenterOfCircle().getY() - p.getY());
+
+	//計算半徑的平方
+	float radiusTime2 = c.getRadius() * c.getRadius();
+
+	//判斷關係
+	if (distance == radiusTime2){
+		cout<<"點在圓上"<<endl;
+	}
+	else if (distance < radiusTime2){
+		cout<<"點在圓外"<<endl;
+	}
+	else{
+		cout<<"點在圓內"<<endl;
+	}
+}
+
+int main() {
+
+	//設定圓的圓心
+	Point CircleCenter;
+	CircleCenter.setX(0);
+	CircleCenter.setY(0);
+
+	//設定圓c1
+	Circle c1;
+	c1.setCenterOfCircle(CircleCenter);
+
+	//設定一個點
+	Point p;
+	p.setX(3.5);
+	p.setY(4.6);
+
+	//判斷點在圓心的什麼位置
+	isInCircle(c1,p);
+
+
+	system("pause");
+
+	return 0;
+};
+```
+
 
 
 
@@ -557,11 +676,9 @@ int main() {
 
 对象的**初始化和清理**也是两个非常重要的安全问题
 
-​	一个对象或者变量没有初始状态，对其使用后果是未知
+​一个对象或者变量没有初始状态，对其使用后果是未知
 
-​	同样的使用完一个对象或变量，没有及时清理，也会造成一定的安全问题
-
-
+​同样的使用完一个对象或变量，没有及时清理，也会造成一定的安全问题
 
 c++利用了**构造函数**和**析构函数**解决上述问题，这两个函数将会被编译器自动调用，完成对象初始化和清理工作。
 
@@ -601,15 +718,29 @@ c++利用了**构造函数**和**析构函数**解决上述问题，这两个函
 
 
 ```C++
+//*********構造函數與析构函数*********
+
+#include<iostream>
+using namespace std;
+
 class Person
 {
 public:
-	//构造函数
+	//1. 構造函數，進行初始化操作
+    //沒有返回值，不用寫void
+    //函數名與類名相同
+    //構造函數可以有參數，可以發生重載
+    //創建對象的時候，構造函數會自動調用，而且只會調用一次
 	Person()
 	{
 		cout << "Person的构造函数调用" << endl;
 	}
-	//析构函数
+
+	//2. 析构函数，進行清理操作
+    //沒有返回值，不用寫void
+    //函數名與類名相同，但要在前面有`~`
+    //析构函数可以不可以有參數，所以不可以發生重載
+    //對象在銷毀前，會自動調用析构函数，而且只會調用一次
 	~Person()
 	{
 		cout << "Person的析构函数调用" << endl;
@@ -617,9 +748,11 @@ public:
 
 };
 
+//構造函數和析构函數都是必須有的，如果我們沒有去撰寫構造函數和析构函數
+//編譯器會自動提供一個空的構造函數和析构函數
 void test01()
 {
-	Person p;
+	Person p;   //在棧上的數據，test01執行完畢後，會自動釋放這個對象
 }
 
 int main() {
@@ -644,25 +777,28 @@ int main() {
 
 #### 4.2.2 构造函数的分类及调用
 
-两种分类方式：
+**两种分类方式：**
 
-​	按参数分为： 有参构造和无参构造
+* ​按参数分为： 有参构造和无参构造
+* 按类型分为： 普通构造和拷贝构造
 
-​	按类型分为： 普通构造和拷贝构造
-
-三种调用方式：
-
-​	括号法
-
-​	显示法
-
-​	隐式转换法
+**三种调用方式：**
+* ​括号法
+* ​显示法
+* 隐式转换法
 
 
 
 **示例：**
 
 ```C++
+//*********構造函數的分類與調用*********
+//注意1：调用无参构造函数不能加括号，如果加了编译器认为这是一个函数声明，因為如果加括号，編譯器會以為你在做函數聲明
+
+
+#include<iostream>
+using namespace std;
+
 //1、构造函数分类
 // 按照参数分类分为 有参和无参构造   无参又称为默认构造函数
 // 按照类型分类分为 普通构造和拷贝构造
@@ -679,7 +815,8 @@ public:
 		cout << "有参构造函数!" << endl;
 	}
 	//拷贝构造函数
-	Person(const Person& p) {
+	Person(const Person & p) {
+		//將傳入的人身上的所有屬性，拷貝到我身上
 		age = p.age;
 		cout << "拷贝构造函数!" << endl;
 	}
@@ -694,6 +831,8 @@ public:
 //2、构造函数的调用
 //调用无参构造函数
 void test01() {
+	//注意1：调用无参构造函数不能加括号，如果加了编译器认为这是一个函数声明，因為如果加括号，編譯器會以為你在做函數聲明
+	//Person p();  //絕對不可以這樣寫，因為看起來在做函數聲明;
 	Person p; //调用无参构造函数
 }
 
@@ -701,18 +840,27 @@ void test01() {
 void test02() {
 
 	//2.1  括号法，常用
-	Person p1(10);
 	//注意1：调用无参构造函数不能加括号，如果加了编译器认为这是一个函数声明
-	//Person p2();
+	//Person p();  //絕對不可以這樣寫，因為看起來在做函數聲明;
+	Person p;	//调用无参构造函数
+	Person p1(10);	//调用有参构造函数
+	Person p2(p1);	//調用拷貝構造函數
+	cout<<p1.age<<endl;
+	cout<<p2.age<<endl;
+
 
 	//2.2 显式法
-	Person p2 = Person(10); 
-	Person p3 = Person(p2);
-	//Person(10)单独写就是匿名对象  当前行结束之后，马上析构
+	Person p3 = Person(10); 	//有參構造
+	Person p4 = Person(p3);		//無參構造
+	//Person(10);		//单独写就是匿名对象  当前行结束之后，马上析构
+
+	//注意2：不能利用 拷贝构造函数 初始化匿名对象 编译器认为是对象声明，Person (p4) === Person p4，
+	//Person (p4);
+	
 
 	//2.3 隐式转换法
-	Person p4 = 10; // Person p4 = Person(10); 
-	Person p5 = p4; // Person p5 = Person(p4); 
+	Person p5 = 10; // Person p4 = Person(10); 
+	Person p6 = p5; // Person p5 = Person(p4); 
 
 	//注意2：不能利用 拷贝构造函数 初始化匿名对象 编译器认为是对象声明
 	//Person p5(p4);
@@ -720,8 +868,8 @@ void test02() {
 
 int main() {
 
-	test01();
-	//test02();
+	//test01();
+	test02();
 
 	system("pause");
 
@@ -752,6 +900,12 @@ C++中拷贝构造函数调用时机通常有三种情况
 **示例：**
 
 ```C++
+//*********拷貝構造函數的調用時機*********
+
+
+#include<iostream>
+using namespace std;
+
 class Person {
 public:
 	Person() {
@@ -785,9 +939,9 @@ void test01() {
 	//newman3 = man; //不是调用拷贝构造函数，赋值操作
 }
 
-//2. 值传递的方式给函数参数传值
+//2. 值传递的方式给函数的参数传值
 //相当于Person p1 = p;
-void doWork(Person p1) {}
+void doWork(Person p1) {}	//值傳遞給形參等於是拷貝一個
 void test02() {
 	Person p; //无参构造函数
 	doWork(p);
@@ -797,14 +951,14 @@ void test02() {
 Person doWork2()
 {
 	Person p1;
-	cout << (int *)&p1 << endl;
+	cout << (int *)&p1 << endl;		//查看p1的地址
 	return p1;
 }
 
 void test03()
 {
 	Person p = doWork2();
-	cout << (int *)&p << endl;
+	cout << (int *)&p << endl;		//查看p的地址
 }
 
 
@@ -838,16 +992,29 @@ int main() {
 
 构造函数调用规则如下：
 
-* 如果用户定义有参构造函数，c++不在提供默认无参构造，但是会提供默认拷贝构造
+* 如果用户定义`有参构造函数`，c++不再提供默认`无参构造函數`，但是会提供`默认拷贝构造`
 
 
-* 如果用户定义拷贝构造函数，c++不会再提供其他构造函数
+* 如果用户定义`拷贝构造函数`，c++不会再提供`其他默認构造函数`
 
 
 
 示例：
 
 ```C++
+//*********構造函數的調用規則*********
+
+#include<iostream>
+using namespace std;
+
+//1. 只要創建一個類，c++編譯器會自動給每個類添加三個函數
+//默認構造（空實現）
+//析構函數（空實現）
+//拷貝函數（值拷貝）
+
+//2. 如果我們寫了有參構造函數，則編譯器則不會有默認無參構造函數
+//如果我們提供了拷貝構造函數，則編譯器就不提供其他所有的默認函數
+
 class Person {
 public:
 	//无参（默认）构造函数
@@ -883,12 +1050,12 @@ void test01()
 
 void test02()
 {
-	//如果用户提供有参构造，编译器不会提供默认构造，会提供拷贝构造
+	//如果用户提供有参构造，编译器不会提供默认构造，但依然会提供拷贝构造
 	Person p1; //此时如果用户自己没有提供默认构造，会出错
 	Person p2(10); //用户提供的有参
 	Person p3(p2); //此时如果用户没有提供拷贝构造，编译器会提供
 
-	//如果用户提供拷贝构造，编译器不会提供其他构造函数
+	//如果用户提供拷贝构造，编译器不会提供其他默認构造函数
 	Person p4; //此时如果用户自己没有提供默认构造，会出错
 	Person p5(10); //此时如果用户自己没有提供有参，会出错
 	Person p6(p5); //用户自己提供拷贝构造
@@ -931,6 +1098,12 @@ int main() {
 **示例：**
 
 ```C++
+//*********深拷贝与浅拷贝*********
+//总结：如果属性有在堆区开辟的，一定要自己提供拷贝构造函数，防止浅拷贝带来的问题
+
+#include<iostream>
+using namespace std;
+
 class Person {
 public:
 	//无参（默认）构造函数
@@ -944,7 +1117,8 @@ public:
 
 		m_age = age;
 		m_height = new int(height);
-		
+		cout<<(int)&m_age<<endl;		//查看地址
+		cout<<(int)m_height<<endl;		//查看堆區地址
 	}
 	//拷贝构造函数  
 	Person(const Person& p) {
@@ -952,10 +1126,12 @@ public:
 		//如果不利用深拷贝在堆区创建新内存，会导致浅拷贝带来的重复释放堆区问题
 		m_age = p.m_age;
 		m_height = new int(*p.m_height);
-		
+		cout<<(int)&m_age<<endl;		//查看地址
+		cout<<(int)m_height<<endl;		//查看堆區地址
 	}
 
 	//析构函数
+	//將堆區開闢的數據做釋放操作
 	~Person() {
 		cout << "析构函数!" << endl;
 		if (m_height != NULL)
@@ -977,6 +1153,7 @@ void test01()
 	cout << "p1的年龄： " << p1.m_age << " 身高： " << *p1.m_height << endl;
 
 	cout << "p2的年龄： " << p2.m_age << " 身高： " << *p2.m_height << endl;
+
 }
 
 int main() {
@@ -1007,6 +1184,8 @@ int main() {
 
 C++提供了初始化列表语法，用来初始化属性
 
+當然，你也可以用機構函數來做初始化，初始化列表只是另一種初始化的方式
+
 
 
 **语法：**`构造函数()：属性1(值1),属性2（值2）... {}`
@@ -1016,6 +1195,15 @@ C++提供了初始化列表语法，用来初始化属性
 **示例：**
 
 ```C++
+//*********初始化列表*********
+//作用：C++提供了初始化列表语法，用来初始化属性
+//當然，你也可以用傳統方式來做初始化
+//這只是另一種初始化的方式
+//語法：构造函数()：属性1(值1),属性2（值2）... {}
+
+#include<iostream>
+using namespace std;
+
 class Person {
 public:
 
@@ -1043,7 +1231,6 @@ int main() {
 
 	Person p(1, 2, 3);
 	p.PrintPerson();
-
 
 	system("pause");
 
@@ -1086,6 +1273,14 @@ B类中有对象A作为成员，A为对象成员
 **示例：**
 
 ```C++
+//*********類對象作為類成員*********
+//C++类中的成员可以是另一个类的对象，我们称该成员为 对象成员
+//那么当创建B对象时，A与B的构造和析构的顺序是谁先谁后？
+
+#include<iostream>
+using namespace std;
+
+//手機類
 class Phone
 {
 public:
@@ -1100,17 +1295,18 @@ public:
 		cout << "Phone析构" << endl;
 	}
 
+	//手機品牌名稱
 	string m_PhoneName;
 
 };
 
-
+//人類
 class Person
 {
 public:
 
 	//初始化列表可以告诉编译器调用哪一个构造函数
-	Person(string name, string pName) :m_Name(name), m_Phone(pName)
+	Person(string name, string pName) :m_Name(name), m_Phone(pName)		//Phone m_Phone = pName 隱式轉換法
 	{
 		cout << "Person构造" << endl;
 	}
@@ -1129,6 +1325,7 @@ public:
 	Phone m_Phone;
 
 };
+
 void test01()
 {
 	//当类中成员是其他类对象时，我们称该成员为 对象成员
@@ -1138,7 +1335,6 @@ void test01()
 	p.playGame();
 
 }
-
 
 int main() {
 
@@ -1170,7 +1366,7 @@ int main() {
 
 *  静态成员变量
    *  所有对象共享同一份数据
-   *  在编译阶段分配内存
+   *  在编译之前就已經分配内存，並分配在全局區
    *  类内声明，类外初始化
 *  静态成员函数
    *  所有对象共享同一个函数
@@ -1182,9 +1378,15 @@ int main() {
 
 
 
-**示例1 ：**静态成员变量
+**示例1** ：静态成员变量
 
 ```C++
+//*********靜態成員變量*********
+
+#include<iostream>
+using namespace std;
+
+//人類
 class Person
 {
 	
@@ -1193,13 +1395,15 @@ public:
 	static int m_A; //静态成员变量
 
 	//静态成员变量特点：
-	//1 在编译阶段分配内存
+	//1 在编译之前就已經分配内存，並分配在全局區
 	//2 类内声明，类外初始化
 	//3 所有对象共享同一份数据
 
+//静态成员变量也是有访问权限的
 private:
-	static int m_B; //静态成员变量也是有访问权限的
+	static int m_B; 
 };
+
 int Person::m_A = 10;
 int Person::m_B = 10;
 
@@ -1224,9 +1428,24 @@ void test01()
 	//cout << "m_B = " << Person::m_B << endl; //私有权限访问不到
 }
 
+void test02(){
+	//靜態成員變亮不屬於某個對象上，所有對象都共享同一份數據
+	//因此靜態成員變量有兩種訪問方式
+
+	//1. 通過對象進行訪問
+	Person p;
+	cout<<p.m_A<<endl;
+
+	//2. 通過類名進行訪問
+	cout<<Person::m_A<<endl;
+
+	//cout << "m_B = " << Person::m_B << endl; //私有权限访问不到
+
+}
+
 int main() {
 
-	test01();
+	test02();
 
 	system("pause");
 
@@ -1236,23 +1455,28 @@ int main() {
 
 
 
-**示例2：**静态成员函数
+**示例2**：静态成员函数
 
 ```C++
+//*********靜態成員函數*********
+
+#include<iostream>
+using namespace std;
+
 class Person
 {
 
 public:
 
 	//静态成员函数特点：
-	//1 程序共享一个函数
+	//1 所有對象共享一个函数
 	//2 静态成员函数只能访问静态成员变量
 	
 	static void func()
 	{
 		cout << "func调用" << endl;
-		m_A = 100;
-		//m_B = 100; //错误，不可以访问非静态成员变量
+		m_A = 100;	//靜態成員函數可以訪問靜態成員變量
+		//m_B = 100; //错误，不可以访问非静态成员变量，無法缺分到底是哪個對象的m_B
 	}
 
 	static int m_A; //静态成员变量
@@ -1272,15 +1496,15 @@ void test01()
 {
 	//静态成员变量两种访问方式
 
-	//1、通过对象
+	//1、通过对象進行訪問
 	Person p1;
 	p1.func();
 
-	//2、通过类名
+	//2、通过类名進行訪問
 	Person::func();
 
 
-	//Person::func2(); //私有权限访问不到
+	//Person::func2(); //類外訪問不到私有权限的靜態函數
 }
 
 int main() {
@@ -1316,6 +1540,13 @@ int main() {
 
 
 ```C++
+//*********成员变量和成员函数分开存储*********
+//在C++中，类内的成员变量和成员函数分开存储
+//只有非静态成员变量才属于类的对象上
+
+#include<iostream>
+using namespace std;
+
 class Person {
 public:
 	Person() {
@@ -1334,9 +1565,29 @@ public:
 	}
 };
 
+int Person::mB = 10;
+
+class cat{
+	
+};
+
+void test(){
+	//空對象占用內存空間為1
+	//c++編譯器會給每個空對象也分配一個字節的空間，是為了區分空對象占內存的位置
+	//每個空對象，也應該有獨一無二的內存地址
+	cat c1;
+	cout<<"空對象c1的大小為多少：" <<sizeof(c1)<<endl;
+};
+
 int main() {
 
-	cout << sizeof(Person) << endl;
+	test();
+
+	Person p;
+	cout << "Person類的大小為" <<sizeof(Person) << endl;		//因mA的大小有4byte，所以Person類的大小為4byte
+	cout<<"p的地址為：" <<(int)&p<<endl;
+	cout<<"p.mA的地址為："<<(int)&p.mA<<endl;
+	cout<<"靜態變量`mB`的地址為："<<(int) & Person::mB<<endl;
 
 	system("pause");
 
@@ -1362,7 +1613,7 @@ int main() {
 
 c++通过提供特殊的对象指针，this指针，解决上述问题。**this指针指向被调用的成员函数所属的对象**
 
-
+**注意**：這個章節很難，要多看多了解
 
 this指针是隐含每一个非静态成员函数内的一种指针
 
@@ -1376,6 +1627,12 @@ this指针的用途：
 *  在类的非静态成员函数中返回对象本身，可使用return *this
 
 ```C++
+//*********this指針概念*********
+//這個章節很難，要多看多了解
+
+#include<iostream>
+using namespace std;
+
 class Person
 {
 public:
@@ -1383,32 +1640,45 @@ public:
 	Person(int age)
 	{
 		//1、当形参和成员变量同名时，可用this指针来区分
+		//this指針指向被調用的成員函數 所屬的對象
+		//this === Person * p1
 		this->age = age;
 	}
 
-	Person& PersonAddPerson(Person p)
+	Person & PersonAddAge(Person p)
 	{
 		this->age += p.age;
-		//返回对象本身
+
+		//this指向的是p2的指針，而*this指向的就是p2的本體 
 		return *this;
 	}
 
 	int age;
 };
 
+//1. 解決名稱衝突
 void test01()
+{
+	Person p1(10);
+	cout << "p1.age = " << p1.age << endl;
+}
+
+//2. 返回对象本身*this
+void test02()
 {
 	Person p1(10);
 	cout << "p1.age = " << p1.age << endl;
 
 	Person p2(10);
-	p2.PersonAddPerson(p1).PersonAddPerson(p1).PersonAddPerson(p1);
+	p2.PersonAddAge(p1).PersonAddAge(p1).PersonAddAge(p1);	//這是鏈式編程思想
 	cout << "p2.age = " << p2.age << endl;
 }
+
 
 int main() {
 
 	test01();
+	//test02();
 
 	system("pause");
 
