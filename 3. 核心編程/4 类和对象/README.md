@@ -1709,6 +1709,11 @@ C++中空指针也是可以调用成员函数的，但是也要注意有没有�
 **示例：**
 
 ```C++
+//*********空指針訪問成員函數*********
+
+#include<iostream>
+using namespace std;
+
 //空指针访问成员函数
 class Person {
 public:
@@ -1718,14 +1723,12 @@ public:
 	}
 
 	void ShowPerson() {
-		if (this == NULL) {
-			return;
-		}
 		cout << mAge << endl;
+    //會報錯，因為你是用空指針，根本沒有對象去掉用mAge，因為在mAge的程式背後是this->mAge，甚至你可以直接將mAge改成this->mAge
 	}
 
 public:
-	int mAge;
+	int mAge;	//前面的m代表是member，就是成員
 };
 
 void test01()
@@ -1744,6 +1747,57 @@ int main() {
 	return 0;
 }
 ```
+OUTPUT報錯
+```
+我是Person类!
+signal: illegal instruction (core dumped)
+```
+
+這樣寫就不會報錯了
+```C++
+//*********空指針訪問成員函數*********
+
+#include<iostream>
+using namespace std;
+
+//空指针访问成员函数
+class Person {
+public:
+
+	void ShowClassName() {
+		cout << "我是Person类!" << endl;
+	}
+
+	void ShowPerson() {
+		if (this == NULL) {
+			return;
+		}
+		cout << mAge << endl;
+	}
+
+public:
+	int mAge;	//前面的m代表是member，就是成員
+};
+
+void test01()
+{
+	Person * p = NULL;
+	p->ShowClassName(); //空指针，可以调用成员函数
+	p->ShowPerson();  //但是如果成员函数中用到了this指针，就不可以了
+}
+
+int main() {
+
+	test01();
+
+	system("pause");
+
+	return 0;
+}
+```
+
+
+
 
 
 
@@ -1779,6 +1833,11 @@ int main() {
 **示例：**
 
 ```C++
+//*********const修飾成員函數*********
+
+#include<iostream>
+using namespace std;
+
 class Person {
 public:
 	Person() {
@@ -1786,38 +1845,40 @@ public:
 		m_B = 0;
 	}
 
+	//常量函數
 	//this指针的本质是一个指针常量，指针的指向不可修改
 	//如果想让指针指向的值也不可以修改，需要声明常函数
+	//在成員函數後面加上const，修飾的是this指向，讓指針指向的值都不可以修改
 	void ShowPerson() const {
-		//const Type* const pointer;
+		//const Person * const this; 這代表指針的指向跟裡面的值都不能修改
 		//this = NULL; //不能修改指针的指向 Person* const this;
 		//this->mA = 100; //但是this指针指向的对象的数据是可以修改的
+		
 
 		//const修饰成员函数，表示指针指向的内存空间的数据不能修改，除了mutable修饰的变量
 		this->m_B = 100;
 	}
 
-	void MyFunc() const {
-		//mA = 10000;
+	void MyFunc() {		
+		//m_A = 10000;
+		cout<<"我調用了MyFunc"<<endl;
 	}
 
 public:
 	int m_A;
-	mutable int m_B; //可修改 可变的
+	mutable int m_B; //特殊關鍵字mutable，加上這個關鍵字，即使在常量函數中，也可以修改這個值
 };
 
-
-//const修饰对象  常对象
+//const修饰对象  常量对象
 void test01() {
 
 	const Person person; //常量对象  
 	cout << person.m_A << endl;
-	//person.mA = 100; //常对象不能修改成员变量的值,但是可以访问
-	person.m_B = 100; //但是常对象可以修改mutable修饰成员变量
+	//person.mA = 100; //常量对象 不能修改成员变量的值,但是可以访问
+	person.m_B = 100; //m_B因為有加上mutable關鍵字，所以可以修改他
 
-	//常对象访问成员函数
-	person.MyFunc(); //常对象不能调用const的函数
-
+	//常量对象 只能調用常量函數
+	person.MyFunc();
 }
 
 int main() {
@@ -1828,6 +1889,81 @@ int main() {
 
 	return 0;
 }
+```
+OUTPUT
+報錯，因為常量對象不能調用一般函數，常量對象只能調用常量函數
+```
+tempCodeRunnerFile.cpp: In function 'void test01()':
+tempCodeRunnerFile.cpp:46:16: error: passing 'const Person' as 'this' argument discards qualifiers [-fpermissive]
+  person.MyFunc();
+                ^
+tempCodeRunnerFile.cpp:27:7: note:   in call to 'void Person::MyFunc()'
+  void MyFunc() {
+       ^~~~~~
+```
+這樣寫就成功編譯了
+```C++
+//*********const修飾成員函數*********
+
+#include<iostream>
+using namespace std;
+
+class Person {
+public:
+	Person() {
+		m_A = 0;
+		m_B = 0;
+	}
+
+	//常量函數
+	//this指针的本质是一个指针常量，指针的指向不可修改
+	//如果想让指针指向的值也不可以修改，需要声明常函数
+	//在成員函數後面加上const，修飾的是this指向，讓指針指向的值都不可以修改
+	void ShowPerson() const {
+		//const Person * const this; 這代表指針的指向跟裡面的值都不能修改
+		//this = NULL; //不能修改指针的指向 Person* const this;
+		//this->mA = 100; //但是this指针指向的对象的数据是可以修改的
+		
+
+		//const修饰成员函数，表示指针指向的内存空间的数据不能修改，除了mutable修饰的变量
+		this->m_B = 100;
+	}
+
+	void MyFunc() const{		
+		//m_A = 10000;
+		cout<<"我調用了MyFunc"<<endl;
+	}
+
+public:
+	int m_A;
+	mutable int m_B; //特殊關鍵字mutable，加上這個關鍵字，即使在常量函數中，也可以修改這個值
+};
+
+//const修饰对象  常量对象
+void test01() {
+
+	const Person person; //常量对象  
+	cout << person.m_A << endl;
+	//person.mA = 100; //常量对象 不能修改成员变量的值,但是可以访问
+	person.m_B = 100; //m_B因為有加上mutable關鍵字，所以可以修改他
+
+	//常量对象 只能調用常量函數
+	person.MyFunc();
+}
+
+int main() {
+
+	test01();
+
+	system("pause");
+
+	return 0;
+}
+```
+OUTPUT
+```
+0
+我調用了MyFunc
 ```
 
 
@@ -1872,13 +2008,16 @@ int main() {
 
 
 #### 4.4.1 全局函数做友元
-
+**input**
 ```C++
+//*********全局函數做友元*********
+
+#include<iostream>
+using namespace std;
+
+//建築物類
 class Building
 {
-	//告诉编译器 goodGay全局函数 是 Building类的好朋友，可以访问类中的私有内容
-	friend void goodGay(Building * building);
-
 public:
 
 	Building()
@@ -1887,19 +2026,17 @@ public:
 		this->m_BedRoom = "卧室";
 	}
 
-
 public:
-	string m_SittingRoom; //客厅
+	string m_SittingRoom; //客廳
 
 private:
 	string m_BedRoom; //卧室
 };
 
-
-void goodGay(Building * building)
+void goodGay(Building * building)	//goodGay = 好基友
 {
-	cout << "好基友正在访问： " << building->m_SittingRoom << endl;
-	cout << "好基友正在访问： " << building->m_BedRoom << endl;
+	cout << "好基友的全局函數正在访问building->m_SittingRoom： " << building->m_SittingRoom << endl;
+	cout << "好基友的全局函數正在访问building->m_BedRoom： " << building->m_BedRoom << endl;
 }
 
 
@@ -1917,34 +2054,103 @@ int main(){
 	return 0;
 }
 ```
+**output**
+報錯，因為在類外訪問私有屬性
+```
+./main.cpp:32:85: error: 'm_BedRoom' is a private member of 'Building'
+        cout << "好基友的全局函數正在访问building->m_BedRoom： " << building->m_BedRoom << endl;
+                                                                              ^
+./main.cpp:25:9: note: declared private here
+        string m_BedRoom; //卧室
+```
+**input**
+將全局函數變成Building的好朋友，即可以訪問
+```c++
+//*********全局函數做友元*********
+
+#include<iostream>
+using namespace std;
+
+//建築物類
+class Building
+{
+	//告诉编译器 goodGay全局函数 是 Building类的好朋友，可以访问类中的私有内容
+	friend void goodGay(Building * building);
+
+public:
+
+	Building()
+	{
+		this->m_SittingRoom = "客厅";
+		this->m_BedRoom = "卧室";
+	}
+
+public:
+	string m_SittingRoom; //客廳
+
+private:
+	string m_BedRoom; //卧室
+};
+
+void goodGay(Building * building)	//goodGay = 好基友
+{
+	cout << "好基友的全局函數正在访问building->m_SittingRoom： " << building->m_SittingRoom << endl;
+	cout << "好基友的全局函數正在访问building->m_BedRoom： " << building->m_BedRoom << endl;
+}
+
+void test01()
+{
+	Building b;
+	goodGay(&b);
+}
+
+int main(){
+
+	test01();
+
+	system("pause");
+	return 0;
+}
+```
+**output**
+```
+好基友的全局函數正在访问building->m_SittingRoom： 客厅
+好基友的全局函數正在访问building->m_BedRoom： 卧室
+```
+
 
 
 
 #### 4.4.2 类做友元
 
-
-
+**input**
 ```C++
-class Building;
+//*********類做友元*********
+
+#include<iostream>
+using namespace std;
+
+class Building;	//building類的宣告
+
 class goodGay
 {
 public:
 
-	goodGay();
-	void visit();
+	goodGay();	//goodGay構造函數宣告，並在類外實現這個函數
+	void visit();	//參觀函數，訪問building中的屬性
 
 private:
 	Building *building;
 };
 
 
-class Building
+class Building	//buildng類的實現
 {
 	//告诉编译器 goodGay类是Building类的好朋友，可以访问到Building类中私有内容
 	friend class goodGay;
 
 public:
-	Building();
+	Building();	//Building構造函數宣告，並在類外實現這個函數
 
 public:
 	string m_SittingRoom; //客厅
@@ -1952,6 +2158,7 @@ private:
 	string m_BedRoom;//卧室
 };
 
+//類外寫成員函數
 Building::Building()
 {
 	this->m_SittingRoom = "客厅";
@@ -1960,6 +2167,7 @@ Building::Building()
 
 goodGay::goodGay()
 {
+	//創建一個建築物 指針對象
 	building = new Building;
 }
 
@@ -1984,25 +2192,33 @@ int main(){
 	return 0;
 }
 ```
-
+**output**
+```
+好基友正在访问客厅
+好基友正在访问卧室
+```
 
 
 
 
 #### 4.4.3 成员函数做友元
-
-
-
+**input**
 ```C++
+//**************類做友元**************
 
+#include<iostream>
+using namespace std;
+
+//**************類的宣告**************
 class Building;
+
 class goodGay
 {
 public:
 
-	goodGay();
-	void visit(); //只让visit函数作为Building的好朋友，可以发访问Building中私有内容
-	void visit2(); 
+	goodGay();	//構造函數宣告
+	void visit(); //讓visit函數可以訪問Building中的私有成員
+	void visit2(); 	//讓visit2函數不可以訪問Building中的私有成員
 
 private:
 	Building *building;
@@ -2015,7 +2231,7 @@ class Building
 	friend void goodGay::visit();
 
 public:
-	Building();
+	Building();//構造函數宣告
 
 public:
 	string m_SittingRoom; //客厅
@@ -2023,13 +2239,14 @@ private:
 	string m_BedRoom;//卧室
 };
 
-Building::Building()
+//**************類外實現成員函數**************
+Building::Building()	//構造函數實現
 {
 	this->m_SittingRoom = "客厅";
 	this->m_BedRoom = "卧室";
 }
 
-goodGay::goodGay()
+goodGay::goodGay()	//構造函數實現
 {
 	building = new Building;
 }
@@ -2043,9 +2260,10 @@ void goodGay::visit()
 void goodGay::visit2()
 {
 	cout << "好基友正在访问" << building->m_SittingRoom << endl;
-	//cout << "好基友正在访问" << building->m_BedRoom << endl;
+	//cout << "好基友正在访问" << building->m_BedRoom << endl;	//因visit2()不是building的好朋友，所以不能訪問building的私有屬性
 }
 
+//**************全局函數**************
 void test01()
 {
 	goodGay  gg;
@@ -2053,6 +2271,7 @@ void test01()
 
 }
 
+//**************main 函數**************
 int main(){
     
 	test01();
@@ -2061,12 +2280,11 @@ int main(){
 	return 0;
 }
 ```
-
-
-
-
-
-
+**output**
+```
+好基友正在访问客厅
+好基友正在访问卧室
+```
 
 
 
