@@ -2300,20 +2300,31 @@ int main(){
 
 
 
-作用：实现两个自定义数据类型相加的运算
-
+**作用**：实现两个自定义数据类型相加的运算
+重點整理：
+* `operator+` 是編譯器內建的函數運算符
+* 如果你把全部運算式寫成都寫成 `Person p3 = p2 + p1;` 這種格式，編譯器會不知道你是要調用成員函數還是全局函數
+* 建議可以寫成`Person p6 = p4 + p5`這種格式
 
 
 ```C++
+//**************加號運算符重載**************
+//运算符重载概念：对已有的运算符重新进行定义，赋予其另一种功能，以适应不同的数据类型
+//作用：实现两个自定义数据类型相加的运算
+
+#include<iostream>
+using namespace std;
+
 class Person {
 public:
-	Person() {};
-	Person(int a, int b)
+	Person() {};	//默認無參構造函數
+	Person(int a, int b)	//有參構造函數
 	{
 		this->m_A = a;
 		this->m_B = b;
 	}
 	//成员函数实现 + 号运算符重载
+	//operator+ 是編譯器內建的
 	Person operator+(const Person& p) {
 		Person temp;
 		temp.m_A = this->m_A + p.m_A;
@@ -2321,19 +2332,18 @@ public:
 		return temp;
 	}
 
-
 public:
 	int m_A;
 	int m_B;
 };
 
 //全局函数实现 + 号运算符重载
-//Person operator+(const Person& p1, const Person& p2) {
-//	Person temp(0, 0);
-//	temp.m_A = p1.m_A + p2.m_A;
-//	temp.m_B = p1.m_B + p2.m_B;
-//	return temp;
-//}
+Person operator+(const Person& p1, const Person& p2) {
+	Person temp(0, 0);
+	temp.m_A = p1.m_A + p2.m_A;
+	temp.m_B = p1.m_B + p2.m_B;
+	return temp;
+}
 
 //运算符重载 可以发生函数重载 
 Person operator+(const Person& p2, int val)  
@@ -2349,13 +2359,19 @@ void test() {
 	Person p1(10, 10);
 	Person p2(20, 20);
 
-	//成员函数方式
-	Person p3 = p2 + p1;  //相当于 p2.operaor+(p1)
+	//成员函数重載方式調用
+	Person p3 = p2 + p1;  //相当于 Person p3 = p2.operaor+(p1)
 	cout << "mA:" << p3.m_A << " mB:" << p3.m_B << endl;
 
+	Person p4(10, 10);
+	Person p5(20, 20);
+	//全局函數重載調用
+	Person p6 = operator+(p4,p5);	//也可以寫成 Person p6 = p4 + p5
+	cout << "mA:" << p6.m_A << " mB:" << p6.m_B << endl;
+	Person p7 = p6 + 10; //相当于 Person p7 = operator+(p6,10)
+	cout << "mA:" << p7.m_A << " mB:" << p7.m_B << endl;
 
-	Person p4 = p3 + 10; //相当于 operator+(p3,10)
-	cout << "mA:" << p4.m_A << " mB:" << p4.m_B << endl;
+	//注意： 如果你全部都寫成 Person p3 = p2 + p1; 這種格式，編譯器會不知道你是要調用成員函數還是全局函數
 
 }
 
@@ -2385,13 +2401,26 @@ int main() {
 
 
 
-作用：可以输出自定义数据类型
+**作用**：可以输出自定义数据类型
+**例如**：你創建一個`class Person`，則`cout<<Person<<endl;` 可以輸出Person類裡面的所有屬性，就要使用`左移运算符重载`
+
+**重點整理：**
+* 製作左移運算符重載的函數，一定要在全局下新增
+* 在 `vscode` 可以點擊 `cout` 並按下 `alt + F12`，即可查看 `cout` 的原碼
 
 
+**input**
+```C++ {.line-numbers}
+//**************左移运算符重载**************
+//作用：可以输出自定义数据类型
 
-```C++
+#include<iostream>
+using namespace std;
+
 class Person {
-	friend ostream& operator<<(ostream& out, Person& p);
+	//利用成員函數重載左移運算符
+	//friend ostream& operator<<(ostream& out, Person& p);
+	friend void operator<<(ostream & cout, Person & p);
 
 public:
 
@@ -2401,8 +2430,9 @@ public:
 		this->m_B = b;
 	}
 
-	//成员函数 实现不了  p << cout 不是我们想要的效果
-	//void operator<<(Person& p){
+	//利用成員函數重載左移運算符 p.operator<<(cout) 簡化版本 p<<cout
+	//不會利用成員函數重載左移運算符(<<)，因為無法實現 cout 在左側
+	//void operator<<(cout){
 	//}
 
 private:
@@ -2410,18 +2440,19 @@ private:
 	int m_B;
 };
 
-//全局函数实现左移重载
-//ostream对象只能有一个
-ostream& operator<<(ostream& out, Person& p) {
-	out << "a:" << p.m_A << " b:" << p.m_B;
-	return out;
+//只能利用全局函數實現左移運算符(<<)
+//在 vscode 可以點擊 `cout` 並按下 `alt + F12`，即可查看 cout的原碼
+//可以看到 `cout` 的是在 `ostream` 創建出來的對象。
+//補充： `ostream`為輸出流，`istream`為輸入流
+void operator<<(ostream & cout, Person & p)	//本質 operator<<(cout, p) 可簡化成 cout<<p
+{
+	cout<<"m_A = "<<p.m_A<<"\t\t"<<"m_B = "<<p.m_B<<endl;
 }
 
 void test() {
 
 	Person p1(10, 20);
-
-	cout << p1 << "hello world" << endl; //链式编程
+	cout<<p1;
 }
 
 int main() {
@@ -2433,7 +2464,58 @@ int main() {
 	return 0;
 }
 ```
+另外，如果在 `42` 行加上 `endl;` 就會報錯，因為 `34` 行的全局函數返回的並不是 `cout`，所以修改代碼如下
 
+
+```c++ {.line-numbers}
+//**************左移运算符重载**************
+//作用：可以输出自定义数据类型
+
+#include<iostream>
+using namespace std;
+
+class Person {
+	//利用成員函數重載左移運算符
+	friend ostream & operator<<(ostream & cout, Person & p);
+
+public:
+
+	Person(int a, int b)
+	{
+		this->m_A = a;
+		this->m_B = b;
+	}
+
+private:
+	int m_A;
+	int m_B;
+};
+
+//只能利用全局函數實現左移運算符(<<)
+//在 vscode 可以點擊 `cout` 並按下 `alt + F12`，即可查看 cout的原碼
+//可以看到 `cout` 的是在 `ostream` 創建出來的對象。
+//補充： `ostream`為輸出流，`istream`為輸入流
+ostream & operator<<(ostream & cout, Person & p)	//本質 operator<<(cout, p) 可簡化成 cout<<p
+{
+	cout<<"m_A = "<<p.m_A<<"\t\t"<<"m_B = "<<p.m_B<<endl;
+	return cout;
+}
+
+void test() {
+
+	Person p1(10, 20);
+	cout<<p1<<endl;
+}
+
+int main() {
+
+	test();
+
+	system("pause");
+
+	return 0;
+}
+```
 
 
 > 总结：重载左移运算符配合友元可以实现输出自定义数据类型
