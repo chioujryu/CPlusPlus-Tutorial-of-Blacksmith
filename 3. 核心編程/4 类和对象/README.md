@@ -2540,29 +2540,52 @@ int main() {
 
 
 
-```C++
+```C++ {.line-numbers}
+//**************遞增运算符重载**************
+//作用：通过重载递增运算符，实现自己的整型数据
+
+#include<iostream>
+using namespace std;
 
 class MyInteger {
 
-	friend ostream& operator<<(ostream& out, MyInteger myint);
+	friend ostream & operator<<(ostream & out, MyInteger myint);
 
 public:
 	MyInteger() {
 		m_Num = 0;
 	}
-	//前置++
-	MyInteger& operator++() {
-		//先++
+	//重載前置++運算符	返回引用是為了對同一個數據做增加
+	MyInteger & operator++() {
+		//先進行++運算
 		m_Num++;
-		//再返回
+		//再將自身做返回
 		return *this;
 	}
 
-	//后置++
-	MyInteger operator++(int) {
+	//重載后置++運算符
+	MyInteger operator++(int) {	//int代表佔位參數，可以區分前置以及後置遞增
 		//先返回
 		MyInteger temp = *this; //记录当前本身的值，然后让本身的值加1，但是返回的是以前的值，达到先返回后++；
 		m_Num++;
+		//再將自身做返回
+		return temp;
+	}
+
+	//重載前置--運算符	返回引用是為了對同一個數據做遞減
+	MyInteger & operator--() {
+		//先進行++運算
+		m_Num--;
+		//再將自身做返回
+		return *this;
+	}
+
+	//重載后置--運算符
+	MyInteger operator--(int) {	//int代表佔位參數，可以區分前置以及後置遞增
+		//先返回
+		MyInteger temp = *this; //记录当前本身的值，然后让本身的值加1，但是返回的是以前的值，达到先返回后++；
+		m_Num++;
+		//再將自身做返回
 		return temp;
 	}
 
@@ -2570,12 +2593,11 @@ private:
 	int m_Num;
 };
 
-
-ostream& operator<<(ostream& out, MyInteger myint) {
+//重載左移運算符
+ostream & operator<<(ostream & out, MyInteger myint) {
 	out << myint.m_Num;
 	return out;
 }
-
 
 //前置++ 先++ 再返回
 void test01() {
@@ -2592,10 +2614,29 @@ void test02() {
 	cout << myInt << endl;
 }
 
+//前置-- 先-- 再返回
+void test03() {
+	MyInteger myInt;
+	cout << --myInt << endl;
+	cout << myInt << endl;
+}
+
+//后置-- 先返回 再--
+void test04() {
+
+	MyInteger myInt;
+	cout << myInt-- << endl;
+	cout << myInt << endl;
+}
+
 int main() {
 
-	test01();
+	//test01();
 	//test02();
+	//test03();
+    //test04();
+
+    return 0;
 
 	system("pause");
 
@@ -2632,37 +2673,46 @@ c++编译器至少给一个类添加4个函数
 
 
 
-
-
 如果类中有属性指向堆区，做赋值操作时也会出现深浅拷贝问题
-
-
 
 
 
 **示例：**
 
-```C++
+```C++ {.line-numbers}
+//**************赋值运算符重载**************
+//c++编译器至少给一个类添加4个函数
+//1. 默认构造函数(无参，函数体为空)
+//2. 默认析构函数(无参，函数体为空)
+//3. 默认拷贝构造函数，对属性进行值拷贝
+//4. 赋值运算符 operator=, 对属性进行值拷贝
+
+#include<iostream>
+using namespace std;
+
 class Person
 {
 public:
 
 	Person(int age)
 	{
-		//将年龄数据开辟到堆区
+		//將年龄數據開闢到堆區
 		m_Age = new int(age);
 	}
 
-	//重载赋值运算符 
-	Person& operator=(Person &p)
+	//重载赋值运算符 (=)
+	Person & operator=(Person & p)
 	{
+		//编译器提供的代码是浅拷贝
+		//m_Age = p.m_Age;
+
+
+		//我們應該先判斷是否有屬性在堆區，如果有，先釋放乾淨，然後再深拷貝
 		if (m_Age != NULL)
 		{
 			delete m_Age;
 			m_Age = NULL;
 		}
-		//编译器提供的代码是浅拷贝
-		//m_Age = p.m_Age;
 
 		//提供深拷贝 解决浅拷贝的问题
 		m_Age = new int(*p.m_Age);
@@ -2670,7 +2720,6 @@ public:
 		//返回自身
 		return *this;
 	}
-
 
 	~Person()
 	{
@@ -2686,7 +2735,6 @@ public:
 
 };
 
-
 void test01()
 {
 	Person p1(18);
@@ -2695,7 +2743,7 @@ void test01()
 
 	Person p3(30);
 
-	p3 = p2 = p1; //赋值操作
+	p3 = p2 = p1; //赋值操作	//p2 = p1 相當於 p2.operator=(p1)
 
 	cout << "p1的年龄为：" << *p1.m_Age << endl;
 
@@ -2712,6 +2760,7 @@ int main() {
 	//int b = 20;
 	//int c = 30;
 
+	//我們想讓Person類值行這樣的賦值
 	//c = b = a;
 	//cout << "a = " << a << endl;
 	//cout << "b = " << b << endl;
@@ -2722,10 +2771,6 @@ int main() {
 	return 0;
 }
 ```
-
-
-
-
 
 
 
