@@ -2780,13 +2780,19 @@ int main() {
 
 
 
-**作用：**重载关系运算符，可以让两个自定义类型对象进行对比操作
+**作用**：重载关系运算符，可以让两个自定义类型对象进行对比操作
 
 
 
 **示例：**
 
-```C++
+```C++ {.line-numbers}
+//**************关系运算符重载**************
+//作用：重载关系运算符，可以让两个自定义类型对象进行对比操作
+
+#include<iostream>
+using namespace std;
+
 class Person
 {
 public:
@@ -2870,32 +2876,49 @@ int main() {
 
 
 
-* 函数调用运算符 ()  也可以重载
-* 由于重载后使用的方式非常像函数的调用，因此称为仿函数
-* 仿函数没有固定写法，非常灵活
+* `函数调用运算符 ()`  也可以重载
+* 由于重载后使用的方式非常像`函数`的调用，因此称为`仿函数`
+* `仿函数`没有固定写法，非常灵活
+
+**動點整理：**
+1. 有用到`匿名對象`
+2. 有用到 `函数调用运算符 ()`
+
 
 
 
 **示例：**
 
-```C++
+```C++ {.line-numbers}
+//**************函數調用運算符重載**************
+//作用：重载关系运算符，可以让两个自定义类型对象进行对比操作
+
+#include<iostream>
+using namespace std;
+
+//打印的類
 class MyPrint
 {
 public:
+
+	//重載()運算符
 	void operator()(string text)
 	{
 		cout << text << endl;
 	}
 
+	int a =20;
+
 };
 void test01()
 {
-	//重载的（）操作符 也称为仿函数
 	MyPrint myFunc;
-	myFunc("hello world");
+
+	//因為使用起來非常像是函數，所以也称为仿函数
+	myFunc("hello world");	
 }
 
-
+//加法類
 class MyAdd
 {
 public:
@@ -2911,7 +2934,7 @@ void test02()
 	int ret = add(10, 10);
 	cout << "ret = " << ret << endl;
 
-	//匿名对象调用  
+	//匿名對象调用，調用完之後，會馬上釋放掉記憶體
 	cout << "MyAdd()(100,100) = " << MyAdd()(100, 100) << endl;
 }
 
@@ -2919,7 +2942,7 @@ int main() {
 
 	test01();
 	test02();
-
+	
 	system("pause");
 
 	return 0;
@@ -2958,6 +2981,8 @@ int main() {
 
 
 
+
+
 **普通实现：**
 
 ```C++
@@ -2977,6 +3002,8 @@ public:
 	{
 		cout << "Java,Python,C++...(公共分类列表)" << endl;
 	}
+
+	//
 	void content()
 	{
 		cout << "JAVA学科视频" << endl;
@@ -3159,17 +3186,11 @@ int main() {
 }
 ```
 
-
-
-**总结：**
-
-继承的好处：==可以减少重复的代码==
-
-class A : public B; 
-
-A 类称为子类 或 派生类
-
-B 类称为父类 或 基类
+**重點整理**：
+1. 繼承的好處是減少重複的代碼
+2. 語法：class 子類: public 父類
+3. 子類 也稱為 派生類
+4. 父類 也稱為 基類
 
 
 
@@ -3213,7 +3234,10 @@ B 类称为父类 或 基类
 
 **示例：**
 
-```C++
+```C++  {.line-numbers}
+#include<iostream>
+using namespace std;
+
 class Base1
 {
 public: 
@@ -3230,8 +3254,8 @@ class Son1 :public Base1
 public:
 	void func()
 	{
-		m_A; //可访问 public权限
-		m_B; //可访问 protected权限
+		m_A; //父類中是 public 權限成員，到子類中依然是 public 權限
+		m_B; //父類中是 protected 權限成員，到子類中依然是 protected 權限
 		//m_C; //不可访问
 	}
 };
@@ -3240,6 +3264,7 @@ void myClass()
 {
 	Son1 s1;
 	s1.m_A; //其他类只能访问到公共权限
+	//s1.m_B;	//m_B是 protected 權限，所以類外訪問不到
 }
 
 //保护继承
@@ -3252,20 +3277,22 @@ protected:
 private:
 	int m_C;
 };
+
 class Son2:protected Base2
 {
 public:
 	void func()
 	{
-		m_A; //可访问 protected权限
-		m_B; //可访问 protected权限
-		//m_C; //不可访问
+		m_A; //父類中的 public 成員，子類中也會變成 protected 权限
+		m_B; //父類中的 protected 成員，子類中也會變成 protected 权限
+		//m_C; //父類中的 private 成員，子類中訪問不到
 	}
 };
+
 void myClass2()
 {
 	Son2 s;
-	//s.m_A; //不可访问
+	//s.m_A; //上 Son2 中 m_A 是 protected 权限，所以類外無法訪問
 }
 
 //私有继承
@@ -3283,11 +3310,18 @@ class Son3:private Base3
 public:
 	void func()
 	{
-		m_A; //可访问 private权限
-		m_B; //可访问 private权限
-		//m_C; //不可访问
+		m_A; //父類中的 public 成員到子類中變成 private 成員
+		m_B; //父類中的 protected 成員到子類中變成 private 成員
+		//m_C; //父類中 private 成員訪問不到
 	}
 };
+
+void myClass3()
+{
+	Son3 s;
+	//s.m_A; // Son3 中 m_A 是 private 成員，所以類外無法訪問
+}
+
 class GrandSon3 :public Son3
 {
 public:
@@ -3298,6 +3332,14 @@ public:
 		//m_B;
 		//m_C;
 	}
+};
+
+int main(){
+
+	myClass();
+	
+	return 0;
+
 };
 ```
 
@@ -3319,7 +3361,7 @@ public:
 
 **示例：**
 
-```C++
+```C++  {.line-numbers}
 class Base
 {
 public:
@@ -3412,7 +3454,7 @@ int main() {
 
 **示例：**
 
-```C++
+```C++  {.line-numbers}
 class Base 
 {
 public:
