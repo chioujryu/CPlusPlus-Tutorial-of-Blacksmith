@@ -5,11 +5,11 @@
 ## **4** 类和对象
 
 
-C++面向对象的三大特性为：==封装、继承、多态==
+C++面向对象的三大特性为：**封装、继承、多态**
 
 
 
-C++认为==万事万物都皆为对象==，对象上有其属性和行为
+C++认为**万事万物都皆为对象**，对象上有其属性和行为
 
 
 
@@ -19,7 +19,7 @@ C++认为==万事万物都皆为对象==，对象上有其属性和行为
 
 ​	车也可以作为对象，属性有轮胎、方向盘、车灯...,行为有载人、放音乐、放空调...
 
-​	具有==相同性质的对象==，我们可以抽象称为==类==，人属于人类，车属于车类
+​	具有**相同性质的对象**，我们可以抽象称为`类`，人属于人类，车属于车类
 
 ### 4.1 封装
 
@@ -32,7 +32,7 @@ C++认为==万事万物都皆为对象==，对象上有其属性和行为
 * 将属性和行为作为一个整体，表现生活中的事物
 * 将属性和行为加以权限控制
 * 可以想一個道理，有人類之後才有我，有我之後才有手腳，也會有行為，像是走路，跑跳等。
-* ==類中的屬性和行為，我們統一稱為成員==
+* **類中的屬性和行為，我們統一稱為成員**
   * `類中的屬性`又稱為`成員屬性`或`成員變數`
   * `類中的行為`又稱為`成員函數`
 
@@ -3960,30 +3960,39 @@ int main() {
 
 **多态是C++面向对象三大特性之一**
 
-多态分为两类
+**多态分为两类**
 
 * 静态多态: 函数重载 和 运算符重载属于静态多态，复用函数名
 * 动态多态: 派生类和虚函数实现运行时多态
 
 
 
-静态多态和动态多态区别：
+**静态多态和动态多态区别：**
 
 * 静态多态的函数地址早绑定  -  编译阶段确定函数地址
 * 动态多态的函数地址晚绑定  -  运行阶段确定函数地址
 
-
+**重點整理：**
+1. 有继承关系
+2. 子类重写父类中的虚函数
+3. 父类指针或引用指向子类对象
 
 下面通过案例进行讲解多态
 
 
 
 ```C++
+#include<iostream>
+using namespace std;
+
+
 class Animal
 {
 public:
+	//行為
 	//Speak函数就是虚函数
 	//函数前面加上virtual关键字，变成虚函数，那么编译器在编译的时候就不能确定函数调用了。
+	//你可以試試看把 virtual 去掉，並編譯看看
 	virtual void speak()
 	{
 		cout << "动物在说话" << endl;
@@ -3993,7 +4002,7 @@ public:
 class Cat :public Animal
 {
 public:
-	void speak()
+	void speak()	//要加virtual或不加virtual都可以
 	{
 		cout << "小猫在说话" << endl;
 	}
@@ -4003,20 +4012,24 @@ class Dog :public Animal
 {
 public:
 
-	void speak()
+	void speak()	//要加virtual或不加virtual都可以
 	{
 		cout << "小狗在说话" << endl;
 	}
 
 };
+
+//執行說話的還數
 //我们希望传入什么对象，那么就调用什么对象的函数
 //如果函数地址在编译阶段就能确定，那么静态联编
 //如果函数地址在运行阶段才能确定，就是动态联编
-
-void DoSpeak(Animal & animal)
+//地址早綁定，在編譯階段就可以確定函數的地址
+//如果想執行讓貓說話，那麼這個函數地址就不能提前綁定，需要在運行階段進行綁定，地址晚綁定
+void DoSpeak(Animal & animal)	//Animal & animal = cat  ，  c++允許父子類型的轉換，很猛吧
 {
 	animal.speak();
 }
+
 //
 //多态满足条件： 
 //1、有继承关系
@@ -4032,6 +4045,10 @@ void test01()
 
 	Dog dog;
 	DoSpeak(dog);
+
+
+	Animal animal;
+	DoSpeak(animal);
 }
 
 
@@ -4045,7 +4062,7 @@ int main() {
 }
 ```
 
-总结：
+**总结：**
 
 多态满足条件
 
@@ -4056,7 +4073,83 @@ int main() {
 
 * 父类指针或引用指向子类对象
 
-重写：函数返回值类型  函数名 参数列表 完全一致称为重写
+重写：函数返回值类型  函数名 参数列表 完全一致称为重写。
+
+
+接下來請用 `Developer Command Prompt for VS 2022` 來深入解析程式碼，請在程式碼當前資料夾，執行`cl /d1 reportSingleClassLayout<查看的类名> <所属文件名>`
+```c++
+#include<iostream>
+using namespace std;
+
+class Animal
+{
+public:
+
+	//virtual其實是一個指針，指針占了4byte
+	virtual void speak()
+	{
+		cout << "动物在说话" << endl;
+	};
+	
+};
+
+class Cat :public Animal
+{
+public:
+	void speak()	
+	{
+		cout << "小猫在说话" << endl;
+	}
+};
+
+class Dog :public Animal
+{
+public:
+
+	void speak()	//要加virtual或不加virtual都可以
+	{
+		cout << "小狗在说话" << endl;
+	}
+
+};
+
+
+void DoSpeak(Animal & animal)	
+{
+	animal.speak();
+}
+
+
+void test01()
+{
+	Cat cat;
+	DoSpeak(cat);
+
+
+	Dog dog;
+	DoSpeak(dog);
+
+
+	Animal animal;
+	DoSpeak(animal);
+}
+
+
+void test02()
+{
+	cout<<sizeof(Animal)<<endl;
+}
+
+
+int main() {
+
+	test02();
+
+	system("pause");
+
+	return 0;
+}
+```
 
 
 
