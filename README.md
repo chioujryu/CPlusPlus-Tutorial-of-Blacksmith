@@ -19,3 +19,8 @@
 
 * 综合大案例：机房预约系统# Blacksmith-of-CPP
 
+# Tools
+* Developer Command Prompt for VS 2022
+  * 使用方式：
+    * 在程式當前資料夾輸入`cl /d1 reportSingleClassLayout<查看的类名> <所属文件名>`
+
