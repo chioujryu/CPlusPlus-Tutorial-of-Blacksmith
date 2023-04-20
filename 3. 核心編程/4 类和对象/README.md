@@ -1,6 +1,6 @@
 # C++核心编程
 
-本阶段主要针对C++==面向对象==编程技术做详细讲解，探讨C++中的核心和精髓。
+本阶段主要针对C++**面向对象**编程技术做详细讲解，探讨C++中的核心和精髓。
 
 ## **4** 类和对象
 
@@ -3362,6 +3362,9 @@ int main(){
 **示例：**
 
 ```C++  {.line-numbers}
+#include<iostream>
+using namespace std;
+
 class Base
 {
 public:
@@ -3379,8 +3382,13 @@ public:
 	int m_D;
 };
 
+//利用`Developer Command Prompt for VS 2022`查看對象模型
+//跳轉文件路徑，使用 cd
+// cl /d1 reportSingleClassLayout <文件名>
 void test01()
 {
+	//父類中所有非靜態成員屬性都會被子類繼承下去
+	//父類中私有成員屬性 是被編譯器給隱藏了，因此是訪問不到，但是確實被繼承下去了
 	cout << "sizeof Son = " << sizeof(Son) << endl;
 }
 
@@ -3455,6 +3463,10 @@ int main() {
 **示例：**
 
 ```C++  {.line-numbers}
+#include<iostream>
+using namespace std;
+
+//Base中的構造和析構順序
 class Base 
 {
 public:
@@ -3486,6 +3498,7 @@ public:
 void test01()
 {
 	//继承中 先调用父类构造函数，再调用子类构造函数，析构顺序与构造相反
+	//可以想成，先有父親，才會有兒子
 	Son s;
 }
 
@@ -3528,7 +3541,13 @@ int main() {
 
 **示例：**
 
-```C++
+```C++ {.line-numbers}
+#include<iostream>
+using namespace std;
+//子类对象可以直接访问到子类中同名成员
+//子类对象加作用域可以访问到父类同名成员
+//当子类与父类拥有同名的成员函数，子类会隐藏父类中同名成员函数，加作用域可以访问到父类中同名函数
+
 class Base {
 public:
 	Base()
@@ -3565,6 +3584,7 @@ public:
 		cout << "Son - func()调用" << endl;
 	}
 public:
+	//跟父類有同名的屬性
 	int m_A;
 };
 
@@ -3573,15 +3593,18 @@ void test01()
 	Son s;
 
 	cout << "Son下的m_A = " << s.m_A << endl;
+	//如果通過子類對象訪問父類裡有同名的成員的話，要加上的作用域，才可以訪問父類的成員
 	cout << "Base下的m_A = " << s.Base::m_A << endl;
 
 	s.func();
+	//同名的成員函數處理方式，跟一般的成員處理方式一樣
 	s.Base::func();
 	s.Base::func(10);
 
 }
-int main() {
 
+int main() {
+	
 	test01();
 
 	system("pause");
@@ -3589,7 +3612,7 @@ int main() {
 }
 ```
 
-总结：
+**总结：**
 
 1. 子类对象可以直接访问到子类中同名成员
 2. 子类对象加作用域可以访问到父类同名成员
@@ -3626,7 +3649,11 @@ int main() {
 
 **示例：**
 
-```C++
+```C++ {.line-numbers}
+#include<iostream>
+using namespace std;
+//子類如果有跟父類同名的成員，會把父類的同名成員隱藏掉
+
 class Base {
 public:
 	static void func()
@@ -3654,7 +3681,7 @@ public:
 
 int Son::m_A = 200;
 
-//同名成员属性
+//同名靜態成員屬性處理方式
 void test01()
 {
 	//通过对象访问
@@ -3666,10 +3693,11 @@ void test01()
 	//通过类名访问
 	cout << "通过类名访问： " << endl;
 	cout << "Son  下 m_A = " << Son::m_A << endl;
+	//第一個::代表通過類名的方式訪問，第二個::代表訪問父類的作用域下
 	cout << "Base 下 m_A = " << Son::Base::m_A << endl;
 }
 
-//同名成员函数
+//同名靜態成員函数處理方式
 void test02()
 {
 	//通过对象访问
@@ -3680,14 +3708,16 @@ void test02()
 
 	cout << "通过类名访问： " << endl;
 	Son::func();
+	//第一個::代表通過類名的方式訪問，第二個::代表訪問父類的作用域下
 	Son::Base::func();
 	//出现同名，子类会隐藏掉父类中所有同名成员函数，需要加作作用域访问
+	//如果想訪問父類中被隱藏的成員，需要加作用域
 	Son::Base::func(100);
 }
 int main() {
 
-	//test01();
-	test02();
+	test01();
+	//test02();
 
 	system("pause");
 
@@ -3735,7 +3765,11 @@ C++允许**一个类继承多个类**
 
 **示例：**
 
-```C++
+```C++ {.line-numbers}
+#include<iostream>
+using namespace std;
+//一般不建議這樣子做
+
 class Base1 {
 public:
 	Base1()
@@ -3777,8 +3811,9 @@ void test01()
 {
 	Son s;
 	cout << "sizeof Son = " << sizeof(s) << endl;
-	cout << s.Base1::m_A << endl;
-	cout << s.Base2::m_A << endl;
+	//當父類中出現同名成員，需要加作用域
+	cout <<"Base1::m_A"<<s.Base1::m_A << endl;
+	cout <<"Base2::m_A"<< s.Base2::m_A << endl;
 }
 
 int main() {
@@ -3810,12 +3845,9 @@ int main() {
 
 
 **菱形继承概念：**
-
-​	两个派生类继承同一个基类
-
-​	又有某个类同时继承者两个派生类
-
-​	这种继承被称为菱形继承，或者钻石继承
+* 两个派生类（子類）继承同一个基类（父類）
+* 又有某个类同时继承者两个派生类
+* 这种继承被称为菱形继承，或者钻石继承
 
 
 
@@ -3831,7 +3863,7 @@ int main() {
 
 
 
-1.     羊继承了动物的数据，驼同样继承了动物的数据，当草泥马使用数据时，就会产生二义性。
+1. 羊继承了动物的数据，驼同样继承了动物的数据，当草泥马使用数据时，就会产生二义性。
 
 2. 草泥马继承自动物的数据继承了两份，其实我们应该清楚，这份数据我们只需要一份就可以。
 
@@ -3840,14 +3872,19 @@ int main() {
 **示例：**
 
 ```C++
+#include<iostream>
+using namespace std;
+
 class Animal
 {
 public:
 	int m_Age;
 };
 
+//利用需繼承可以解決菱形繼承的問題
 //继承前加virtual关键字后，变为虚继承
 //此时公共的父类Animal称为虚基类
+//使用虛繼承後，同名的成員就變成同一個數據了
 class Sheep : virtual public Animal {};
 class Tuo   : virtual public Animal {};
 class SheepTuo : public Sheep, public Tuo {};
@@ -3855,14 +3892,18 @@ class SheepTuo : public Sheep, public Tuo {};
 void test01()
 {
 	SheepTuo st;
-	st.Sheep::m_Age = 100;
-	st.Tuo::m_Age = 200;
+	//Sheep 作用域下的m_Age
+	st.Sheep::m_Age = 18;
+	//Tuo 作用域下的m_Age
+	st.Tuo::m_Age = 20;
 
+	//當菱形繼承，兩個父類有相同數據，所以要加上作用域來區分
 	cout << "st.Sheep::m_Age = " << st.Sheep::m_Age << endl;
 	cout << "st.Tuo::m_Age = " <<  st.Tuo::m_Age << endl;
+
+	//那現在st.m_Age 到底是多少，所以要用到virtual
 	cout << "st.m_Age = " << st.m_Age << endl;
 }
-
 
 int main() {
 
@@ -3874,9 +3915,21 @@ int main() {
 }
 ```
 
+沒有加 `virtual` 的話 `m_Age` 會是不同作用域下面的數據，也就是不同數據
+![1](assets/1.png)
+
+但如果加上 `virtual` 的話，`m_Age`就會是同一個作用域下的數據，也就是同一個數據
+![2](assets/2.png)
+
+* `vbptr` 為 `vitual base pointer`
+* `vbtable` 為 `vitual base table`
+
+左邊的數字為它的位置，例如 `Sheep` 作用域下面的 `vbptr` 是 `0` ，所以 `+8 `則會為`m_Age`。以此類推
 
 
-总结：
+![3](assets/3.png)
+
+**总结：**
 
 * 菱形继承带来的主要问题是子类继承两份相同的数据，导致资源浪费以及毫无意义
 * 利用虚继承可以解决菱形继承问题

@@ -2,8 +2,12 @@
 [![VSCode](https://img.shields.io/badge/VSCode-any-blue)](https://code.visualstudio.com/)
 [![Replit](https://img.shields.io/badge/Replit-%20-orange)](https://replit.com/)
 
+## Resource
+[Video](https://www.bilibili.com/video/BV1et411b73Z?p=1&vd_source=1c6353162cc579be272e6d12bfeb50d0)
 
-* 明确C++课程学习阶段以及课程内容
+
+
+## 明确C++课程学习阶段以及课程内容
 
 
 
