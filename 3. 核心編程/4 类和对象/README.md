@@ -4159,7 +4159,7 @@ int main() {
 
 
 
-#### 4.7.2 多态案例一-计算器类
+#### 4.7.3 多态案例一-计算器类
 
 
 
@@ -4178,128 +4178,152 @@ int main() {
 
 
 **示例：**
+`main.cpp` 這是普通的物件導向寫法
+```c++
+#include<iostream>
+using namespace std;
+
+// 分別利用普通寫法和多態來實現計算機
+
+class calculator{
+public:
+	float number1;
+	float number2;
+public:
+	//初始值設定
+	calculator(){
+		this->number1 = 0;
+		this->number2 = 0;
+	};
+	calculator(float number1, float number2){
+		this->number1 = number1;
+		this->number2 = number2;
+	}
+
+public:
+
+	float getResult(string oper){	//operator是c++的保留字，所以變數名稱不能用operator
+		if (number1 == 0 || number2 == 0)
+		{
+			cout<<"妳沒有給計算機數值，所以無法運算"<<endl;
+		}
+		else if(oper=="+"){
+			return number1 + number2;
+		}
+		else if(oper=="-"){
+			return number1 - number2;
+		}
+		else if(oper=="*"){
+			return number1 * number2;
+		}
+		//如果想要擴展新功能，就需要修改原始碼
+		//在真實開發中，我們提倡開閉原則
+		//開閉原則就是不可以修改，只能進行擴展
+	};
+};
+
+void function(){
+	calculator c;
+	cout<<c.getResult("+")<<endl;
+};
+
+int main(){
+	
+	function();
+
+}
+```
+會發現一般的寫法非常不利於維護以及擴展，如果要擴展新功能就需要修改原始碼
+
+
+接下來介紹多態寫法
+`main.cpp`
+
 
 ```C++
-//普通实现
-class Calculator {
+#include<iostream>
+using namespace std;
+
+// 多態的好處
+// 1. 組織結構清晰
+// 2. 可讀性強
+// 3. 對於前期以及後期的維護性高
+
+class  AbstractCalculator{
 public:
-	int getResult(string oper)
-	{
-		if (oper == "+") {
-			return m_Num1 + m_Num2;
-		}
-		else if (oper == "-") {
-			return m_Num1 - m_Num2;
-		}
-		else if (oper == "*") {
-			return m_Num1 * m_Num2;
-		}
-		//如果要提供新的运算，需要修改源码
-	}
+	float number1;
+	float number2;
 public:
-	int m_Num1;
-	int m_Num2;
-};
+	//初始值設定
+	AbstractCalculator(){
+		this->number1 = 0;
+		this->number2 = 0;
+	};
 
-void test01()
-{
-	//普通实现测试
-	Calculator c;
-	c.m_Num1 = 10;
-	c.m_Num2 = 10;
-	cout << c.m_Num1 << " + " << c.m_Num2 << " = " << c.getResult("+") << endl;
+public:
 
-	cout << c.m_Num1 << " - " << c.m_Num2 << " = " << c.getResult("-") << endl;
-
-	cout << c.m_Num1 << " * " << c.m_Num2 << " = " << c.getResult("*") << endl;
-}
-
-
-
-//多态实现
-//抽象计算器类
-//多态优点：代码组织结构清晰，可读性强，利于前期和后期的扩展以及维护
-class AbstractCalculator
-{
-public :
-
-	virtual int getResult()
-	{
+	virtual float getResult(){	//operator是c++的保留字，所以變數名稱不能用operator
 		return 0;
-	}
+	};
 
-	int m_Num1;
-	int m_Num2;
 };
 
-//加法计算器
-class AddCalculator :public AbstractCalculator
-{
+class CalculatorAdd: public AbstractCalculator{
 public:
-	int getResult()
-	{
-		return m_Num1 + m_Num2;
+	float getResult(){
+		return number1 + number2;
 	}
 };
 
-//减法计算器
-class SubCalculator :public AbstractCalculator
-{
+class CalculatorSubstract: public AbstractCalculator{
 public:
-	int getResult()
-	{
-		return m_Num1 - m_Num2;
+	float getResult(){
+		return number1 - number2;
 	}
 };
 
-//乘法计算器
-class MulCalculator :public AbstractCalculator
-{
+class CalculatorMulitiple: public AbstractCalculator{
 public:
-	int getResult()
-	{
-		return m_Num1 * m_Num2;
+	float getResult(){
+		return number1 * number2;
 	}
 };
 
+void function(){
+	//多態使用條件
+	//父指針或者引用指向子類對象
 
-void test02()
-{
 	//创建加法计算器
-	AbstractCalculator *abc = new AddCalculator;
-	abc->m_Num1 = 10;
-	abc->m_Num2 = 10;
-	cout << abc->m_Num1 << " + " << abc->m_Num2 << " = " << abc->getResult() << endl;
-	delete abc;  //用完了记得销毁
+	AbstractCalculator * c = new CalculatorAdd;
+	c->number1 = 20;
+	c->number2 = 30;
+	cout<<c->getResult()<<endl;
+	delete c;
 
-	//创建减法计算器
-	abc = new SubCalculator;
-	abc->m_Num1 = 10;
-	abc->m_Num2 = 10;
-	cout << abc->m_Num1 << " - " << abc->m_Num2 << " = " << abc->getResult() << endl;
-	delete abc;  
+	//创建減法计算器
+	c = new CalculatorSubstract;
+	c->number1 = 20;
+	c->number2 = 30;
+	cout<<c->getResult()<<endl;
+	delete c;
 
 	//创建乘法计算器
-	abc = new MulCalculator;
-	abc->m_Num1 = 10;
-	abc->m_Num2 = 10;
-	cout << abc->m_Num1 << " * " << abc->m_Num2 << " = " << abc->getResult() << endl;
-	delete abc;
-}
+	c = new CalculatorSubstract;
+	c->number1 = 20;
+	c->number2 = 30;
+	cout<<c->getResult()<<endl;
+	delete c;
 
-int main() {
+};
 
-	//test01();
+int main(){
+	
+	function();
 
-	test02();
-
-	system("pause");
-
-	return 0;
 }
 ```
 
-> 总结：C++开发提倡利用多态设计程序架构，因为多态优点很多
+> **总结**：C++开发提倡利用多态设计程序架构，因为多态优点很多
 
 
 
@@ -4317,7 +4341,7 @@ int main() {
 
 
 
-#### 4.7.3 纯虚函数和抽象类
+#### 4.7.4 纯虚函数和抽象类
 
 
 
@@ -4349,41 +4373,48 @@ int main() {
 **示例：**
 
 ```C++
-class Base
-{
+#include<iostream>
+using namespace std;
+
+class Base{
+
 public:
-	//纯虚函数
-	//类中只要有一个纯虚函数就称为抽象类
-	//抽象类无法实例化对象
-	//子类必须重写父类中的纯虚函数，否则也属于抽象类
-	virtual void func() = 0;
+
+	// 通常父类中虚函数的实现是毫无意义的，主要都是调用子类重写的内容
+	// 所以可以將虛函數，改成純虛函數
+	// 將虛函數，改成純虛函數後，這個類別就變成抽象類，繼承的類別也會是抽象類
+	virtual float getResult() = 0;
+
 };
 
-class Son :public Base
-{
+class son: public Base{
+
 public:
-	virtual void func() 
-	{
-		cout << "func调用" << endl;
+
+	virtual float getResult(){
+		cout<<"已調用 son 函數"<<endl;
 	};
+
 };
 
-void test01()
-{
-	Base * base = NULL;
-	//base = new Base; // 错误，抽象类无法实例化对象
-	base = new Son;
-	base->func();
-	delete base;//记得销毁
-}
+void function(){
 
-int main() {
+	// Base b; // 無法實例化對象，因為這是抽象類
+	// new Base  // 無法實例化對象，因為這是抽象類
 
-	test01();
+	son s;	//子類別必須重寫父類別中的純虛函數，不然無法實例化對象
+	s.getResult();
+	
+	Base * b = new son;
+	b->getResult();
+	delete b;
 
-	system("pause");
+};
 
-	return 0;
+int main(){
+	
+	function();
+
 }
 ```
 
@@ -4401,7 +4432,7 @@ int main() {
 
 
 
-#### 4.7.4 多态案例二-制作饮品
+#### 4.7.5 多态案例二-制作饮品
 
 **案例描述：**
 
@@ -4420,88 +4451,81 @@ int main() {
 **示例：**
 
 ```C++
-//抽象制作饮品
-class AbstractDrinking {
+#include<iostream>
+using namespace std;
+
+//飲品類
+class Drinking{
 public:
-	//烧水
-	virtual void Boil() = 0;
-	//冲泡
-	virtual void Brew() = 0;
-	//倒入杯中
-	virtual void PourInCup() = 0;
-	//加入辅料
-	virtual void PutSomething() = 0;
-	//规定流程
-	void MakeDrink() {
-		Boil();
-		Brew();
-		PourInCup();
-		PutSomething();
+	virtual void boil() = 0;	//煮水
+	virtual void brew() = 0;	//沖泡
+	virtual void pourIntoWater() = 0;	//倒水
+	virtual void addSomeSeasoning() = 0;	//加調味料
+
+	//執行所有函數
+	void implement(){
+		boil();
+		brew();
+		pourIntoWater();
+		addSomeSeasoning();
+	};
+};
+
+//咖啡類
+class Coffee: public Drinking{
+	virtual void boil(){
+		cout<<"煮水"<<endl;
+	}
+	virtual void brew(){
+		cout<<"沖泡咖啡"<<endl;
+	}
+	virtual void pourIntoWater(){
+		cout<<"倒入杯中"<<endl;
+	}
+	virtual void addSomeSeasoning(){
+		cout<<"加入奶精還有糖"<<endl;
 	}
 };
 
-//制作咖啡
-class Coffee : public AbstractDrinking {
-public:
-	//烧水
-	virtual void Boil() {
-		cout << "煮农夫山泉!" << endl;
+//茶類
+class Tea: public Drinking{
+	virtual void boil(){
+		cout<<"煮水"<<endl;
 	}
-	//冲泡
-	virtual void Brew() {
-		cout << "冲泡咖啡!" << endl;
+	virtual void brew(){
+		cout<<"沖泡茶葉"<<endl;
 	}
-	//倒入杯中
-	virtual void PourInCup() {
-		cout << "将咖啡倒入杯中!" << endl;
+	virtual void pourIntoWater(){
+		cout<<"倒入杯中"<<endl;
 	}
-	//加入辅料
-	virtual void PutSomething() {
-		cout << "加入牛奶!" << endl;
+	virtual void addSomeSeasoning(){
+		cout<<"加檸檬"<<endl;
 	}
 };
 
-//制作茶水
-class Tea : public AbstractDrinking {
-public:
-	//烧水
-	virtual void Boil() {
-		cout << "煮自来水!" << endl;
-	}
-	//冲泡
-	virtual void Brew() {
-		cout << "冲泡茶叶!" << endl;
-	}
-	//倒入杯中
-	virtual void PourInCup() {
-		cout << "将茶水倒入杯中!" << endl;
-	}
-	//加入辅料
-	virtual void PutSomething() {
-		cout << "加入枸杞!" << endl;
-	}
-};
-
-//业务函数
-void DoWork(AbstractDrinking* drink) {
-	drink->MakeDrink();
-	delete drink;
+//製作飲品
+void buildDrink(Drinking * drink){
+	drink->implement();
+	delete drink;	// 釋放記憶體
 }
 
-void test01() {
-	DoWork(new Coffee);
-	cout << "--------------" << endl;
-	DoWork(new Tea);
-}
+//製作咖啡
+void buildCoffee(){
+	buildDrink(new Coffee);
+};
+
+//製作茶
+void buildTea(){
+	buildDrink(new Tea);
+};
 
 
-int main() {
 
-	test01();
+int main(){
 
-	system("pause");
-
-	return 0;
+	buildCoffee();
+	buildTea();
+	
 }
 ```
 
@@ -4523,7 +4547,7 @@ int main() {
 
 
 
-#### 4.7.5 虚析构和纯虚析构
+#### 4.7.6 虚析构和纯虚析构
 
 
 
@@ -4559,25 +4583,98 @@ int main() {
 
 
 **示例：**
+`main.cpp`
+```c++
+#include<iostream>
+using namespace std;
+
+//Animal類
+//因裡面有純虛函數，所以這是抽象類
+class Animal{
+public:
+	Animal(){
+		cout<<"Animal構造函數調用"<<endl;
+	};
+	~Animal(){
+		cout<<"Animal析構函數調用"<<endl;
+	}
+	
+	//純虛函數
+	virtual void speak() = 0;
+};
+
+//Cat類
+class Cat: public Animal{
+public:
+	Cat(string name){
+		cout<<"Cat構造函數調用"<<endl;
+		m_name = new string(name);
+	};
+	~Cat(){
+
+		cout<<"Cat析構函數調用"<<endl;
+		if(this->m_name != NULL){
+			delete m_name;
+			m_name = NULL;
+		};
+	};
+	//虛函數
+	virtual void speak(){
+		cout<<"小貓在說話"<<endl;
+	};
+private:
+	string * m_name;
+};
+
+void Speak(){
+
+	Animal * animal = new Cat("Tom Cat");
+	animal->speak();
+	delete animal;
+};
+
+int main(){
+
+	Speak();
+	return 0;
+
+};
+```
+`terminal`
+```
+Animal構造函數調用
+Cat構造函數調用
+小貓在說話
+Animal析構函數調用
+```
+會發現清除記憶體沒有清除乾淨，Cat類的析構函數沒有調用，所以在父類的析構函數的前面加上`virtual`
+
+
 
 ```C++
-class Animal {
+#include<iostream>
+using namespace std;
+
+//Animal類
+//因裡面有純虛函數，所以這是抽象類
+class Animal{
 public:
+	Animal(){
+		cout<<"Animal構造函數調用"<<endl;
+	};
 
-	Animal()
-	{
-		cout << "Animal 构造函数调用！" << endl;
-	}
-	virtual void Speak() = 0;
+	// //析构函数加上virtual关键字，变成虚析构函数
+	// virtual ~Animal(){
+	// 	cout<<"Animal析構函數調用"<<endl;
+	// }
+	
+	virtual ~Animal() = 0;	//或是寫成純虛析構也可以，不過一定要在類外做具體的實現
 
-	//析构函数加上virtual关键字，变成虚析构函数
-	//virtual ~Animal()
-	//{
-	//	cout << "Animal虚析构函数调用！" << endl;
-	//}
+	//純虛函數
+	virtual void speak() = 0;
 
-
-	virtual ~Animal() = 0;
+protected:
+	string * m_name;
 };
 
 Animal::~Animal()
@@ -4586,55 +4683,55 @@ Animal::~Animal()
 }
 
 //和包含普通纯虚函数的类一样，包含了纯虚析构函数的类也是一个抽象类。不能够被实例化。
-
-class Cat : public Animal {
+//Cat類
+class Cat: public Animal{
 public:
-	Cat(string name)
-	{
-		cout << "Cat构造函数调用！" << endl;
-		m_Name = new string(name);
-	}
-	virtual void Speak()
-	{
-		cout << *m_Name <<  "小猫在说话!" << endl;
-	}
-	~Cat()
-	{
-		cout << "Cat析构函数调用!" << endl;
-		if (this->m_Name != NULL) {
-			delete m_Name;
-			m_Name = NULL;
-		}
-	}
-
-public:
-	string *m_Name;
+	Cat(string name){
+		cout<<"Cat構造函數調用"<<endl;
+		this->m_name = new string(name);
+	};
+	~Cat(){
+		cout<<"Cat析構函數調用"<<endl;
+		if(this->m_name != NULL){
+			delete m_name;
+			m_name = NULL;
+		};
+	};
+	//虛函數
+	virtual void speak(){
+		cout<<"小貓在說話"<<endl;
+	};
 };
 
-void test01()
-{
-	Animal *animal = new Cat("Tom");
-	animal->Speak();
+void Speak(){
+
+	Animal * animal = new Cat("Tom Cat");
+	animal->speak();
 
 	//通过父类指针去释放，会导致子类对象可能清理不干净，造成内存泄漏
 	//怎么解决？给基类增加一个虚析构函数
 	//虚析构函数就是用来解决通过父类指针释放子类对象
 	delete animal;
-}
+};
 
-int main() {
-
-	test01();
-
-	system("pause");
-
+int main(){
+	
+	Speak();
 	return 0;
-}
+
+};
+```
+`output`
+```
+Animal構造函數調用
+Cat構造函數調用
+小貓在說話
+Cat析構函數調用
+Animal 纯虚析构函数调用！
 ```
 
 
-
-总结：
+**总结**：
 
 ​	1. 虚析构或纯虚析构就是用来解决通过父类指针释放子类对象
 
@@ -4656,7 +4753,7 @@ int main() {
 
 
 
-#### 4.7.6 多态案例三-电脑组装
+#### 4.7.7 多态案例三-电脑组装
 
 
 
@@ -4682,171 +4779,133 @@ int main() {
 #include<iostream>
 using namespace std;
 
-//抽象CPU类
-class CPU
-{
+//處理器
+class CPU{
 public:
-	//抽象的计算函数
 	virtual void calculate() = 0;
 };
-
-//抽象显卡类
-class VideoCard
-{
+//顯示卡
+class GPU{
 public:
-	//抽象的显示函数
 	virtual void display() = 0;
 };
-
-//抽象内存条类
-class Memory
-{
+//記憶體
+class RAM{
 public:
-	//抽象的存储函数
 	virtual void storage() = 0;
 };
 
-//电脑类
-class Computer
-{
+class Computer{
 public:
-	Computer(CPU * cpu, VideoCard * vc, Memory * mem)
-	{
-		m_cpu = cpu;
-		m_vc = vc;
-		m_mem = mem;
-	}
+	Computer(CPU * cpu, GPU * gpu, RAM * ram){
+		this->cpu = cpu;
+		this->gpu = gpu;
+		this->ram = ram;
+	};
 
-	//提供工作的函数
-	void work()
-	{
-		//让零件工作起来，调用接口
-		m_cpu->calculate();
+	void Work(){
+		this->cpu->calculate();
+		this->gpu->display();
+		this->ram->storage();
+	};
 
-		m_vc->display();
-
-		m_mem->storage();
-	}
-
-	//提供析构函数 释放3个电脑零件
-	~Computer()
-	{
-
-		//释放CPU零件
-		if (m_cpu != NULL)
-		{
-			delete m_cpu;
-			m_cpu = NULL;
+	//提供析構函數釋放三個零件的指針
+	virtual ~Computer(){
+		//釋放cpu零件
+		if (cpu != NULL){
+			delete cpu;
+			//cpu = NULL;
+			cout<<"cpu記憶體已經被釋放"<<endl;
 		}
-
-		//释放显卡零件
-		if (m_vc != NULL)
-		{
-			delete m_vc;
-			m_vc = NULL;
+		//釋放gpu零件
+		if (gpu != NULL){
+			delete gpu;
+			//gpu = NULL;
+			cout<<"gpu記憶體已經被釋放"<<endl;
 		}
-
-		//释放内存条零件
-		if (m_mem != NULL)
-		{
-			delete m_mem;
-			m_mem = NULL;
+		//釋放ram零件
+		if (ram != NULL){
+			delete ram;
+			//ram = NULL;
+			cout<<"ram記憶體已經被釋放"<<endl;
 		}
 	}
-
 private:
-
-	CPU * m_cpu; //CPU的零件指针
-	VideoCard * m_vc; //显卡零件指针
-	Memory * m_mem; //内存条零件指针
+	CPU * cpu;
+	GPU * gpu;
+	RAM * ram;
 };
 
-//具体厂商
-//Intel厂商
-class IntelCPU :public CPU
-{
-public:
-	virtual void calculate()
-	{
-		cout << "Intel的CPU开始计算了！" << endl;
+//Intel零件
+class IntelCPU: public CPU{
+	virtual void calculate(){
+		cout << "Intel的CPU開始運作了" << endl;
 	}
 };
 
-class IntelVideoCard :public VideoCard
-{
-public:
-	virtual void display()
-	{
-		cout << "Intel的显卡开始显示了！" << endl;
+class IntelGPU: public GPU{
+	virtual void display(){
+		cout << "Intel的GPU開始運作了" << endl;
 	}
 };
 
-class IntelMemory :public Memory
-{
-public:
-	virtual void storage()
-	{
-		cout << "Intel的内存条开始存储了！" << endl;
+class IntelRAM: public RAM{
+	virtual void storage(){
+		cout << "Intel的RAM開始運作了" << endl;
 	}
 };
 
-//Lenovo厂商
-class LenovoCPU :public CPU
-{
-public:
-	virtual void calculate()
-	{
-		cout << "Lenovo的CPU开始计算了！" << endl;
+//Lenovo零件
+class LenovoCPU: public CPU{
+	virtual void calculate(){
+		cout << "Lenovo的CPU開始運作了" << endl;
 	}
 };
 
-class LenovoVideoCard :public VideoCard
-{
-public:
-	virtual void display()
-	{
-		cout << "Lenovo的显卡开始显示了！" << endl;
+class LenovoGPU: public GPU{
+	virtual void display(){
+		cout << "Lenovo的GPU開始運作了" << endl;
 	}
 };
 
-class LenovoMemory :public Memory
-{
-public:
-	virtual void storage()
-	{
-		cout << "Lenovo的内存条开始存储了！" << endl;
+class LenovoRAM: public RAM{
+	virtual void storage(){
+		cout << "Lenovo的RAM開始運作了" << endl;
 	}
 };
 
+void Work(){
 
-void test01()
-{
-	//第一台电脑零件
-	CPU * intelCpu = new IntelCPU;
-	VideoCard * intelCard = new IntelVideoCard;
-	Memory * intelMem = new IntelMemory;
+	//電腦零件宣告
+	CPU * Intelcpu = new IntelCPU;
+	GPU * Intelgpu = new IntelGPU;
+	RAM * Intelram = new IntelRAM;
+	CPU * Lenovocpu = new LenovoCPU;
+	GPU * Lenovogpu = new LenovoGPU;
+	RAM * Lenovoram = new LenovoRAM;
 
-	cout << "第一台电脑开始工作：" << endl;
-	//创建第一台电脑
-	Computer * computer1 = new Computer(intelCpu, intelCard, intelMem);
-	computer1->work();
-	delete computer1;
+	//第一台電腦組裝即開始運作
+	Computer * intel_computer = new Computer(Intelcpu,Intelgpu,Intelram);
+	intel_computer->Work();
+	delete intel_computer;
+	cout<<"已經釋放掉intel_computer指針"<<endl;
 
-	cout << "-----------------------" << endl;
-	cout << "第二台电脑开始工作：" << endl;
-	//第二台电脑组装
-	Computer * computer2 = new Computer(new LenovoCPU, new LenovoVideoCard, new LenovoMemory);;
-	computer2->work();
-	delete computer2;
+	//第二台電腦組裝即開始運作
+	Computer * Levon_computer = new Computer(Intelcpu,Lenovogpu,Intelram);
+	Levon_computer->Work();
+	delete Levon_computer;
+	cout<<"已經釋放掉Levon_computer指針"<<endl;
 
-	cout << "-----------------------" << endl;
-	cout << "第三台电脑开始工作：" << endl;
-	//第三台电脑组装
-	Computer * computer3 = new Computer(new LenovoCPU, new IntelVideoCard, new LenovoMemory);;
-	computer3->work();
-	delete computer3;
+};
 
-}
+
+int main(){
+
+	Work();
+	
+	return 0;
+
+};
 ```
 
 
