@@ -263,7 +263,7 @@ int main(){
 
 以二进制的方式对文件进行读写操作
 
-打开方式要指定为 ==ios::binary==
+打开方式要指定为 `ios::binary`
 
 
 
@@ -280,23 +280,26 @@ int main(){
 **示例：**
 
 ```C++
-#include <fstream>
+#include<iostream>
 #include <string>
+using namespace std;
+
+//1、包含头文件
+#include <fstream>	
 
 class Person
 {
 public:
-	char m_Name[64];
+	char m_Name[64];	// 用c++的string會有問題，所以要用char
 	int m_Age;
 };
 
 //二进制文件  写文件
 void test01()
 {
-	//1、包含头文件
-
+	
 	//2、创建输出流对象
-	ofstream ofs("person.txt", ios::out | ios::binary);
+	ofstream ofs("person.txt", ios::out | ios::binary);	// ofstream 裡面有構造函數，可以直接設定初始值
 	
 	//3、打开文件
 	//ofs.open("person.txt", ios::out | ios::binary);
@@ -304,7 +307,7 @@ void test01()
 	Person p = {"张三"  , 18};
 
 	//4、写文件
-	ofs.write((const char *)&p, sizeof(p));
+	ofs.write((const char *)&p, sizeof(p));	//二進制寫入，會是亂碼是正常的，可以讀回來就好
 
 	//5、关闭文件
 	ofs.close();
@@ -345,14 +348,18 @@ int main() {
 示例：
 
 ```C++
-#include <fstream>
+#include<iostream>
 #include <string>
+using namespace std;
+
+#include <fstream>
 
 class Person
 {
 public:
 	char m_Name[64];
 	int m_Age;
+	char m_mood[64];
 };
 
 void test01()
@@ -366,7 +373,7 @@ void test01()
 	Person p;
 	ifs.read((char *)&p, sizeof(p));
 
-	cout << "姓名： " << p.m_Name << " 年龄： " << p.m_Age << endl;
+	cout << "姓名： " << p.m_Name << " 年龄： " << p.m_Age << " 心情： " <<p.m_mood<<endl;
 }
 
 int main() {
