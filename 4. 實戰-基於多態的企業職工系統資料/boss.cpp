@@ -10,7 +10,8 @@ Boss::Boss(int m_ID, string m_Name, int position){
 void Boss::showInfo(){
     cout << "員工編號：" << m_ID 
             << "\t員工姓名：" << m_Name
-            << "\t員工部門ID" << position << endl;
+            << "\t員工部門ID：" << position 
+            <<"\t工作責任："<<"給manager工作事務"<< endl;
 };  
 
 //獲取部門名稱

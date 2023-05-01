@@ -25,27 +25,42 @@ int main(){
 
     
     //實例化管理對象
-    WorkManager WM;
+    WorkManager workerManager;
 
     int choice = 0; //用來存儲用戶的選項
     while(true){
 
         //展示菜單
-        WM.ShowMenu();
+        workerManager.ShowMenu();
         cout<<"請輸入你的選擇"<<endl;
         cin>>choice;    //接受用戶的選項
         switch (choice)
         {
         case 0: //退出管理程式
-            WM.exitSystem();
+            workerManager.exitSystem();
             break;
         case 1: //增加職工信息
-            WM.AddEmployee();
+            workerManager.AddEmployee();
             break;
         case 2: //顯示職工信息
+            workerManager.Show_Workers();
             break;
         case 3: //刪除離職職工
+        {
+            //測試用的程式碼，先隱藏掉，你也可以再打開它
+            // int result = workerManager.Check_Exist_Worker(1);
+            // if (result == -1)
+            // {
+            //     cout << "員工不存在" << endl;
+            // }
+            // else
+            // {
+            //     cout << "員工存在" << endl;    
+            // }
+
+            workerManager.Delete_Workers();
             break;
+        }
         case 4: //修改職工信息
             break;
         case 5: //查找職工信息

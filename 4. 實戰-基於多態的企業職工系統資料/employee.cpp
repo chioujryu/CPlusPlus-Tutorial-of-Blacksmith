@@ -14,7 +14,6 @@ void Employee::showInfo(){
     cout << "員工編號：" << m_ID 
             << "\t員工姓名：" << m_Name
             << "\t員工部門ID：" << position << endl;
-
 };
 
 //獲取部門名稱
