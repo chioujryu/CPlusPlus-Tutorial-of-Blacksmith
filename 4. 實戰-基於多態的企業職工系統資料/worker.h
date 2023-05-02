@@ -1,5 +1,6 @@
 #pragma once //防止頭文件重複包含
 #include<iostream>
+#include<string>
 using namespace std;
 
 class Worker{

@@ -62,8 +62,10 @@ int main(){
             break;
         }
         case 4: //修改職工信息
+            workerManager.ModifyWorkerDetail();
             break;
         case 5: //查找職工信息
+            workerManager.SearchWorker();
             break;
         case 6: //按造編號排序
             break;

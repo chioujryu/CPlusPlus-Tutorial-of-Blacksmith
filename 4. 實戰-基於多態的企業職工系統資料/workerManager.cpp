@@ -1,5 +1,5 @@
 #include"workerManager.h"
-#include <iostream> 	//包含輸入輸出輸入流的頭文件
+#include <iostream> 	//導入輸入輸出流頭文件
 #include "employee.h"
 #include "manager.h"
 #include "boss.h"
@@ -18,7 +18,7 @@ WorkManager::WorkManager(){
 
 		//初始化屬性
 		//初始化員工人數
-		this->m_employee_number_ = 0;
+		this->m_worker_number_ = 0;
 		//初始化陣列指針
 		this->m_worker_array_ptr_ = nullptr;
 		//將 m_file_is_empty_ 改成 true
@@ -36,7 +36,7 @@ WorkManager::WorkManager(){
 		cout<<"已有員工資料 txt 文件，但裡面為空白的"<<endl;
 		//初始化屬性
 		//初始化員工人數
-		this->m_employee_number_ = 0;
+		this->m_worker_number_ = 0;
 		//初始化陣列指針
 		this->m_worker_array_ptr_ = nullptr;
 		//將 m_file_is_empty_ 改成 true
@@ -61,16 +61,16 @@ WorkManager::WorkManager(){
 
 		//初始化屬性
 		//初始化員工人數
-		this->m_employee_number_ = employee_number_in_txt;
+		this->m_worker_number_ = employee_number_in_txt;
 
 		//開闢空間
-		this->m_worker_array_ptr_ = new Worker * [this->m_employee_number_];
+		this->m_worker_array_ptr_ = new Worker * [this->m_worker_number_];
 		
 		//將文件中的數據存到陣列中
 		this->InitEmployee();
 
         //測試用的程式碼，可以註釋掉，你也可以將它打開
-		// for(int i=0;i<this->m_employee_number_;i++){
+		// for(int i=0;i<this->m_worker_number_;i++){
 		// 	cout<<"員工編號："<<this->m_worker_array_ptr_[i]->m_ID
 		// 		<<"\t員工姓名"<<this->m_worker_array_ptr_[i]->m_Name
 		// 		<<"\t員工職位"<<this->m_worker_array_ptr_[i]->position<<endl;
@@ -121,7 +121,8 @@ void WorkManager::AddEmployee(){
 	if(add_employee_number > 0){
 		//添加
 		//計算新空間大小
-		int new_employee_number = this->m_employee_number_ + add_employee_number;	// 新空間大小 = 原來的紀錄人數 + 新增人數
+		// 新空間大小 = 原來的紀錄人數 + 新增人數
+		int new_employee_number = this->m_worker_number_ + add_employee_number;	
 
 		//開闢新空間
 		//這個陣列的每個元素都是一個指向 Worker 類別的指標
@@ -133,7 +134,7 @@ void WorkManager::AddEmployee(){
 		//意味著如果 m_worker_array_ptr_ 已經有員工了
 		//那新增的員工會再從後面加上去
 		if (this->m_worker_array_ptr_ != nullptr){
-			for(int i = 0; i < this->m_employee_number_; i++){
+			for(int i = 0; i < this->m_worker_number_; i++){
 				new_employee_array[i] = this->m_worker_array_ptr_[i];
 			}
 		}
@@ -174,7 +175,7 @@ void WorkManager::AddEmployee(){
 			}
 
 			//將創建員工，保存到數組中
-			new_employee_array[this->m_employee_number_ + i] = worker;
+			new_employee_array[this->m_worker_number_ + i] = worker;
 		};
 
 		//釋放原有空間
@@ -185,7 +186,7 @@ void WorkManager::AddEmployee(){
 		this->m_worker_array_ptr_ = new_employee_array;
 
 		//更新新的員工人數
-		this->m_employee_number_ = new_employee_number;
+		this->m_worker_number_ = new_employee_number;
 
 		//判斷員工資料 csv 現在裡面不為空
 		this->m_file_is_empty_ = false;
@@ -216,7 +217,7 @@ void WorkManager::SaveEmployeeDetail(){
 	ofs.open(all_employees_detail_file_txt,ios::out);
 
 	//將每個人的數據寫入到文件中
-	for(int i = 0; i < this->m_employee_number_; i++)
+	for(int i = 0; i < this->m_worker_number_; i++)
 	{
 		ofs<<this->m_worker_array_ptr_[i]->m_ID<<" "
         	<<this->m_worker_array_ptr_[i]->m_Name<<" "
@@ -286,7 +287,7 @@ void WorkManager::Show_Workers(){
         cout<<"員工資料 csv 目前裡面為空"<<endl;
     }
 	else{
-		for(int i = 0 ; i < m_employee_number_ ; i++){
+		for(int i = 0 ; i < m_worker_number_ ; i++){
 			//利用多態調用程序接口
 			this->m_worker_array_ptr_[i]->showInfo();
 		}
@@ -315,13 +316,13 @@ void WorkManager::Delete_Workers(){
 		{
 			
 			//數據前移
-			for(int i = 0; i < this->m_employee_number_ - 1; i++)
+			for(int i = 0; i < this->m_worker_number_ - 1; i++)
             {
                 this->m_worker_array_ptr_[i] = this->m_worker_array_ptr_[i + 1];
             };
 
 			//由於刪除了一個人，所以員工總人數要減 1
-			this->m_employee_number_--;	
+			this->m_worker_number_--;	
 
 			//數據同步到文件中
 			this->SaveEmployeeDetail();
@@ -343,7 +344,7 @@ void WorkManager::Delete_Workers(){
 int WorkManager::Check_Exist_Worker(int worker_id){
 
 	int index = -1;
-	for(int i = 0 ; i < m_employee_number_ ; i++){
+	for(int i = 0 ; i < m_worker_number_ ; i++){
 		if (this->m_worker_array_ptr_[i]->m_ID == worker_id){
 			//找到員工
 			index = i;
@@ -353,17 +354,130 @@ int WorkManager::Check_Exist_Worker(int worker_id){
 	return index;
 };
 
-
-void WorkManager::ModifyWorker(int worker_id){
+// 修改員工的資料
+void WorkManager::ModifyWorkerDetail(){
 	if(this->m_file_is_empty_)
 	{
 		cout<<"員工資料 csv 裡面為空，所以沒任何員工資訊可以修改"<<endl;
 	}
 	else
 	{
+		cout<<"你想要修改的員工是誰，請輸入他的ID"<<endl;
+		int id;
+		cin>>id;
+		// 如果此ID有人的話，就會返回那個 ID 的陣列 index
+		// 如果那個ID沒有人的話，就會返回 -1
+		int index = this->Check_Exist_Worker(id);	
+		delete this->m_worker_array_ptr_[index];
 
+		if(index != -1)    // 有找到此員工
+        {
+
+            cout<<"有找到此員工，請輸入"<<endl;
+
+			cout<<"你要新增的新 ID 為"<<endl;
+            int new_id;
+			cin>>new_id;
+
+			cout<<"你要新增的新名字為"<<endl;
+            string new_name;
+			cin>>new_name;
+
+			cout<<"你要新增的新職位為"<<endl;
+			cout<<"1. 普通員工"<<endl;
+			cout<<"2. 經理"<<endl;
+			cout<<"3. 老闆"<<endl;
+            int position;
+			cin>>position;
+
+			Worker * worker = nullptr;
+
+			switch (position)
+			{
+			case 1:
+				worker = new Employee(new_id,new_name,position);
+				break;
+			case 2:
+				worker = new Manager(new_id,new_name,position);
+				break;
+			case 3:
+				worker = new Boss(new_id,new_name,position);
+				break;
+			default:
+				break;
+			}
+
+			this->m_worker_array_ptr_[index] = worker;	// ?Nworker??H??????R?????????
+
+			cout<<"success"<<endl;
+
+			// 將所有員工資訊存進TXT檔案裡面
+			this->SaveEmployeeDetail();
+
+		}
+		else
+		{
+			cout<<"查無此員工"<<endl;
+		}
 	}
+	//清理螢幕的資訊
+	system("pause");
+	system("cls");
+};
 
+void WorkManager::SearchWorker(){
+	if (this->m_file_is_empty_)
+	{
+		cout<<"員工資料 csv 裡面為空，所以沒任何員工資訊可以查詢"<<endl;
+	}
+	else
+	{
+		cout<<"請輸入要查詢的方式"<<endl;
+		cout<<"1. 用ID查詢"<<endl;
+		cout<<"2. 用姓名查詢"<<endl;
+
+		int selection;
+		cin>>selection;
+
+		if (selection == 1)
+		{
+			cout<<"請輸入要查找的ID為"<<endl;
+			int id;
+			cin>>id;
+			int index = Check_Exist_Worker(id);
+			if(index != -1)
+			{
+				this->m_worker_array_ptr_[index]->showInfo();
+			}
+			else
+			{
+				cout<<"查無此人"<<endl;
+			}
+		}
+		else if (selection == 2)
+		{
+			cout<<"請輸入你要查找的姓名"<<endl;
+			string name;
+			cin >> name;
+			bool flag = false;	// 如果 flag 為 false 代表沒有找到人
+			for (int i = 0 ; i <  m_worker_number_ ; i++)
+			{
+				if (this->m_worker_array_ptr_[i]->m_Name == name)
+				{
+					this->m_worker_array_ptr_[i]->showInfo();
+					flag = true;
+				}
+			}
+			if (flag == false)
+			{
+				cout << "查無此人" << endl;
+			}
+		}
+		else
+		{
+			cout<<"輸入錯誤"<<endl;
+		}
+	}
 };
 
 

@@ -28,9 +28,9 @@ public:
     void SaveEmployeeDetail();
 
     //紀錄文件中的人數
-    int m_employee_number_;
+    int m_worker_number_;
 
-    //員工陣列的指針
+    //員工陣列的指針，裡面必須放worker對象指針
     Worker ** m_worker_array_ptr_;  //這是指針的指針
 
     //判斷文件是否為空
@@ -52,7 +52,10 @@ public:
     int Check_Exist_Worker(int worker_id);
 
     //修改員工的資訊
-    void ModifyWorker(int worker_id);
+    void ModifyWorkerDetail();
+
+    //查找員工，可以按造(id, 姓名, 職位)，來查找
+    void SearchWorker();
 
     //析構函數
     ~WorkManager();
