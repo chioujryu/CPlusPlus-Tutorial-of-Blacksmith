@@ -1,4 +1,4 @@
-// #pragma once 
+#pragma once 
 using namespace std;
 #include<iostream>
 #include"worker.h"

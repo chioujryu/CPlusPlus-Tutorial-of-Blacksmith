@@ -171,9 +171,9 @@ WorkerManager::~WorkerManager()
 
 ### 4.1 添加成员函数
 
-在管理类workerManager.h中添加成员函数  `void Show_Menu();`
+在管理类workerManager.h中添加成员函数  `void ShowMenu();`
 
-![1546351543942](assets/1546351543942.png)
+![1546351543942](assets/1.png)
 
  
 
@@ -184,21 +184,21 @@ WorkerManager::~WorkerManager()
 在管理类workerManager.cpp中实现  Show_Menu()函数
 
 ```C++
-void WorkerManager::Show_Menu()
-{
+//展示菜單
+void  WorkManager::ShowMenu(){
 	cout << "********************************************" << endl;
-	cout << "*********  欢迎使用职工管理系统！ **********" << endl;
-	cout << "*************  0.退出管理程序  *************" << endl;
-	cout << "*************  1.增加职工信息  *************" << endl;
-	cout << "*************  2.显示职工信息  *************" << endl;
-	cout << "*************  3.删除离职职工  *************" << endl;
-	cout << "*************  4.修改职工信息  *************" << endl;
-	cout << "*************  5.查找职工信息  *************" << endl;
-	cout << "*************  6.按照编号排序  *************" << endl;
-	cout << "*************  7.清空所有文档  *************" << endl;
+	cout << "*********  歡迎使用職工管理系統！ **********" << endl;
+	cout << "*************  0.退出管理程式  *************" << endl;
+	cout << "*************  1.增加職工信息  *************" << endl;
+	cout << "*************  2.顯示職工信息  *************" << endl;
+	cout << "*************  3.刪除離職職工  *************" << endl;
+	cout << "*************  4.修改職工信息  *************" << endl;
+	cout << "*************  5.查找職工信息  *************" << endl;
+	cout << "*************  6.按造編號排序  *************" << endl;
+	cout << "*************  7.清空所有文檔  *************" << endl;
 	cout << "********************************************" << endl;
 	cout << endl;
-}
+};
 ```
 
 
@@ -216,9 +216,9 @@ using namespace std;
 
 int main() {
 
-	WorkerManager wm;
+	WorkerManager workerManager;
 
-	wm.Show_Menu();
+	workerManager.ShowMenu();
 
 	system("pause");
 
@@ -249,44 +249,45 @@ int main() {
 代码：
 
 ```C++
-int main() {
+int main(){
+    //實例化管理對象
+    WorkManager workerManager;
 
-	WorkerManager wm;
-	int choice = 0;
-	while (true)
-	{
-		//展示菜单
-		wm.Show_Menu();
-		cout << "请输入您的选择:" << endl;
-		cin >> choice;
+    int choice = 0; //用來存儲用戶的選項
+    while(true){
 
-		switch (choice)
-		{
-		case 0: //退出系统
-			break;
-		case 1: //添加职工
-			break;
-		case 2: //显示职工
-			break;
-		case 3: //删除职工
-			break;
-		case 4: //修改职工
-			break;
-		case 5: //查找职工
-			break;
-		case 6: //排序职工
-			break;
-		case 7: //清空文件
-			break;
-		default:
-			system("cls");
-			break;
-		}
-	}
+        //展示菜單
+        workerManager.ShowMenu();
+        cout<<"請輸入你的選擇"<<endl;
+        cin>>choice;    //接受用戶的選項
+        switch (choice)
+        {
+        case 0: //退出管理程式
+            break;
+        case 1: //增加職工信息
+            break;
+        case 2: //顯示職工信息
+            break;
+        case 3: //刪除離職職工
+            break;
+        case 4: //修改職工信息
+            break;
+        case 5: //查找職工信息
+            break;
+        case 6: //按造編號排序
+            break;
+        case 7: //清空所有文檔
+            break;
+        default:
+            cout<<"輸入錯誤，請重新輸入"<<endl;
+            system("cls");
+            break;
+        }
 
-	system("pause");
-	return 0;
+    }
+    system("pause");
 }
+
 ```
 
 
@@ -312,7 +313,7 @@ void WorkerManager::exitSystem()
 
 在main函数分支 0  选项中，调用退出程序的接口
 
-![1546353199424](assets/1546353199424.png)
+![1546353199424](assets/3.png)
 
 
 
@@ -347,24 +348,23 @@ void WorkerManager::exitSystem()
 头文件文件夹下  创建文件worker.h  文件并且添加如下代码：
 
 ```C++
-#pragma once
+#pragma once //防止頭文件重複包含
 #include<iostream>
 #include<string>
 using namespace std;
 
-//职工抽象基类
-class Worker
-{
+class Worker{
 public:
+    //獲取個人信息
+    virtual void showInfo() = 0;
 
-	//显示个人信息
-	virtual void showInfo() = 0;
-	//获取岗位名称
-	virtual string getDeptName() = 0;
-
-	int m_Id; //职工编号
-	string m_Name; //职工姓名
-	int m_DeptId; //职工所在部门名称编号
+    //獲取部門名稱
+    virtual string getDepartmentName()=0;
+    
+public:
+    int m_ID;
+    string m_Name;
+    int position;
 };
 ```
 
@@ -382,53 +382,49 @@ employee.h中代码如下：
 
 ```C++
 #pragma once 
-#include<iostream>
 using namespace std;
-#include "worker.h"
+#include<iostream>
+#include"worker.h"
 
-//员工类
-class Employee :public Worker
-{
+class Employee: public Worker{
 public:
+    //構造函數
+    Employee(int m_ID,string m_Name,int position);
 
-	//构造函数
-	Employee(int id, string name, int dId);
+    //獲取個人信息
+    virtual void showInfo();  // 這裡不可以用純虛函數，因為在父類已經是純虛函數了
 
-	//显示个人信息
-	virtual void showInfo();
-
-	//获取职工岗位名称
-	virtual string getDeptName();
+    //獲取部門名稱
+    virtual string getDepartmentName();     // 這裡不可以用純虛函數，因為在父類已經是純虛函數了
 };
+
 ```
 
 employee.cpp中代码如下：
 
 ```C++
-#include "employee.h"
+#include"employee.h"
 
-Employee::Employee(int id, string name, int dId)
+
+//構造函數
+Employee::Employee(int m_ID,string m_Name,int position)
 {
-	this->m_Id = id;
-	this->m_Name = name;
-	this->m_DeptId = dId;
-}
+    this->m_ID = m_ID;
+    this->m_Name = m_Name;
+    this->position = position;
+};
 
-void Employee::showInfo()
-{
-	cout << "职工编号： " << this->m_Id
-		<< " \t职工姓名： " << this->m_Name
-		<< " \t岗位：" << this->getDeptName()
-		<< " \t岗位职责：完成经理交给的任务" << endl;
-}
+//獲取個人信息
+void Employee::showInfo(){
+    cout << "員工編號：" << m_ID 
+            << "\t員工姓名：" << m_Name
+            << "\t員工部門ID：" << position << endl;
+};
 
-
-string Employee::getDeptName()
-{
-	return string("员工");
-}
-
-
+//獲取部門名稱
+string Employee::getDepartmentName(){
+    return "普通員工";
+};
 ```
 
 
@@ -448,21 +444,16 @@ manager.h中代码如下：
 ```c++
 #pragma once
 #include<iostream>
-using namespace std;
 #include "worker.h"
+using namespace std;
 
-//经理类
-class Manager :public Worker
-{
+class Manager: public Worker{
 public:
-
-	Manager(int id, string name, int dId);
-
-	//显示个人信息
-	virtual void showInfo();
-
-	//获取职工岗位名称
-	virtual string getDeptName();
+    Manager(int m_ID, string m_name, int position);
+    //獲取個人信息
+    virtual void showInfo();   
+    //獲取部門名稱
+    virtual string getDepartmentName();  
 };
 ```
 
@@ -471,28 +462,23 @@ manager.cpp中代码如下：
 ```c++
 #include "manager.h"
 
-Manager::Manager(int id, string name, int dId)
-{
-	this->m_Id = id;
-	this->m_Name = name;
-	this->m_DeptId = dId;
+Manager::Manager(int m_ID, string m_Name, int position){
+    this->m_ID = m_ID;
+    this->m_Name = m_Name;
+    this->position = position;
+};
 
-}
+//獲取個人信息
+void Manager::showInfo(){
+    cout << "員工編號：" << m_ID 
+            << "\t員工姓名：" << m_Name
+            << "\t員工部門ID：" << position << endl;
+};   
 
-void Manager::showInfo()
-{
-	cout << "职工编号： " << this->m_Id
-		<< " \t职工姓名： " << this->m_Name
-		<< " \t岗位：" << this->getDeptName()
-		<< " \t岗位职责：完成老板交给的任务,并下发任务给员工" << endl;
-}
-
-string Manager::getDeptName()
-{
-	return string("经理");
-}
-
-
+//獲取部門名稱
+string Manager::getDepartmentName(){
+    cout<<"經理"<<endl;
+};  
 ```
 
 
@@ -510,50 +496,44 @@ boss.h中代码如下：
 ```c++
 #pragma once
 #include<iostream>
-using namespace std;
-#include "worker.h"
+#include"worker.h"
 
-//老板类
-class Boss :public Worker
-{
+//老闆類
+class Boss: public Worker{
 public:
-
-	Boss(int id, string name, int dId);
-
-	//显示个人信息
-	virtual void showInfo();
-
-	//获取职工岗位名称
-	virtual string getDeptName();
+    //構造函數
+    Boss(int m_ID, string m_Name, int position);
+    //獲取個人信息
+    virtual void showInfo(); 
+    //獲取部門名稱
+    virtual string getDepartmentName(); 
 };
 ```
 
 boss.cpp中代码如下：
 
 ```c++
-#include "boss.h"
+#include"boss.h"
 
-Boss::Boss(int id, string name, int dId)
-{
-	this->m_Id = id;
-	this->m_Name = name;
-	this->m_DeptId = dId;
+Boss::Boss(int m_ID, string m_Name, int position){
+    this->m_ID = m_ID;
+    this->m_Name = m_Name;
+    this->position = position;
+};
 
-}
+//獲取個人信息
+void Boss::showInfo(){
+    cout << "員工編號：" << m_ID 
+            << "\t員工姓名：" << m_Name
+            << "\t員工部門ID：" << position 
+            <<"\t工作責任："<<"給manager工作事務"<< endl;
+};  
 
-void Boss::showInfo()
-{
-	cout << "职工编号： " << this->m_Id
-		<< " \t职工姓名： " << this->m_Name
-		<< " \t岗位：" << this->getDeptName()
-		<< " \t岗位职责：管理公司所有事务" << endl;
-}
+//獲取部門名稱
+string Boss::getDepartmentName(){
+    cout<<"老闆"<<endl;
 
-string Boss::getDeptName()
-{
-	return string("总裁");
-}
-
+};  
 ```
 
 
@@ -634,11 +614,11 @@ void test()
 在WokerManager.h头文件中添加成员属性 代码：
 
 ```C++
-	//记录文件中的人数个数
-	int m_EmpNum;
+    //紀錄文件中的人數
+    int m_worker_number_;
 
-	//员工数组的指针
-	Worker ** m_EmpArray;
+    //員工陣列的指針，裡面必須放worker對象指針
+    Worker ** m_worker_array_ptr_;  //這是指針的指針
 ```
 
 
@@ -648,11 +628,11 @@ void test()
 ```C++
 WorkerManager::WorkerManager()
 {
-	//初始化人数
-	this->m_EmpNum = 0;
-
-	//初始化数组指针
-	this->m_EmpArray = NULL;
+	//初始化屬性
+	//初始化員工人數
+	this->m_worker_number_ = 0;
+	//初始化陣列指針
+	this->m_worker_array_ptr_ = nullptr;
 }
 ```
 
@@ -661,8 +641,8 @@ WorkerManager::WorkerManager()
 在workerManager.h中添加成员函数
 
 ```C++
-	//增加职工
-	void Add_Emp();
+    //增加員工
+    void AddEmployee();
 ```
 
 
@@ -670,93 +650,106 @@ WorkerManager::WorkerManager()
 workerManager.cpp中实现该函数
 
 ```C++
-//增加职工
-void WorkerManager::Add_Emp()
-{
-	cout << "请输入增加职工数量： " << endl;
+//增加員工
+void WorkManager::AddEmployee(){
+	
+	//設定要增加的員工數量
+	cout<<"請輸入想增加的員工數量"<<endl;
+	int add_employee_number = 0;	
+	cin>>add_employee_number;
 
-	int addNum = 0;
-	cin >> addNum;
 
-	if (addNum > 0)
-	{
-		//计算新空间大小
-		int newSize = this->m_EmpNum + addNum;
+	// 如果你輸入的員工數量大於 0 的話，
+	if(add_employee_number > 0){
+		//添加
+		//計算新空間大小
+		// 新空間大小 = 原來的紀錄人數 + 新增人數
+		int new_employee_number = this->m_worker_number_ + add_employee_number;	
 
-		//开辟新空间
-		Worker ** newSpace = new Worker*[newSize];
+		//開闢新空間
+		//這個陣列的每個元素都是一個指向 Worker 類別的指標
+		//總的來說，這段程式碼創建了一個可以存放多個 Worker 對象指標的陣列，並將其陣列大小指定為 new_employee_number。
+		//更簡單來是一次建立了好幾個 Worker 對象指標
+		Worker ** new_employee_array = new Worker*[new_employee_number];		
 
-		//将原空间下内容存放到新空间下
-		if (this->m_EmpArray != NULL)
-		{
-			for (int i = 0; i < this->m_EmpNum; i++)
-			{
-				newSpace[i] = this->m_EmpArray[i];
+		//將原空間下內容拷貝到新空間下
+		//意味著如果 m_worker_array_ptr_ 已經有員工了
+		//那新增的員工會再從後面加上去
+		if (this->m_worker_array_ptr_ != nullptr){
+			for(int i = 0; i < this->m_worker_number_; i++){
+				new_employee_array[i] = this->m_worker_array_ptr_[i];
 			}
 		}
 
-		//输入新数据
-		for (int i = 0; i < addNum; i++)
-		{
-			int id;
-			string name;
-			int dSelect;
+		//批量添加新數據
+		for(int i = 0; i < add_employee_number; i++){
+			int id ; //員工編號
+			string name; //員工姓名
+			int positionSelection; //選擇職位
 
-			cout << "请输入第 " << i + 1 << " 个新职工编号：" << endl;
-			cin >> id;
+			cout<<"請輸入員工ID"<<endl;
+			cin>>id;
 
+			cout<<"請輸入員工姓名"<<endl;
+			cin>>name;
 
-			cout << "请输入第 " << i + 1 << " 个新职工姓名：" << endl;
-			cin >> name;
-
-
-			cout << "请选择该职工的岗位：" << endl;
-			cout << "1、普通职工" << endl;
-			cout << "2、经理" << endl;
-			cout << "3、老板" << endl;
-			cin >> dSelect;
+			cout<<"請選擇職位"<<endl;
+			cout<<"1. 普通員工"<<endl;
+			cout<<"2. 經理"<<endl;
+			cout<<"3. 老闆"<<endl;
+            cin>>positionSelection;
 
 
-			Worker * worker = NULL;
-			switch (dSelect)
+			Worker * worker = nullptr;
+			switch (positionSelection)
 			{
-			case 1: //普通员工
-				worker = new Employee(id, name, 1);
+			case 1:  //普通員工
+			    worker = new Employee(id,name,1);
 				break;
-			case 2: //经理
-				worker = new Manager(id, name, 2);
-				break;
-			case 3:  //老板
-				worker = new Boss(id, name, 3);
+			case 2:  //經理
+			    worker = new Manager(id,name,2);
+			    break;
+			case 3:  //老闆
+			    worker = new Boss(id,name,3);
 				break;
 			default:
-				break;
+                break;
 			}
 
+			//將創建員工，保存到數組中
+			new_employee_array[this->m_worker_number_ + i] = worker;
+		};
 
-			newSpace[this->m_EmpNum + i] = worker;
-		}
+		//釋放原有空間
+		//delete[]用作於是放陣列
+		delete[] this->m_worker_array_ptr_;
 
-		//释放原有空间
-		delete[] this->m_EmpArray;
+		//更改新陣列的指向
+		this->m_worker_array_ptr_ = new_employee_array;
 
-		//更改新空间的指向
-		this->m_EmpArray = newSpace;
+		//更新新的員工人數
+		this->m_worker_number_ = new_employee_number;
 
-		//更新新的个数
-		this->m_EmpNum = newSize;
+		//判斷員工資料 csv 現在裡面不為空
+		this->m_file_is_empty_ = false;
 
-		//提示信息
-		cout << "成功添加" << addNum << "名新职工！" << endl;
+		//保存員工資料到文件中
+		this->SaveEmployeeDetail();
+
+
+		//顯示添加成功
+		cout<<"已經成功添加"<<add_employee_number<<"名新員工！！"<<endl;
+
+
 	}
 	else
 	{
-		cout << "输入有误" << endl;
+		cout<<"輸入錯誤，請重新輸入"<<endl;
 	}
-
+	//按任意鍵後，清理螢幕
 	system("pause");
 	system("cls");
-}
+};
 ```
 
 
@@ -764,13 +757,11 @@ void WorkerManager::Add_Emp()
 在WorkerManager.cpp的析构函数中，释放堆区数据
 
 ```C++
-WorkerManager::~WorkerManager()
-{
-	if (this->m_EmpArray != NULL)
-	{
-		delete[] this->m_EmpArray;
+WorkManager::~WorkManager(){
+	if(this->m_worker_array_ptr_!= nullptr){
+		delete[] this->m_worker_array_ptr_;
 	}
-}
+};
 
 ```
 
@@ -782,7 +773,7 @@ WorkerManager::~WorkerManager()
 
 在main函数分支 1  选项中，调用添加职工接口
 
-![1546401705277](assets/1546401705277.png)
+![1546401705277](assets/4.png)
 
 效果如图：
 
@@ -817,8 +808,8 @@ WorkerManager::~WorkerManager()
 首先我们将文件路径，在workerManager.h中添加宏常量,并且包含头文件 fstream
 
 ```C++
-#include <fstream>
-#define  FILENAME "empFile.txt"
+#include<fstream>
+#define all_employees_detail_file_txt "all_employees_detail.txt"
 ```
 
 
@@ -829,7 +820,7 @@ WorkerManager::~WorkerManager()
 
 ```C++
 //保存文件
-void save();
+void SaveEmployeeDetail();
 ```
 
 
@@ -837,19 +828,19 @@ void save();
 ### 8.3 保存文件功能实现
 
 ```C++
-void WorkerManager::save()
-{
+//保存文件
+void WorkManager::SaveEmployeeDetail(){
 	ofstream ofs;
-	ofs.open(FILENAME, ios::out);
+	ofs.open(all_employees_detail_file_txt,ios::out);
 
-
-	for (int i = 0; i < this->m_EmpNum; i++)
+	//將每個人的數據寫入到文件中
+	for(int i = 0; i < this->m_worker_number_; i++)
 	{
-		ofs << this->m_EmpArray[i]->m_Id << " " 
-			<< this->m_EmpArray[i]->m_Name << " " 
-			<< this->m_EmpArray[i]->m_DeptId << endl;
+		ofs<<this->m_worker_array_ptr_[i]->m_ID<<" "
+        	<<this->m_worker_array_ptr_[i]->m_Name<<" "
+        	<<this->m_worker_array_ptr_[i]->position<<endl;
 	}
-
+	//關閉文件
 	ofs.close();
 }
 ```
@@ -862,7 +853,7 @@ void WorkerManager::save()
 
 
 
-![1546432469465](assets/1546432469465.png)
+![1546432469465](assets/5.png)
 
 
 
@@ -901,8 +892,8 @@ void WorkerManager::save()
 在workerManager.h中添加新的成员属性 m_FileIsEmpty标志文件是否为空
 
 ```C++
-	//标志文件是否为空
-	bool m_FileIsEmpty;
+    //判斷文件是否為空
+    bool m_file_is_empty_;
 ```
 
 
@@ -910,19 +901,25 @@ void WorkerManager::save()
 修改WorkerManager.cpp中构造函数代码
 
 ```C++
-WorkerManager::WorkerManager()
-{
-	ifstream ifs;
-	ifs.open(FILENAME, ios::in);
+//構造函數 初始化
+WorkManager::WorkManager(){
 
-	//文件不存在情况
-	if (!ifs.is_open())
-	{
-		cout << "文件不存在" << endl; //测试输出
-		this->m_EmpNum = 0;  //初始化人数
-		this->m_FileIsEmpty = true; //初始化文件为空标志
-		this->m_EmpArray = NULL; //初始化数组
-		ifs.close(); //关闭文件
+	//1. 文件不存在
+	ifstream ifs;
+	ifs.open(all_employees_detail_file_txt,ios::in);
+
+	if (!ifs.is_open()){
+		cout<<"員工資料不存在"<<endl;
+
+		//初始化屬性
+		//初始化員工人數
+		this->m_worker_number_ = 0;
+		//初始化陣列指針
+		this->m_worker_array_ptr_ = nullptr;
+		//將 m_file_is_empty_ 改成 true
+		this->m_file_is_empty_ = true;
+		//關閉文件
+		ifs.close();
 		return;
 	}
 }
@@ -939,23 +936,78 @@ WorkerManager::WorkerManager()
 在workerManager.cpp中的构造函数追加代码：
 
 ```C++
-	//文件存在，并且没有记录
+	//2. 文件存在，但裡面為空白的
 	char ch;
-	ifs >> ch;
-	if (ifs.eof())
+	ifs>>ch;
+	if(ifs.eof())
 	{
-		cout << "文件为空!" << endl;
-		this->m_EmpNum = 0;
-		this->m_FileIsEmpty = true;
-		this->m_EmpArray = NULL;
+		cout<<"已有員工資料 txt 文件，但裡面為空白的"<<endl;
+		//初始化屬性
+		//初始化員工人數
+		this->m_worker_number_ = 0;
+		//初始化陣列指針
+		this->m_worker_array_ptr_ = nullptr;
+		//將 m_file_is_empty_ 改成 true
+		this->m_file_is_empty_ = true;
+		//關閉文件
 		ifs.close();
 		return;
 	}
 ```
 
-追加代码位置如图：
+可再另外追加程式碼
+```c++
+	//2. 文件存在，但裡面為空白的
+	char ch;
+	ifs>>ch;
+	if(ifs.eof())
+	{
+		cout<<"已有員工資料 txt 文件，但裡面為空白的"<<endl;
+		//初始化屬性
+		//初始化員工人數
+		this->m_worker_number_ = 0;
+		//初始化陣列指針
+		this->m_worker_array_ptr_ = nullptr;
+		//將 m_file_is_empty_ 改成 true
+		this->m_file_is_empty_ = true;
+		//關閉文件
+		ifs.close();
+		return;
+	}
 
-![1546435197575](assets/1546435197575.png)
+	//3. 文件存在，裡面也有員工資料
+	char ch_2;
+	ifs>>ch_2;
+	if(!ifs.eof())
+	{
+		//將 m_file_is_empty_ 改成 false
+		this->m_file_is_empty_ = false;
+
+		cout<<"已有員工資料 txt 文件"<<endl;
+
+		int employee_number_in_txt = this->GetEmployeeNumberFromTXT();
+		cout<<"目前員工資料裡面有："<<employee_number_in_txt<<"個員工"<<endl;
+
+		//初始化屬性
+		//初始化員工人數
+		this->m_worker_number_ = employee_number_in_txt;
+
+		//開闢空間
+		this->m_worker_array_ptr_ = new Worker * [this->m_worker_number_];
+		
+		//將文件中的數據存到陣列中
+		this->InitEmployee();
+
+        //測試用的程式碼，可以註釋掉，你也可以將它打開
+		// for(int i=0;i<this->m_worker_number_;i++){
+		// 	cout<<"員工編號："<<this->m_worker_array_ptr_[i]->m_ID
+		// 		<<"\t員工姓名"<<this->m_worker_array_ptr_[i]->m_Name
+		// 		<<"\t員工職位"<<this->m_worker_array_ptr_[i]->position<<endl;
+		// }
+	}
+```
+
+
 
 将文件创建后清空文件内容，并测试该情况下初始化功能
 
@@ -968,11 +1020,11 @@ WorkerManager::WorkerManager()
 在`void WorkerManager::Add_Emp() `成员函数中添加：
 
 ```C++
-		//更新职工不为空标志
-		this->m_FileIsEmpty = false;
+	//判斷員工資料 csv 現在裡面不為空
+	this->m_file_is_empty_ = false;
 ```
 
-![1546656256176](assets/1546656256176.png)
+![1546656256176](assets/6.png)
 
 
 
@@ -984,44 +1036,47 @@ WorkerManager::WorkerManager()
 
 #### 9.3.1 获取记录的职工人数
 
-在workerManager.h中添加成员函数 ` int get_EmpNum();`
+在workerManager.h中添加成员函数 ` int GetEmployeeNumberFromTXT();`
 
 ```C++
-	//统计人数
-	int get_EmpNum();
+    //獲取紀錄文件csv中的人數
+    int GetEmployeeNumberFromTXT();
 ```
 
 workerManager.cpp中实现
 
 ```C++
-int WorkerManager::get_EmpNum()
-{
+//獲取現在在 txt 檔裡面的員工人數
+int WorkManager::GetEmployeeNumberFromTXT(){
+
 	ifstream ifs;
-	ifs.open(FILENAME, ios::in);
+	ifs.open(all_employees_detail_file_txt,ios::in);
 
 	int id;
 	string name;
-	int dId;
+	int position;
 
-	int num = 0;
+	//紀錄 csv 裡面的人數用的變數
+	int employee_number = 0;
 
-	while (ifs >> id && ifs >> name && ifs >> dId)
-	{
-        //记录人数
-		num++;
-	}
+	while(ifs>>id && ifs>>name && ifs>>position){
+		employee_number++;
+	};
+
 	ifs.close();
-
-	return num;
+	return employee_number;
 }
 ```
 
 在workerManager.cpp构造函数中继续追加代码：
 
 ```C++
-	int num =  this->get_EmpNum();
-	cout << "职工个数为：" << num << endl;  //测试代码
-	this->m_EmpNum = num;  //更新成员属性 
+		int employee_number_in_txt = this->GetEmployeeNumberFromTXT();
+		cout<<"目前員工資料裡面有："<<employee_number_in_txt<<"個員工"<<endl;
+
+		//初始化屬性
+		//初始化員工人數
+		this->m_worker_number_ = employee_number_in_txt;
 ```
 
 
@@ -1036,15 +1091,15 @@ int WorkerManager::get_EmpNum()
 
 #### 9.3.2 初始化数组
 
-根据职工的数据以及职工数据，初始化workerManager中的Worker ** m_EmpArray 指针
+根据职工的数据以及职工数据，初始化workerManager中的Worker ** m_worker_array_ptr_ 指针
 
 
 
-在WorkerManager.h中添加成员函数  `void init_Emp();`
+在WorkerManager.h中添加成员函数  `void InitEmployee();`
 
 ```C++
-	//初始化员工
-	void init_Emp();
+    //初始化員工。從外部檔案導入到程式裡面，初始化程式裡面的員工資料
+    void InitEmployee();
 ```
 
 
@@ -1052,37 +1107,37 @@ int WorkerManager::get_EmpNum()
 在WorkerManager.cpp中实现
 
 ```C++
-void WorkerManager::init_Emp()
-{
-	ifstream ifs;
-	ifs.open(FILENAME, ios::in);
+//初始化員工。從外部檔案導入到程式裡面，初始化程式裡面的員工資料
+void WorkManager::InitEmployee(){
+	ifstream ifs;	//創建輸出入流對象
+	ifs.open(all_employees_detail_file_txt,ios::in);	//讀取數據
 
-	int id;
-	string name;
-	int dId;
-	
+    int m_ID;
+    string m_Name;
+    int position;
+
 	int index = 0;
-	while (ifs >> id && ifs >> name && ifs >> dId)
-	{
-		Worker * worker = NULL;
-		//根据不同的部门Id创建不同对象
-		if (dId == 1)  // 1普通员工
-		{
-			worker = new Employee(id, name, dId);
+	//您需要在循環之前定義它們的作用域。這意味著您需要在循環之前聲明這些指針，
+	//並將它們初始化為nullptr。然後在循環中分配內存給這些指針並使用它們，直到循環結束。
+	Worker * worker = nullptr;
+
+	while(ifs >> m_ID && ifs >> m_Name && ifs >> position){
+		if(position == 1){	//普通員工
+			worker = new Employee(m_ID,m_Name,position);
 		}
-		else if (dId == 2) //2经理
-		{
-			worker = new Manager(id, name, dId);
+		else if(position == 2){	//經理
+			worker = new Manager(m_ID,m_Name,position);
 		}
-		else //总裁
-		{
-			worker = new Boss(id, name, dId);
+		else if(position == 3){	//老闆
+			worker = new Boss(m_ID,m_Name,position);
 		}
-		//存放在数组中
-		this->m_EmpArray[index] = worker;
+
+		this->m_worker_array_ptr_[index] = worker;
 		index++;
-	}
-}
+	};
+
+	ifs.close();	//關閉文件
+};
 ```
 
 
@@ -1090,18 +1145,18 @@ void WorkerManager::init_Emp()
 在workerManager.cpp构造函数中追加代码
 
 ```C++
-	//根据职工数创建数组
-	this->m_EmpArray = new Worker *[this->m_EmpNum];
-	//初始化职工
-	init_Emp();
+		//開闢空間
+		this->m_worker_array_ptr_ = new Worker * [this->m_worker_number_];
+		
+		//將文件中的數據存到陣列中
+		this->InitEmployee();
 
-	//测试代码
-	for (int i = 0; i < m_EmpNum; i++)
-	{
-		cout << "职工号： " << this->m_EmpArray[i]->m_Id
-			<< " 职工姓名： " << this->m_EmpArray[i]->m_Name
-			<< " 部门编号： " << this->m_EmpArray[i]->m_DeptId << endl;
-	}
+        //測試用的程式碼，可以註釋掉，你也可以將它打開
+		for(int i=0;i<this->m_worker_number_;i++){
+			cout<<"員工編號："<<this->m_worker_array_ptr_[i]->m_ID
+				<<"\t員工姓名"<<this->m_worker_array_ptr_[i]->m_Name
+				<<"\t員工職位"<<this->m_worker_array_ptr_[i]->position<<endl;
+		}
 ```
 
 
@@ -1130,35 +1185,32 @@ void WorkerManager::init_Emp()
 
 ```C++
 	//显示职工
-	void Show_Emp();
+	void Show_Workers();
 ```
 
 
 
 #### 10.2 显示职工函数实现
 
-在workerManager.cpp中实现成员函数 `void Show_Emp();`
+在workerManager.cpp中实现成员函数 `void Show_Workers();`
 
 ```C++
-//显示职工
-void WorkerManager::Show_Emp()
-{
-	if (this->m_FileIsEmpty)
-	{
-		cout << "文件不存在或记录为空！" << endl;
-	}
-	else
-	{
-		for (int i = 0; i < m_EmpNum; i++)
-		{
-			//利用多态调用接口
-			this->m_EmpArray[i]->showInfo();
+//顯示員工的函數
+void WorkManager::Show_Workers(){
+	//判斷文件是否為空
+	if(this->m_file_is_empty_){
+        cout<<"員工資料 csv 目前裡面為空"<<endl;
+    }
+	else{
+		for(int i = 0 ; i < m_worker_number_ ; i++){
+			//利用多態調用程序接口
+			this->m_worker_array_ptr_[i]->showInfo();
 		}
 	}
-
+	//按任意鍵清理屏幕
 	system("pause");
 	system("cls");
-}
+};
 ```
 
 
@@ -1167,7 +1219,7 @@ void WorkerManager::Show_Emp()
 
 在main函数分支 2  选项中，调用显示职工接口
 
-![1546497336465](assets/1546497336465.png)
+![1546497336465](assets/7.png)
 
 
 
@@ -1208,8 +1260,8 @@ void WorkerManager::Show_Emp()
 在workerManager.h中添加成员函数  `void Del_Emp();`
 
 ```C++
-	//删除职工
-	void Del_Emp();
+    //刪除員工的函數
+    void Delete_Workers();
 ```
 
 
@@ -1220,11 +1272,11 @@ void WorkerManager::Show_Emp()
 
 因此添加该公告函数，以便后续调用
 
-在workerManager.h中添加成员函数  `int IsExist(int id);`
+在workerManager.h中添加成员函数  `int Check_Exist_Worker(int worker_id);`
 
 ```C++
-	//按照职工编号判断职工是否存在,若存在返回职工在数组中位置，不存在返回-1
-	int IsExist(int id);
+    //判斷員工是否存在，如果存在就返回那個員工在陣列中的位置，如果不存在就返回-1
+    int Check_Exist_Worker(int worker_id);
 ```
 
 
@@ -1234,22 +1286,20 @@ void WorkerManager::Show_Emp()
 在workerManager.cpp中实现成员函数 `int IsExist(int id);`
 
 ```C++
-int WorkerManager::IsExist(int id)
-{
+//判斷員工是否存在，如果存在就返回那個員工在陣列中的位置，如果不存在就返回-1
+int WorkManager::Check_Exist_Worker(int worker_id){
+
 	int index = -1;
-
-	for (int i = 0; i < this->m_EmpNum; i++)
-	{
-		if (this->m_EmpArray[i]->m_Id == id)
-		{
+	for(int i = 0 ; i < m_worker_number_ ; i++){
+		if (this->m_worker_array_ptr_[i]->m_ID == worker_id){
+			//找到員工
 			index = i;
-
-			break;
+            break;
 		}
 	}
-
 	return index;
-}
+};
+
 ```
 
 
@@ -1258,45 +1308,51 @@ int WorkerManager::IsExist(int id)
 
 #### 11.4 删除职工函数实现
 
-在workerManager.cpp中实现成员函数 ` void Del_Emp();`
+在workerManager.cpp中实现成员函数 ` void Delete_Workers();`
 
 ```C++
-//删除职工
-void WorkerManager::Del_Emp()
-{
-	if (this->m_FileIsEmpty)
+//刪除員工的函數
+void WorkManager::Delete_Workers(){
+	if(this->m_file_is_empty_)
 	{
-		cout << "文件不存在或记录为空！" << endl;
+		cout<<"員工資料 csv 裡面為空，所以沒東西可以刪除"<<endl;
 	}
 	else
 	{
-		//按职工编号删除
-		cout << "请输入想要删除的职工号：" << endl;
-		int id = 0;
-		cin >> id;
+		cout<<"請輸入想要刪除的員工編號"<<endl;
+		int id;
+		cin>>id;
 
-		int index = this->IsExist(id);
-
-		if (index != -1)  //说明index上位置数据需要删除
+		// Check_Exist_Worker()函數用法
+		// 如果此id有人，就會返回id。如果沒有人，就會返回-1
+		int index = this->Check_Exist_Worker(id);
+		if(index != -1)	// 說明員工存在，並且刪除掉 index 位置上的員工
 		{
-			for (int i = index; i < this->m_EmpNum - 1; i++)
-			{
-				this->m_EmpArray[i] = this->m_EmpArray[i + 1];
-			}
-			this->m_EmpNum--;
+			
+			//數據前移
+			for(int i = 0; i < this->m_worker_number_ - 1; i++)
+            {
+                this->m_worker_array_ptr_[i] = this->m_worker_array_ptr_[i + 1];
+            };
 
-			this->save(); //删除后数据同步到文件中
-			cout << "删除成功！" << endl;
+			//由於刪除了一個人，所以員工總人數要減 1
+			this->m_worker_number_--;	
+
+			//數據同步到文件中
+			this->SaveEmployeeDetail();
 		}
+		
 		else
 		{
-			cout << "删除失败，未找到该职工" << endl;
+			cout<<"刪除失敗,沒有此id"<<endl;
 		}
 	}
-	
+
+	//按任意鍵清理屏幕
 	system("pause");
-	system("cls");
-}
+    system("cls");
+
+};
 ```
 
 
@@ -1305,7 +1361,7 @@ void WorkerManager::Del_Emp()
 
 在main函数分支 3  选项中，调用删除职工接口
 
-![1546502698622](assets/1546502698622.png)
+![1546502698622](assets/8.png)
 
 测试1 - 删除不存在职工情况
 
@@ -1341,91 +1397,90 @@ void WorkerManager::Del_Emp()
 
 #### 12.1 修改职工函数声明
 
-在workerManager.h中添加成员函数  `void Mod_Emp();`
+在workerManager.h中添加成员函数  `void ModifyWorkerDetail();`
 
 ```C++
-	//修改职工
-	void Mod_Emp();
+    //修改員工的資訊
+    void ModifyWorkerDetail();
 ```
 
 
 
 #### 12.2 修改职工函数实现
 
-在workerManager.cpp中实现成员函数 ` void Mod_Emp();`
+在workerManager.cpp中实现成员函数 ` void ModifyWorkerDetail();`
 
 ```C++
-//修改职工
-void WorkerManager::Mod_Emp()
-{
-	if (this->m_FileIsEmpty)
+// 修改員工的資料
+void WorkManager::ModifyWorkerDetail(){
+	if(this->m_file_is_empty_)
 	{
-		cout << "文件不存在或记录为空！" << endl;
+		cout<<"員工資料 csv 裡面為空，所以沒任何員工資訊可以修改"<<endl;
 	}
 	else
 	{
-		cout << "请输入修改职工的编号：" << endl;
+		cout<<"你想要修改的員工是誰，請輸入他的ID"<<endl;
 		int id;
-		cin >> id;
+		cin>>id;
+		// 如果此ID有人的話，就會返回那個 ID 的陣列 index
+		// 如果那個ID沒有人的話，就會返回 -1
+		int index = this->Check_Exist_Worker(id);	
+		delete this->m_worker_array_ptr_[index];
 
-		int ret = this->IsExist(id);
-		if (ret != -1)
-		{ 
-			//查找到编号的职工
+		if(index != -1)    // 有找到此員工
+        {
 
-			delete this->m_EmpArray[ret];
-			
-			int newId = 0;
-			string newName = "";
-			int dSelect = 0;
+            cout<<"有找到此員工，請輸入"<<endl;
 
-			cout << "查到： " << id << "号职工，请输入新职工号： " << endl;
-			cin >> newId;
+			cout<<"你要新增的新 ID 為"<<endl;
+            int new_id;
+			cin>>new_id;
 
-			cout << "请输入新姓名： " << endl;
-			cin >> newName;
+			cout<<"你要新增的新名字為"<<endl;
+            string new_name;
+			cin>>new_name;
 
-			cout << "请输入岗位： " << endl;
-			cout << "1、普通职工" << endl;
-			cout << "2、经理" << endl;
-			cout << "3、老板" << endl;
-			cin >> dSelect;
+			cout<<"你要新增的新職位為"<<endl;
+			cout<<"1. 普通員工"<<endl;
+			cout<<"2. 經理"<<endl;
+			cout<<"3. 老闆"<<endl;
+            int position;
+			cin>>position;
 
-			Worker * worker = NULL;
-			switch (dSelect)
+			Worker * worker = nullptr;
+
+			switch (position)
 			{
-			case1:
-				worker = new Employee(newId, newName, dSelect);
+			case 1:
+				worker = new Employee(new_id,new_name,position);
 				break;
-			case2:
-				worker = new Manager(newId, newName, dSelect);
+			case 2:
+				worker = new Manager(new_id,new_name,position);
 				break;
 			case 3:
-				worker = new Boss(newId, newName, dSelect);
+				worker = new Boss(new_id,new_name,position);
 				break;
 			default:
 				break;
 			}
 
-			//更改数据 到数组中
-			this->m_EmpArray[ret]= worker;
-			
-			cout << "修改成功！" << endl;
+			this->m_worker_array_ptr_[index] = worker;	// ?Nworker??H??????R?????????
 
-			//保存到文件中
-			this->save();
+			cout<<"success"<<endl;
+
+			// 將所有員工資訊存進TXT檔案裡面
+			this->SaveEmployeeDetail();
+
 		}
 		else
 		{
-			cout << "修改失败，查无此人" << endl;
+			cout<<"查無此員工"<<endl;
 		}
 	}
-
-	//按任意键 清屏
+	//清理螢幕的資訊
 	system("pause");
 	system("cls");
-}
-
+};
 ```
 
 
@@ -1436,7 +1491,7 @@ void WorkerManager::Mod_Emp()
 
 在main函数分支 4  选项中，调用修改职工接口
 
-![1546502651922](assets/1546502651922.png)
+![1546502651922](assets/9.png)
 
 
 
@@ -1474,90 +1529,74 @@ void WorkerManager::Mod_Emp()
 
 #### 13.1 查找职工函数声明
 
-在workerManager.h中添加成员函数  `void Find_Emp();`
+在workerManager.h中添加成员函数  `void SearchWorker();`
 
 ```c++
 	//查找职工
-	void Find_Emp();
+	void SearchWorker();
 ```
 
 
 
 #### 13.2 查找职工函数实现
 
-在workerManager.cpp中实现成员函数 ` void Find_Emp();`
+在workerManager.cpp中实现成员函数 ` void SearchWorker();`
 
 ```C++
-//查找职工
-void WorkerManager::Find_Emp()
-{
-	if (this->m_FileIsEmpty)
+void WorkManager::SearchWorker(){
+	if (this->m_file_is_empty_)
 	{
-		cout << "文件不存在或记录为空！" << endl;
+		cout<<"員工資料 csv 裡面為空，所以沒任何員工資訊可以查詢"<<endl;
 	}
 	else
 	{
-		cout << "请输入查找的方式：" << endl;
-		cout << "1、按职工编号查找" << endl;
-		cout << "2、按姓名查找" << endl;
+		cout<<"請輸入要查詢的方式"<<endl;
+		cout<<"1. 用ID查詢"<<endl;
+		cout<<"2. 用姓名查詢"<<endl;
 
-		int select = 0;
-		cin >> select;
+		int selection;
+		cin>>selection;
 
-
-		if (select == 1) //按职工号查找
+		if (selection == 1)
 		{
+			cout<<"請輸入要查找的ID為"<<endl;
 			int id;
-			cout << "请输入查找的职工编号：" << endl;
-			cin >> id;
-
-			int ret = IsExist(id);
-			if (ret != -1)
+			cin>>id;
+			int index = Check_Exist_Worker(id);
+			if(index != -1)
 			{
-				cout << "查找成功！该职工信息如下：" << endl;
-				this->m_EmpArray[ret]->showInfo();
+				this->m_worker_array_ptr_[index]->showInfo();
 			}
 			else
 			{
-				cout << "查找失败，查无此人" << endl;
+				cout<<"查無此人"<<endl;
 			}
 		}
-		else if(select == 2) //按姓名查找
+		else if (selection == 2)
 		{
+			cout<<"請輸入你要查找的姓名"<<endl;
 			string name;
-			cout << "请输入查找的姓名：" << endl;
 			cin >> name;
-
-			bool flag = false;  //查找到的标志
-			for (int i = 0; i < m_EmpNum; i++)
+			bool flag = false;	// 如果 flag 為 false 代表沒有找到人
+			for (int i = 0 ; i <  m_worker_number_ ; i++)
 			{
-				if (m_EmpArray[i]->m_Name == name)
+				if (this->m_worker_array_ptr_[i]->m_Name == name)
 				{
-					cout << "查找成功,职工编号为："
-                           << m_EmpArray[i]->m_Id
-                           << " 号的信息如下：" << endl;
-					
+					this->m_worker_array_ptr_[i]->showInfo();
 					flag = true;
-
-					this->m_EmpArray[i]->showInfo();
 				}
 			}
 			if (flag == false)
 			{
-				//查无此人
-				cout << "查找失败，查无此人" << endl;
+				cout << "查無此人" << endl;
 			}
 		}
 		else
 		{
-			cout << "输入选项有误" << endl;
+			cout<<"輸入錯誤"<<endl;
 		}
 	}
-
-
-	system("pause");
-	system("cls");
-}
+};
 ```
 
 
@@ -1568,7 +1607,7 @@ void WorkerManager::Find_Emp()
 
 在main函数分支 5  选项中，调用查找职工接口
 
-![1546504714318](assets/1546504714318.png)
+![1546504714318](assets/10.png)
 
 测试1 - 按照职工编号查找 - 查找不存在职工
 

@@ -16,6 +16,6 @@ void Boss::showInfo(){
 
 //獲取部門名稱
 string Boss::getDepartmentName(){
-    cout<<"5465465"<<endl;
+    cout<<"老闆"<<endl;
 
 };  

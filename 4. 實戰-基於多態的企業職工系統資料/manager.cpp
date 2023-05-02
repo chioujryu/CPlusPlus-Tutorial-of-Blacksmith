@@ -17,4 +17,3 @@ void Manager::showInfo(){
 string Manager::getDepartmentName(){
     cout<<"¸g²z"<<endl;
 };  
-

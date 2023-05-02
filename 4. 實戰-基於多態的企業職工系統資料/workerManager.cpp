@@ -69,7 +69,7 @@ WorkManager::WorkManager(){
 		//將文件中的數據存到陣列中
 		this->InitEmployee();
 
-        //測試用的程式碼，可以註釋掉，你也可以將它打開
+        // //測試用的程式碼，可以註釋掉，你也可以將它打開
 		// for(int i=0;i<this->m_worker_number_;i++){
 		// 	cout<<"員工編號："<<this->m_worker_array_ptr_[i]->m_ID
 		// 		<<"\t員工姓名"<<this->m_worker_array_ptr_[i]->m_Name
@@ -207,8 +207,6 @@ void WorkManager::AddEmployee(){
 	//按任意鍵後，清理螢幕
 	system("pause");
 	system("cls");
-
-
 };
 
 //保存文件

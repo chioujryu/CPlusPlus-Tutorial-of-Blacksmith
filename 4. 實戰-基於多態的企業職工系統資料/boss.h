@@ -1,4 +1,4 @@
-//#pragma once
+#pragma once
 #include<iostream>
 #include"worker.h"
 
@@ -12,3 +12,4 @@ public:
     //獲取部門名稱
     virtual string getDepartmentName(); 
 };
+
