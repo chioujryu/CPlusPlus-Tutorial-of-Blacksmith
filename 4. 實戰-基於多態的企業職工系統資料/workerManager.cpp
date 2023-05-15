@@ -478,10 +478,105 @@ void WorkManager::SearchWorker(){
 	}
 };
 
+void WorkManager::SortWorker()
+{
+	if (this->m_file_is_empty_)
+	{
+		cout<<"文件不存在或是紀錄為空"<<endl;
+		system("pause");
+		system("cls");
+	}
+	else
+	{
+		cout<<"你想要升序排列還是降序排列"<<endl;
+		cout<<"1. 按照員工編號升序排列"<<endl;
+		cout<<"2. 按照員工編號降序排列"<<endl;
+	}
+	int select;
+	cin >> select;
+
+	for (int i = 0 ; i < m_worker_number_  ; i++)
+	{
+		int min_or_max = i; // 聲明最小值或最大值
+		for (int j = i + 1 ; j < this->m_worker_number_  ; j++)
+		{
+			if (select == 1)
+			{
+				if (this->m_worker_array_ptr_[i]->m_ID > this->m_worker_array_ptr_[j]->m_ID)
+				{
+					min_or_max = j;
+				}
+			}
+			if (select == 2)
+			{
+				if (this->m_worker_array_ptr_[i]->m_ID < this->m_worker_array_ptr_[j]->m_ID)
+				{
+					min_or_max = j;
+				}
+			}
+		}
+		//判斷一開始認定的最小值或最大值 是不是 計算的最小值以及最大值
+		if (min_or_max != i)
+		{
+			Worker * temp = this->m_worker_array_ptr_[i];
+			this->m_worker_array_ptr_[i] = this->m_worker_array_ptr_[min_or_max];
+			this->m_worker_array_ptr_[min_or_max] = temp;
+		}
+	}
+	cout<<"sort sccessful"<<endl;
+	this->SaveEmployeeDetail();
+	this->Show_Workers();
+}
+
+void WorkManager::CleanFile(){
+	cout<<"確定清空"<<endl;
+	cout<<"1. 確定"<<endl;
+	cout<<"或是按任意鍵返回"<<endl;
+
+	int select;
+	cin >> select;
+
+	if (select == 1)
+	{
+		//清空文件
+		ofstream ofs(all_employees_detail_file_txt, ios::trunc); // 刪除文件後創建
+		ofs.close();
+
+		if (this->m_worker_array_ptr_ != nullptr)
+		{
+			//刪除堆區的每個職工對象
+			for (int i = 0 ; i < this->m_worker_number_ ; i++)
+			{
+				delete this->m_worker_array_ptr_[i];
+				this->m_worker_array_ptr_[i] = nullptr;
+			}
+		}
+
+		//刪除堆區數組的指針
+		delete[] this->m_worker_array_ptr_;
+		this->m_worker_array_ptr_ = nullptr;
+		this->m_worker_number_ = 0;
+		this->m_file_is_empty_ = true;
+
+		cout<<"clean sccess"<<endl;
+	}
+	system("pause");
+	system("cls");
+
+}
+
 
 WorkManager::~WorkManager(){
 	if(this->m_worker_array_ptr_!= nullptr){
+		for(int i = 0; i < this->m_worker_number_ ; i++)
+		{
+			if (this->m_worker_array_ptr_[i] != nullptr)
+			{
+				delete this->m_worker_array_ptr_[i];
+			}
+		}
 		delete[] this->m_worker_array_ptr_;
+		this->m_worker_array_ptr_ = nullptr;
 	}
 };
 

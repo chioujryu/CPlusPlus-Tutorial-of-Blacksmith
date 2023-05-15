@@ -68,8 +68,10 @@ int main(){
             workerManager.SearchWorker();
             break;
         case 6: //按造編號排序
+            workerManager.SortWorker();
             break;
         case 7: //清空所有文檔
+            workerManager.CleanFile();
             break;
         default:
             cout<<"輸入錯誤，請重新輸入"<<endl;

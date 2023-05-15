@@ -57,6 +57,12 @@ public:
     //查找員工，可以按造(id, 姓名, 職位)，來查找
     void SearchWorker();
 
+    // 按造職工編號進行排序
+    void SortWorker();
+
+    // 按造職工編號進行排序
+    void CleanFile();
+
     //析構函數
     ~WorkManager();
 };

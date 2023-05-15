@@ -1645,74 +1645,68 @@ void WorkManager::SearchWorker(){
 
 #### 14.1 排序函数声明
 
-在workerManager.h中添加成员函数  `void Sort_Emp();`
+在workerManager.h中添加成员函数  `void SortWorker();`
 
 ```C++
 	//排序职工
-	void Sort_Emp();
+	void SortWorker();
 ```
 
 
 
 #### 14.2 排序函数实现
 
-在workerManager.cpp中实现成员函数 ` void Sort_Emp();`
+在workerManager.cpp中实现成员函数 ` void SortWorker();`
 
 ```C++
-//排序职工
-void WorkerManager::Sort_Emp()
+void WorkManager::SortWorker()
 {
-	if (this->m_FileIsEmpty)
+	if (this->m_file_is_empty_)
 	{
-		cout << "文件不存在或记录为空！" << endl;
+		cout<<"文件不存在或是紀錄為空"<<endl;
 		system("pause");
 		system("cls");
 	}
 	else
 	{
-		cout << "请选择排序方式： " << endl;
-		cout << "1、按职工号进行升序" << endl;
-		cout << "2、按职工号进行降序" << endl;
-
-		int select = 0;
-		cin >> select;
-
-
-		for (int i = 0; i < m_EmpNum; i++)
-		{
-			int minOrMax = i;
-			for (int j = i + 1; j < m_EmpNum; j++)
-			{
-				if (select == 1) //升序
-				{
-					if (m_EmpArray[minOrMax]->m_Id > m_EmpArray[j]->m_Id)
-					{
-						minOrMax = j;
-					}
-				}
-				else  //降序
-				{
-					if (m_EmpArray[minOrMax]->m_Id < m_EmpArray[j]->m_Id)
-					{
-						minOrMax = j;
-					}
-				}
-			}
-
-			if (i != minOrMax)
-			{
-				Worker * temp = m_EmpArray[i];
-				m_EmpArray[i] = m_EmpArray[minOrMax];
-				m_EmpArray[minOrMax] = temp;
-			}
-
-		}
-
-		cout << "排序成功,排序后结果为：" << endl;
-		this->save();
-		this->Show_Emp();
+		cout<<"你想要升序排列還是降序排列"<<endl;
+		cout<<"1. 按照員工編號升序排列"<<endl;
+		cout<<"2. 按照員工編號降序排列"<<endl;
 	}
+	int select;
+	cin >> select;
 
+	for (int i = 0 ; i < m_worker_number_  ; i++)
+	{
+		int min_or_max = i; // 聲明最小值或最大值
+		for (int j = i + 1 ; j < this->m_worker_number_  ; j++)
+		{
+			if (select == 1)
+			{
+				if (this->m_worker_array_ptr_[i]->m_ID > this->m_worker_array_ptr_[j]->m_ID)
+				{
+					min_or_max = j;
+				}
+			}
+			if (select == 2)
+			{
+				if (this->m_worker_array_ptr_[i]->m_ID < this->m_worker_array_ptr_[j]->m_ID)
+				{
+					min_or_max = j;
+				}
+			}
+		}
+		//判斷一開始認定的最小值或最大值 是不是 計算的最小值以及最大值
+		if (min_or_max != i)
+		{
+			Worker * temp = this->m_worker_array_ptr_[i];
+			this->m_worker_array_ptr_[i] = this->m_worker_array_ptr_[min_or_max];
+			this->m_worker_array_ptr_[min_or_max] = temp;
+		}
+	}
+	cout<<"sort sccessful"<<endl;
+	this->SaveEmployeeDetail();
+	this->Show_Workers();
 }
 ```
 
@@ -1724,7 +1718,7 @@ void WorkerManager::Sort_Emp()
 
 在main函数分支 6  选项中，调用排序职工接口
 
-![1546510145181](assets/1546510145181.png)
+![1546510145181](assets/11.png)
 
 测试：
 
@@ -1774,7 +1768,7 @@ void WorkerManager::Sort_Emp()
 
 #### 15.1 清空函数声明
 
-在workerManager.h中添加成员函数  `void Clean_File();`
+在workerManager.h中添加成员函数  `void CleanFile();`
 
 ```C++
 	//清空文件
@@ -1787,45 +1781,62 @@ void WorkerManager::Sort_Emp()
 
 #### 15.2 清空函数实现
 
-在workerManager.cpp中实现员函数 ` void Clean_File();`
+在workerManager.cpp中实现员函数 ` void CleanFile();`
 
 ```C++
-//清空文件
-void WorkerManager::Clean_File()
-{
-	cout << "确认清空？" << endl;
-	cout << "1、确认" << endl;
-	cout << "2、返回" << endl;
+void WorkManager::CleanFile(){
+	cout<<"確定清空"<<endl;
+	cout<<"1. 確定"<<endl;
+	cout<<"或是按任意鍵返回"<<endl;
 
-	int select = 0;
+	int select;
 	cin >> select;
 
 	if (select == 1)
 	{
-		//打开模式 ios::trunc 如果存在删除文件并重新创建
-		ofstream ofs(FILENAME, ios::trunc);
+		//清空文件
+		ofstream ofs(all_employees_detail_file_txt, ios::trunc); // 刪除文件後創建
 		ofs.close();
 
-		if (this->m_EmpArray != NULL)
+		if (this->m_worker_array_ptr_ != nullptr)
 		{
-            for (int i = 0; i < this->m_EmpNum; i++)
+			//刪除堆區的每個職工對象
+			for (int i = 0 ; i < this->m_worker_number_ ; i++)
 			{
-				if (this->m_EmpArray[i] != NULL)
-				{
-					delete this->m_EmpArray[i];
-				}
+				delete this->m_worker_array_ptr_[i];
+				this->m_worker_array_ptr_[i] = nullptr;
 			}
-			this->m_EmpNum = 0;
-			delete[] this->m_EmpArray;
-			this->m_EmpArray = NULL;
-			this->m_FileIsEmpty = true;
 		}
-		cout << "清空成功！" << endl;
-	}
 
+		//刪除堆區數組的指針
+		delete[] this->m_worker_array_ptr_;
+		this->m_worker_array_ptr_ = nullptr;
+		this->m_worker_number_ = 0;
+		this->m_file_is_empty_ = true;
+
+		cout<<"clean sccess"<<endl;
+	}
 	system("pause");
 	system("cls");
+
 }
+```
+
+記得在析構函數也要將數組裡面的堆區都要清空
+```C++
+WorkManager::~WorkManager(){
+	if(this->m_worker_array_ptr_!= nullptr){
+		for(int i = 0; i < this->m_worker_number_ ; i++)
+		{
+			if (this->m_worker_array_ptr_[i] != nullptr)
+			{
+				delete this->m_worker_array_ptr_[i];
+			}
+		}
+		delete[] this->m_worker_array_ptr_;
+		this->m_worker_array_ptr_ = nullptr;
+	}
+};
 ```
 
 
