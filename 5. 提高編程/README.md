@@ -766,10 +766,10 @@ int main() {
 }
 ```
 
-總結：
+**總結：**
 
-* 利用具體化的模板，可以解決自定義類型的通用化
-* 學習模板並不是爲了寫模板，而是在STL能夠運用系統提供的模板
+* **利用具體化的模板，可以解決自定義類型的通用化**
+* **學習模板並不是爲了寫模板，而是在STL能夠運用系統提供的模板**
 
 
 
@@ -809,40 +809,39 @@ T    ---   通用的數據類型，名稱可以替換，通常爲大寫字母
 **示例：**
 
 ```C++
-#include <string>
+# include <iostream>
+using namespace std;
+
 //類模板
-template<class NameType, class AgeType> 
+template <typename Nametype, typename AgeType>
 class Person
 {
 public:
-	Person(NameType name, AgeType age)
-	{
-		this->mName = name;
-		this->mAge = age;
-	}
-	void showPerson()
-	{
-		cout << "name: " << this->mName << " age: " << this->mAge << endl;
-	}
-public:
-	NameType mName;
-	AgeType mAge;
+    Person(Nametype name, AgeType age)
+    {
+        this->m_Name = name;
+        this->m_Age = age;
+    }
+
+    void ShowPerson()
+    {
+        cout<<"name = "<<this->m_Name<<"\t"<<"age = "<<this->m_Age<<endl;
+    }
+
+    string m_Name;
+    int m_Age;
 };
 
 void test01()
 {
-	// 指定NameType 爲string類型，AgeType 爲 int類型
-	Person<string, int>P1("孫悟空", 999);
-	P1.showPerson();
+    // 指定NameType 爲string類型，AgeType 爲 int類型
+    Person<string, int> p1("孫悟空", 999);
+    p1.ShowPerson();
 }
 
-int main() {
-
-	test01();
-
-	system("pause");
-
-	return 0;
+int main()
+{
+    test01();
 }
 ```
 
@@ -873,50 +872,54 @@ int main() {
 **示例：**
 
 ```C++
-#include <string>
-//類模板
-template<class NameType, class AgeType = int> 
+# include <iostream>
+using namespace std;
+
+//類模板與函數模板區別主要有兩點
+//1. 類模板沒有自動類型推導的使用方式
+//2. 類模板在模板參數列表中可以有默認參數
+
+//類模板與函數模板的區別
+template <typename NameType, typename AgeType = int>
 class Person
 {
 public:
-	Person(NameType name, AgeType age)
-	{
-		this->mName = name;
-		this->mAge = age;
-	}
-	void showPerson()
-	{
-		cout << "name: " << this->mName << " age: " << this->mAge << endl;
-	}
-public:
-	NameType mName;
-	AgeType mAge;
+    Person (NameType name, AgeType age)
+    {
+        this->m_name = name;
+        this->m_age = age;
+    }
+
+    void ShowPerson()
+    {
+        cout<<"name = "<<this->m_name<<"\t"<<"age = "<<this->m_age<<endl;
+    }
+
+    string m_name;
+    int m_age;
 };
 
-//1、類模板沒有自動類型推導的使用方式
+
+//1. 類模板沒有自動類型推導的使用方式
 void test01()
 {
-	// Person p("孫悟空", 1000); // 錯誤 類模板使用時候，不可以用自動類型推導
-	Person <string ,int>p("孫悟空", 1000); //必須使用顯示指定類型的方式，使用類模板
-	p.showPerson();
+    //Person p("孫悟空", 1000); // 錯誤，無法自動推導數據類型
+    Person<string, int> p("孫悟空", 1000);  // 正確，只能用顯示指定類型
+    p.ShowPerson();
 }
 
-//2、類模板在模板參數列表中可以有默認參數
+//2. 類模板在模板參數列表中可以有默認參數
 void test02()
 {
-	Person <string> p("豬八戒", 999); //類模板中的模板參數列表 可以指定默認參數
-	p.showPerson();
+    //只需指定 string 類型，因為 int 已經在 Person 類裡面是默認類型了
+    Person<string> p("孫悟空", 1000);  // 正確
+    p.ShowPerson();
 }
 
-int main() {
-
-	test01();
-
-	test02();
-
-	system("pause");
-
-	return 0;
+int main()
+{
+    test01();
+    test02();
 }
 ```
 
