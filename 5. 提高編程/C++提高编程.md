@@ -1,8 +1,146 @@
-# C++提高编程
+# C++提高編程
 
 
 
-* 本阶段主要针对C++==泛型编程==和==STL==技术做详细讲解，探讨C++更深层的使用
+* 本階段主要針對C++==泛型編程==和==STL==技術做詳細講解，探討C++更深層的使用
+
+- [C++提高編程](#c%E6%8F%90%E9%AB%98%E7%B7%A8%E7%A8%8B)
+    - [模板](#%E6%A8%A1%E6%9D%BF)
+        - [模板的概念](#%E6%A8%A1%E6%9D%BF%E7%9A%84%E6%A6%82%E5%BF%B5)
+        - [函數模板](#%E5%87%BD%E6%95%B8%E6%A8%A1%E6%9D%BF)
+            - [函數模板語法](#%E5%87%BD%E6%95%B8%E6%A8%A1%E6%9D%BF%E8%AA%9E%E6%B3%95)
+            - [函數模板注意事項](#%E5%87%BD%E6%95%B8%E6%A8%A1%E6%9D%BF%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A0%85)
+            - [函數模板案例](#%E5%87%BD%E6%95%B8%E6%A8%A1%E6%9D%BF%E6%A1%88%E4%BE%8B)
+            - [普通函數與函數模板的區別](#%E6%99%AE%E9%80%9A%E5%87%BD%E6%95%B8%E8%88%87%E5%87%BD%E6%95%B8%E6%A8%A1%E6%9D%BF%E7%9A%84%E5%8D%80%E5%88%A5)
+            - [普通函數與函數模板的調用規則](#%E6%99%AE%E9%80%9A%E5%87%BD%E6%95%B8%E8%88%87%E5%87%BD%E6%95%B8%E6%A8%A1%E6%9D%BF%E7%9A%84%E8%AA%BF%E7%94%A8%E8%A6%8F%E5%89%87)
+            - [模板的侷限性](#%E6%A8%A1%E6%9D%BF%E7%9A%84%E4%BE%B7%E9%99%90%E6%80%A7)
+        - [類模板](#%E9%A1%9E%E6%A8%A1%E6%9D%BF)
+            - [類模板語法](#%E9%A1%9E%E6%A8%A1%E6%9D%BF%E8%AA%9E%E6%B3%95)
+            - [類模板與函數模板區別](#%E9%A1%9E%E6%A8%A1%E6%9D%BF%E8%88%87%E5%87%BD%E6%95%B8%E6%A8%A1%E6%9D%BF%E5%8D%80%E5%88%A5)
+            - [類模板中成員函數創建時機](#%E9%A1%9E%E6%A8%A1%E6%9D%BF%E4%B8%AD%E6%88%90%E5%93%A1%E5%87%BD%E6%95%B8%E5%89%B5%E5%BB%BA%E6%99%82%E6%A9%9F)
+            - [類模板對象做函數參數](#%E9%A1%9E%E6%A8%A1%E6%9D%BF%E5%B0%8D%E8%B1%A1%E5%81%9A%E5%87%BD%E6%95%B8%E5%8F%83%E6%95%B8)
+            - [類模板與繼承](#%E9%A1%9E%E6%A8%A1%E6%9D%BF%E8%88%87%E7%B9%BC%E6%89%BF)
+            - [類模板成員函數類外實現](#%E9%A1%9E%E6%A8%A1%E6%9D%BF%E6%88%90%E5%93%A1%E5%87%BD%E6%95%B8%E9%A1%9E%E5%A4%96%E5%AF%A6%E7%8F%BE)
+            - [類模板分文件編寫](#%E9%A1%9E%E6%A8%A1%E6%9D%BF%E5%88%86%E6%96%87%E4%BB%B6%E7%B7%A8%E5%AF%AB)
+            - [類模板與友元](#%E9%A1%9E%E6%A8%A1%E6%9D%BF%E8%88%87%E5%8F%8B%E5%85%83)
+            - [類模板案例](#%E9%A1%9E%E6%A8%A1%E6%9D%BF%E6%A1%88%E4%BE%8B)
+    - [STL初識](#stl%E5%88%9D%E8%AD%98)
+        - [STL的誕生](#stl%E7%9A%84%E8%AA%95%E7%94%9F)
+        - [STL基本概念](#stl%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5)
+        - [STL六大組件](#stl%E5%85%AD%E5%A4%A7%E7%B5%84%E4%BB%B6)
+        - [STL中容器、算法、迭代器](#stl%E4%B8%AD%E5%AE%B9%E5%99%A8%E7%AE%97%E6%B3%95%E8%BF%AD%E4%BB%A3%E5%99%A8)
+        - [容器算法迭代器初識](#%E5%AE%B9%E5%99%A8%E7%AE%97%E6%B3%95%E8%BF%AD%E4%BB%A3%E5%99%A8%E5%88%9D%E8%AD%98)
+            - [vector存放內置數據類型](#vector%E5%AD%98%E6%94%BE%E5%85%A7%E7%BD%AE%E6%95%B8%E6%93%9A%E9%A1%9E%E5%9E%8B)
+            - [Vector存放自定義數據類型](#vector%E5%AD%98%E6%94%BE%E8%87%AA%E5%AE%9A%E7%BE%A9%E6%95%B8%E6%93%9A%E9%A1%9E%E5%9E%8B)
+            - [Vector容器嵌套容器](#vector%E5%AE%B9%E5%99%A8%E5%B5%8C%E5%A5%97%E5%AE%B9%E5%99%A8)
+    - [STL- 常用容器](#stl--%E5%B8%B8%E7%94%A8%E5%AE%B9%E5%99%A8)
+        - [string容器](#string%E5%AE%B9%E5%99%A8)
+            - [string基本概念](#string%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5)
+            - [string構造函數](#string%E6%A7%8B%E9%80%A0%E5%87%BD%E6%95%B8)
+            - [string賦值操作](#string%E8%B3%A6%E5%80%BC%E6%93%8D%E4%BD%9C)
+            - [string字符串拼接](#string%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%8B%BC%E6%8E%A5)
+            - [string查找和替換](#string%E6%9F%A5%E6%89%BE%E5%92%8C%E6%9B%BF%E6%8F%9B)
+            - [string字符串比較](#string%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%AF%94%E8%BC%83)
+            - [string字符存取](#string%E5%AD%97%E7%AC%A6%E5%AD%98%E5%8F%96)
+            - [string插入和刪除](#string%E6%8F%92%E5%85%A5%E5%92%8C%E5%88%AA%E9%99%A4)
+            - [string子串](#string%E5%AD%90%E4%B8%B2)
+        - [vector容器](#vector%E5%AE%B9%E5%99%A8)
+            - [vector基本概念](#vector%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5)
+            - [vector構造函數](#vector%E6%A7%8B%E9%80%A0%E5%87%BD%E6%95%B8)
+            - [vector賦值操作](#vector%E8%B3%A6%E5%80%BC%E6%93%8D%E4%BD%9C)
+            - [vector容量和大小](#vector%E5%AE%B9%E9%87%8F%E5%92%8C%E5%A4%A7%E5%B0%8F)
+            - [vector插入和刪除](#vector%E6%8F%92%E5%85%A5%E5%92%8C%E5%88%AA%E9%99%A4)
+            - [vector數據存取](#vector%E6%95%B8%E6%93%9A%E5%AD%98%E5%8F%96)
+            - [vector互換容器](#vector%E4%BA%92%E6%8F%9B%E5%AE%B9%E5%99%A8)
+            - [vector預留空間](#vector%E9%A0%90%E7%95%99%E7%A9%BA%E9%96%93)
+        - [deque容器](#deque%E5%AE%B9%E5%99%A8)
+            - [deque容器基本概念](#deque%E5%AE%B9%E5%99%A8%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5)
+            - [deque構造函數](#deque%E6%A7%8B%E9%80%A0%E5%87%BD%E6%95%B8)
+            - [deque賦值操作](#deque%E8%B3%A6%E5%80%BC%E6%93%8D%E4%BD%9C)
+            - [deque大小操作](#deque%E5%A4%A7%E5%B0%8F%E6%93%8D%E4%BD%9C)
+            - [deque 插入和刪除](#deque-%E6%8F%92%E5%85%A5%E5%92%8C%E5%88%AA%E9%99%A4)
+            - [deque 數據存取](#deque-%E6%95%B8%E6%93%9A%E5%AD%98%E5%8F%96)
+            - [deque 排序](#deque-%E6%8E%92%E5%BA%8F)
+        - [案例-評委打分](#%E6%A1%88%E4%BE%8B-%E8%A9%95%E5%A7%94%E6%89%93%E5%88%86)
+            - [案例描述](#%E6%A1%88%E4%BE%8B%E6%8F%8F%E8%BF%B0)
+            - [實現步驟](#%E5%AF%A6%E7%8F%BE%E6%AD%A5%E9%A9%9F)
+        - [stack容器](#stack%E5%AE%B9%E5%99%A8)
+            - [stack 基本概念](#stack-%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5)
+            - [stack 常用接口](#stack-%E5%B8%B8%E7%94%A8%E6%8E%A5%E5%8F%A3)
+        - [queue 容器](#queue-%E5%AE%B9%E5%99%A8)
+            - [queue 基本概念](#queue-%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5)
+            - [queue 常用接口](#queue-%E5%B8%B8%E7%94%A8%E6%8E%A5%E5%8F%A3)
+        - [list容器](#list%E5%AE%B9%E5%99%A8)
+            - [list基本概念](#list%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5)
+            - [list構造函數](#list%E6%A7%8B%E9%80%A0%E5%87%BD%E6%95%B8)
+            - [list 賦值和交換](#list-%E8%B3%A6%E5%80%BC%E5%92%8C%E4%BA%A4%E6%8F%9B)
+            - [list 大小操作](#list-%E5%A4%A7%E5%B0%8F%E6%93%8D%E4%BD%9C)
+            - [list 插入和刪除](#list-%E6%8F%92%E5%85%A5%E5%92%8C%E5%88%AA%E9%99%A4)
+            - [list 數據存取](#list-%E6%95%B8%E6%93%9A%E5%AD%98%E5%8F%96)
+            - [list 反轉和排序](#list-%E5%8F%8D%E8%BD%89%E5%92%8C%E6%8E%92%E5%BA%8F)
+            - [排序案例](#%E6%8E%92%E5%BA%8F%E6%A1%88%E4%BE%8B)
+        - [set/ multiset 容器](#set-multiset-%E5%AE%B9%E5%99%A8)
+            - [set基本概念](#set%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5)
+            - [set構造和賦值](#set%E6%A7%8B%E9%80%A0%E5%92%8C%E8%B3%A6%E5%80%BC)
+            - [set大小和交換](#set%E5%A4%A7%E5%B0%8F%E5%92%8C%E4%BA%A4%E6%8F%9B)
+            - [set插入和刪除](#set%E6%8F%92%E5%85%A5%E5%92%8C%E5%88%AA%E9%99%A4)
+            - [set查找和統計](#set%E6%9F%A5%E6%89%BE%E5%92%8C%E7%B5%B1%E8%A8%88)
+            - [set和multiset區別](#set%E5%92%8Cmultiset%E5%8D%80%E5%88%A5)
+            - [pair對組創建](#pair%E5%B0%8D%E7%B5%84%E5%89%B5%E5%BB%BA)
+            - [set容器排序](#set%E5%AE%B9%E5%99%A8%E6%8E%92%E5%BA%8F)
+        - [map/ multimap容器](#map-multimap%E5%AE%B9%E5%99%A8)
+            - [map基本概念](#map%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5)
+            - [map構造和賦值](#map%E6%A7%8B%E9%80%A0%E5%92%8C%E8%B3%A6%E5%80%BC)
+            - [map大小和交換](#map%E5%A4%A7%E5%B0%8F%E5%92%8C%E4%BA%A4%E6%8F%9B)
+            - [map插入和刪除](#map%E6%8F%92%E5%85%A5%E5%92%8C%E5%88%AA%E9%99%A4)
+            - [map查找和統計](#map%E6%9F%A5%E6%89%BE%E5%92%8C%E7%B5%B1%E8%A8%88)
+            - [map容器排序](#map%E5%AE%B9%E5%99%A8%E6%8E%92%E5%BA%8F)
+        - [案例-員工分組](#%E6%A1%88%E4%BE%8B-%E5%93%A1%E5%B7%A5%E5%88%86%E7%B5%84)
+            - [案例描述](#%E6%A1%88%E4%BE%8B%E6%8F%8F%E8%BF%B0)
+            - [實現步驟](#%E5%AF%A6%E7%8F%BE%E6%AD%A5%E9%A9%9F)
+    - [STL- 函數對象](#stl--%E5%87%BD%E6%95%B8%E5%B0%8D%E8%B1%A1)
+        - [函數對象](#%E5%87%BD%E6%95%B8%E5%B0%8D%E8%B1%A1)
+            - [函數對象概念](#%E5%87%BD%E6%95%B8%E5%B0%8D%E8%B1%A1%E6%A6%82%E5%BF%B5)
+            - [函數對象使用](#%E5%87%BD%E6%95%B8%E5%B0%8D%E8%B1%A1%E4%BD%BF%E7%94%A8)
+        - [謂詞](#%E8%AC%82%E8%A9%9E)
+            - [謂詞概念](#%E8%AC%82%E8%A9%9E%E6%A6%82%E5%BF%B5)
+            - [一元謂詞](#%E4%B8%80%E5%85%83%E8%AC%82%E8%A9%9E)
+            - [二元謂詞](#%E4%BA%8C%E5%85%83%E8%AC%82%E8%A9%9E)
+        - [內建函數對象](#%E5%85%A7%E5%BB%BA%E5%87%BD%E6%95%B8%E5%B0%8D%E8%B1%A1)
+            - [內建函數對象意義](#%E5%85%A7%E5%BB%BA%E5%87%BD%E6%95%B8%E5%B0%8D%E8%B1%A1%E6%84%8F%E7%BE%A9)
+            - [算術仿函數](#%E7%AE%97%E8%A1%93%E4%BB%BF%E5%87%BD%E6%95%B8)
+            - [關係仿函數](#%E9%97%9C%E4%BF%82%E4%BB%BF%E5%87%BD%E6%95%B8)
+            - [邏輯仿函數](#%E9%82%8F%E8%BC%AF%E4%BB%BF%E5%87%BD%E6%95%B8)
+    - [STL- 常用算法](#stl--%E5%B8%B8%E7%94%A8%E7%AE%97%E6%B3%95)
+        - [常用遍歷算法](#%E5%B8%B8%E7%94%A8%E9%81%8D%E6%AD%B7%E7%AE%97%E6%B3%95)
+            - [for_each](#for_each)
+            - [transform](#transform)
+        - [常用查找算法](#%E5%B8%B8%E7%94%A8%E6%9F%A5%E6%89%BE%E7%AE%97%E6%B3%95)
+            - [find](#find)
+            - [find_if](#find_if)
+            - [adjacent_find](#adjacent_find)
+            - [binary_search](#binary_search)
+            - [count](#count)
+            - [count_if](#count_if)
+        - [常用排序算法](#%E5%B8%B8%E7%94%A8%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95)
+            - [sort](#sort)
+            - [random_shuffle](#random_shuffle)
+            - [merge](#merge)
+            - [reverse](#reverse)
+        - [常用拷貝和替換算法](#%E5%B8%B8%E7%94%A8%E6%8B%B7%E8%B2%9D%E5%92%8C%E6%9B%BF%E6%8F%9B%E7%AE%97%E6%B3%95)
+            - [copy](#copy)
+            - [replace](#replace)
+            - [replace_if](#replace_if)
+            - [swap](#swap)
+        - [常用算術生成算法](#%E5%B8%B8%E7%94%A8%E7%AE%97%E8%A1%93%E7%94%9F%E6%88%90%E7%AE%97%E6%B3%95)
+            - [accumulate](#accumulate)
+            - [fill](#fill)
+        - [常用集合算法](#%E5%B8%B8%E7%94%A8%E9%9B%86%E5%90%88%E7%AE%97%E6%B3%95)
+            - [set_intersection](#set_intersection)
+            - [set_union](#set_union)
+            - [set_difference](#set_difference)
+
+<!-- /TOC --><!-- vscode-markdown-toc --> 
 
 
 
@@ -14,7 +152,7 @@
 
 
 
-模板就是建立**通用的模具**，大大**提高复用性**
+模板就是建立**通用的模具**，大大**提高複用性**
 
 
 
@@ -42,12 +180,10 @@ PPT模板：
 
 
 
-模板的特点：
+模板的特點：
 
-* 模板不可以直接使用，它只是一个框架
-* 模板的通用并不是万能的
-
-
+* 模板不可以直接使用，它只是一個框架
+* 模板的通用並不是萬能的
 
 
 
@@ -55,39 +191,41 @@ PPT模板：
 
 
 
-### 1.2 函数模板
+
+
+### 1.2 函數模板
 
 
 
-* C++另一种编程思想称为 ==泛型编程== ，主要利用的技术就是模板
+* C++另一種編程思想稱爲 ==泛型編程== ，主要利用的技術就是模板
 
 
-* C++提供两种模板机制:**函数模板**和**类模板** 
-
-
-
-#### 1.2.1 函数模板语法
-
-函数模板作用：
-
-建立一个通用函数，其函数返回值类型和形参类型可以不具体制定，用一个**虚拟的类型**来代表。
+* C++提供兩種模板機制:**函數模板**和**類模板** 
 
 
 
-**语法：** 
+#### 1.2.1 函數模板語法
+
+函數模板作用：
+
+建立一個通用函數，其函數返回值類型和形參類型可以不具體制定，用一個**虛擬的類型**來代表。
+
+
+
+**語法：** 
 
 ```C++
 template<typename T>
-函数声明或定义
+函數聲明或定義
 ```
 
-**解释：**
+**解釋：**
 
-template  ---  声明创建模板
+template  ---  聲明創建模板
 
-typename  --- 表面其后面的符号是一种数据类型，可以用class代替
+typename  --- 表面其後面的符號是一種數據類型，可以用class代替
 
-T    ---   通用的数据类型，名称可以替换，通常为大写字母
+T    ---   通用的數據類型，名稱可以替換，通常爲大寫字母
 
 
 
@@ -95,65 +233,71 @@ T    ---   通用的数据类型，名称可以替换，通常为大写字母
 
 ```C++
 
-//交换整型函数
-void swapInt(int& a, int& b) {
-	int temp = a;
-	a = b;
-	b = temp;
+# include <iostream>
+using namespace std;
+
+//交換兩個整數
+void swapInt(int &a, int &b){
+    int temp = a;
+    a = b;
+    b = temp;
 }
 
-//交换浮点型函数
-void swapDouble(double& a, double& b) {
-	double temp = a;
-	a = b;
-	b = temp;
+
+//交換兩個浮點數
+void swapDouble(double &a, double &b){
+    double temp = a;
+    a = b;
+    b = temp;
 }
 
-//利用模板提供通用的交换函数
+//函數模板
 template<typename T>
-void mySwap(T& a, T& b)
-{
-	T temp = a;
-	a = b;
-	b = temp;
+void mySwap(T &a, T &b){
+    T temp = a;
+    a = b;
+    b = temp;
 }
 
-void test01()
-{
-	int a = 10;
-	int b = 20;
-	
-	//swapInt(a, b);
 
-	//利用模板实现交换
-	//1、自动类型推导
-	mySwap(a, b);
+void test01(){
+    
+    //定義參數
+    int a = 10;
+    int b = 20;
+    double c = 10;
+    double d = 20;
 
-	//2、显示指定类型
-	mySwap<int>(a, b);
+    //整數交換
+    swapInt(a,b);
+    cout<<"a = "<<a<<"\t"<<"b = "<<b<<endl;
 
-	cout << "a = " << a << endl;
-	cout << "b = " << b << endl;
+    //浮點數交換
+    swapDouble(c,d);
+    cout<<"c = "<<c<<"\t"<< "d = "<<d<<endl;
 
+    //利用函數模板交換
+    //兩種方式使用函數模板
+
+    //1. 自動類型推倒
+    mySwap(a,b);
+    cout<<"a = "<<a<<"\t"<<"b = "<<b<<endl;
+
+    //2. 顯示指定類型
+    mySwap<int>(a,b);
+    cout<<"a = "<<a<<"\t"<<"b = "<<b<<endl;
 }
 
-int main() {
-
-	test01();
-
-	system("pause");
-
-	return 0;
+int main(){
+    test01();
 }
 ```
 
-总结：
+總結：
 
-* 函数模板利用关键字 template
-* 使用函数模板有两种方式：自动类型推导、显示指定类型
-* 模板的目的是为了提高复用性，将类型参数化
-
-
+* 函數模板利用關鍵字 template
+* 使用函數模板有兩種方式：自動類型推導、顯示指定類型
+* 模板的目的是爲了提高複用性，將類型參數化
 
 
 
@@ -161,59 +305,62 @@ int main() {
 
 
 
-#### 1.2.2 函数模板注意事项
-
-注意事项：
-
-* 自动类型推导，必须推导出一致的数据类型T,才可以使用
 
 
-* 模板必须要确定出T的数据类型，才可以使用
+#### 1.2.2 函數模板注意事項
+
+注意事項：
+
+* 自動類型推導，必須推導出一致的數據類型T,纔可以使用
+
+
+* 模板必須要確定出T的數據類型，纔可以使用
 
 
 
 **示例：**
 
 ```C++
-//利用模板提供通用的交换函数
-template<class T>
-void mySwap(T& a, T& b)
-{
-	T temp = a;
-	a = b;
-	b = temp;
+# include <iostream>
+using namespace std;
+
+// 函數模板注意事項
+template<class T> // typename可以替換成class，可以用，都一樣
+void mySwap(T&a, T&b){
+    T temp = a;
+    a = b;
+    b = temp;
 }
 
 
-// 1、自动类型推导，必须推导出一致的数据类型T,才可以使用
-void test01()
-{
-	int a = 10;
-	int b = 20;
-	char c = 'c';
+//1. 自動類型推導，必須推導出一致的數據類型T才可以使用
+void test01(){
+    int a = 10;
+    int b = 20;
+    char c = 'c';
+    mySwap(a,b); // 正確！！
+    //mySwap(a,c); // 錯誤！！ 推導不出一致的T類型
 
-	mySwap(a, b); // 正确，可以推导出一致的T
-	//mySwap(a, c); // 错误，推导不出一致的T类型
+    cout<<"a = "<<a<<endl;
+    cout<<"b = "<<b<<endl;
 }
 
-
-// 2、模板必须要确定出T的数据类型，才可以使用
+//2. 模板必須要確定出T的數據類型，才可以使用
 template<class T>
-void func()
-{
-	cout << "func 调用" << endl;
+void func(){
+    cout<<"func調用"<<endl;
 }
 
 void test02()
 {
-	//func(); //错误，模板不能独立使用，必须确定出T的类型
-	func<int>(); //利用显示指定类型的方式，给T一个类型，才可以使用该模板
+    func<int>();    //直接定義出template的數據類型
 }
 
-int main() {
 
-	test01();
-	test02();
+int main()
+{
+    test01();
+    test02();
 
 	system("pause");
 
@@ -221,11 +368,9 @@ int main() {
 }
 ```
 
-总结：
+總結：
 
-* 使用模板时必须确定出通用数据类型T，并且能够推导出一致的类型
-
-
+* 使用模板時必須確定出通用數據類型T，並且能夠推導出一致的類型
 
 
 
@@ -235,20 +380,22 @@ int main() {
 
 
 
-#### 1.2.3 函数模板案例
+
+
+#### 1.2.3 函數模板案例
 
 案例描述：
 
-* 利用函数模板封装一个排序的函数，可以对**不同数据类型数组**进行排序
-* 排序规则从大到小，排序算法为**选择排序**
-* 分别利用**char数组**和**int数组**进行测试
+* 利用函數模板封裝一個排序的函數，可以對**不同數據類型數組**進行排序
+* 排序規則從大到小，排序算法爲**選擇排序**
+* 分別利用**char數組**和**int數組**進行測試
 
 
 
 示例：
 
 ```C++
-//交换的函数模板
+//交換的函數模板
 template<typename T>
 void mySwap(T &a, T&b)
 {
@@ -258,13 +405,13 @@ void mySwap(T &a, T&b)
 }
 
 
-template<class T> // 也可以替换成typename
-//利用选择排序，进行对数组从大到小的排序
+template<class T> // 也可以替換成typename
+//利用選擇排序，進行對數組從大到小的排序
 void mySort(T arr[], int len)
 {
 	for (int i = 0; i < len; i++)
 	{
-		int max = i; //最大数的下标
+		int max = i; //最大數的下標
 		for (int j = i + 1; j < len; j++)
 		{
 			if (arr[max] < arr[j])
@@ -272,7 +419,7 @@ void mySort(T arr[], int len)
 				max = j;
 			}
 		}
-		if (max != i) //如果最大数的下标不是i，交换两者
+		if (max != i) //如果最大數的下標不是i，交換兩者
 		{
 			mySwap(arr[max], arr[i]);
 		}
@@ -288,7 +435,7 @@ void printArray(T arr[], int len) {
 }
 void test01()
 {
-	//测试char数组
+	//測試char數組
 	char charArr[] = "bdcfeagh";
 	int num = sizeof(charArr) / sizeof(char);
 	mySort(charArr, num);
@@ -297,7 +444,7 @@ void test01()
 
 void test02()
 {
-	//测试int数组
+	//測試int數組
 	int intArr[] = { 7, 5, 8, 1, 3, 9, 2, 4, 6 };
 	int num = sizeof(intArr) / sizeof(int);
 	mySort(intArr, num);
@@ -315,7 +462,7 @@ int main() {
 }
 ```
 
-总结：模板可以提高代码复用，需要熟练掌握
+總結：模板可以提高代碼複用，需要熟練掌握
 
 
 
@@ -327,59 +474,71 @@ int main() {
 
 
 
-#### 1.2.4 普通函数与函数模板的区别
+#### 1.2.4 普通函數與函數模板的區別
 
 
 
-**普通函数与函数模板区别：**
+**普通函數與函數模板區別：**
 
-* 普通函数调用时可以发生自动类型转换（隐式类型转换）
-* 函数模板调用时，如果利用自动类型推导，不会发生隐式类型转换
-* 如果利用显示指定类型的方式，可以发生隐式类型转换
+* 普通函數調用時可以發生自動類型轉換（隱式類型轉換）
+* 函數模板調用時，如果利用自動類型推導，不會發生隱式類型轉換
+* 如果利用顯示指定類型的方式，可以發生隱式類型轉換
 
 
 
 **示例：**
 
 ```C++
-//普通函数
-int myAdd01(int a, int b)
+# include <iostream>
+using namespace std;
+
+// 普通函數與函數模板區別
+
+//1. 普通函數調用可以發生隱式類型轉換
+//2. 函數模板 用自動類型推導，不可以發生隱式類型轉換
+//3. 函數模板 用顯示指定類型，可以發生隱式類型轉換
+
+
+
+//普通函數
+int AddTwoNumber(int a, int b)
 {
-	return a + b;
+    return a + b;
 }
 
-//函数模板
+//函數模板
 template<class T>
-T myAdd02(T a, T b)  
+T AddTwoNumberAnyType(T a, T b)
 {
-	return a + b;
+    return a + b;
 }
 
-//使用函数模板时，如果用自动类型推导，不会发生自动类型转换,即隐式类型转换
 void test01()
 {
-	int a = 10;
-	int b = 20;
-	char c = 'c';
-	
-	cout << myAdd01(a, c) << endl; //正确，将char类型的'c'隐式转换为int类型  'c' 对应 ASCII码 99
+    int a = 10;
+    int b = 20;
+    char c = 'c';
 
-	//myAdd02(a, c); // 报错，使用自动类型推导时，不会发生隐式类型转换
+    //1. 普通函數調用可以發生隱式類型轉換
+    cout<<AddTwoNumber(a,b)<<endl;
+    cout<<AddTwoNumber(a,c)<<endl;  // 將字串轉乘ASCII碼, c = 99, a = 97
 
-	myAdd02<int>(a, c); //正确，如果用显示指定类型，可以发生隐式类型转换
+    cout << AddTwoNumberAnyType(a, b) << endl;
+
+    // 2. 函數模板 用自動類型推導，不可以發生隱式類型轉換
+    //cout << AddTwoNumberAnyType(a, c) << endl;    //報錯
+
+    //3. 函數模板 用顯示指定類型，可以發生隱式類型轉換
+    cout<<AddTwoNumberAnyType<int>(a,c)<<endl;
 }
 
-int main() {
-
-	test01();
-
-	system("pause");
-
-	return 0;
+int main()
+{
+    test01();
 }
 ```
 
-总结：建议使用显示指定类型的方式，调用函数模板，因为可以自己确定通用类型T
+**總結：建議使用顯示指定類型的方式，調用函數模板，因爲可以自己確定通用類型T**
 
 
 
@@ -391,16 +550,16 @@ int main() {
 
 
 
-#### 1.2.5 普通函数与函数模板的调用规则
+#### 1.2.5 普通函數與函數模板的調用規則
 
 
 
-调用规则如下：
+調用規則如下：
 
-1. 如果函数模板和普通函数都可以实现，优先调用普通函数
-2. 可以通过空模板参数列表来强制调用函数模板
-3. 函数模板也可以发生重载
-4. 如果函数模板可以产生更好的匹配,优先调用函数模板
+1. 如果函數模板和普通函數都可以實現，優先調用普通函數
+2. 可以通過空模板參數列表來強制調用函數模板
+3. 函數模板也可以發生重載
+4. 如果函數模板可以產生更好的匹配,優先調用函數模板
 
 
 
@@ -409,56 +568,61 @@ int main() {
 **示例：**
 
 ```C++
-//普通函数与函数模板调用规则
-void myPrint(int a, int b)
+# include <iostream>
+using namespace std;
+
+// 普通函數與函數模板的調用規則
+
+//1. 如果函數模板與普通函數都可以調用，優先調用普通函數
+//2. 可以通過空模板參數列表，強制調用 函數模板
+//3. 函數模板可以發生函數重載
+//4. 如果函數模板可以產生更好的匹配，優先調用函數模板
+
+void MyPrint(int a, int b)
 {
-	cout << "调用的普通函数" << endl;
+    cout<<"調用的是普通函數"<<endl;
 }
 
-template<typename T>
-void myPrint(T a, T b) 
-{ 
-	cout << "调用的模板" << endl;
+template<class T>
+void MyPrint(T a, T b)
+{
+    cout<<"調用的是模板"<<endl;
 }
 
-template<typename T>
-void myPrint(T a, T b, T c) 
-{ 
-	cout << "调用重载的模板" << endl; 
+template<class T>
+void MyPrint(T a, T b, T c)
+{
+    cout<<"調用的是重載的模板"<<endl;
 }
 
 void test01()
 {
-	//1、如果函数模板和普通函数都可以实现，优先调用普通函数
-	// 注意 如果告诉编译器  普通函数是有的，但只是声明没有实现，或者不在当前文件内实现，就会报错找不到
-	int a = 10;
-	int b = 20;
-	myPrint(a, b); //调用普通函数
+    int a = 10;
+    int b = 20;
 
-	//2、可以通过空模板参数列表来强制调用函数模板
-	myPrint<>(a, b); //调用函数模板
+    //1. 如果函數模板與普通函數都可以調用，優先調用普通函數
+    MyPrint(a, b);
 
-	//3、函数模板也可以发生重载
-	int c = 30;
-	myPrint(a, b, c); //调用重载的函数模板
+    //2. 可以通過空模板參數列表，強制調用 函數模板
+    MyPrint<>(a, b);
 
-	//4、 如果函数模板可以产生更好的匹配,优先调用函数模板
-	char c1 = 'a';
-	char c2 = 'b';
-	myPrint(c1, c2); //调用函数模板
+    //3. 函數模板可以發生函數重載
+    MyPrint<>(a, b, 100);
+
+    //4. 如果函數模板可以產生更好的匹配，優先調用函數模板
+    //先調用函數模板是因為，調用普通函數還必須要把字符串轉換成整數，所以系統優先調用函數模板
+    const char c1[] = "a";
+    const char c2[] = "b";
+    MyPrint(c1, c2);  
 }
 
-int main() {
-
-	test01();
-
-	system("pause");
-
-	return 0;
+int main()
+{
+    test01();
 }
 ```
 
-总结：既然提供了函数模板，最好就不要提供普通函数，否则容易出现二义性
+**總結：既然提供了函數模板，最好就不要提供普通函數，否則容易出現二義性**
 
 
 
@@ -470,11 +634,11 @@ int main() {
 
 
 
-#### 1.2.6 模板的局限性
+#### 1.2.6 模板的侷限性
 
-**局限性：**
+**侷限性：**
 
-* 模板的通用性并不是万能的
+* 模板的通用性並不是萬能的
 
 
 
@@ -488,7 +652,7 @@ int main() {
     }
 ```
 
-在上述代码中提供的赋值操作，如果传入的a和b是一个数组，就无法实现了
+在上述代碼中提供的賦值操作，如果傳入的a和b是一個數組，就無法實現了
 
 
 
@@ -502,11 +666,11 @@ int main() {
     }
 ```
 
-在上述代码中，如果T的数据类型传入的是像Person这样的自定义数据类型，也无法正常运行
+在上述代碼中，如果T的數據類型傳入的是像Person這樣的自定義數據類型，也無法正常運行
 
 
 
-因此C++为了解决这种问题，提供模板的重载，可以为这些**特定的类型**提供**具体化的模板**
+因此C++爲了解決這種問題，提供模板的重載，可以爲這些**特定的類型**提供**具體化的模板**
 
 
 
@@ -530,7 +694,7 @@ public:
 	int m_Age;
 };
 
-//普通函数模板
+//普通函數模板
 template<class T>
 bool myCompare(T& a, T& b)
 {
@@ -545,8 +709,8 @@ bool myCompare(T& a, T& b)
 }
 
 
-//具体化，显示具体化的原型和定意思以template<>开头，并通过名称来指出类型
-//具体化优先于常规模板
+//具體化，顯示具體化的原型和定意思以template<>開頭，並通過名稱來指出類型
+//具體化優先於常規模板
 template<> bool myCompare(Person &p1, Person &p2)
 {
 	if ( p1.m_Name  == p2.m_Name && p1.m_Age == p2.m_Age)
@@ -563,7 +727,7 @@ void test01()
 {
 	int a = 10;
 	int b = 20;
-	//内置数据类型可以直接使用通用的函数模板
+	//內置數據類型可以直接使用通用的函數模板
 	bool ret = myCompare(a, b);
 	if (ret)
 	{
@@ -579,8 +743,8 @@ void test02()
 {
 	Person p1("Tom", 10);
 	Person p2("Tom", 10);
-	//自定义数据类型，不会调用普通的函数模板
-	//可以创建具体化的Person数据类型的模板，用于特殊处理这个类型
+	//自定義數據類型，不會調用普通的函數模板
+	//可以創建具體化的Person數據類型的模板，用於特殊處理這個類型
 	bool ret = myCompare(p1, p2);
 	if (ret)
 	{
@@ -604,12 +768,10 @@ int main() {
 }
 ```
 
-总结：
+總結：
 
-* 利用具体化的模板，可以解决自定义类型的通用化
-* 学习模板并不是为了写模板，而是在STL能够运用系统提供的模板
-
-
+* 利用具體化的模板，可以解決自定義類型的通用化
+* 學習模板並不是爲了寫模板，而是在STL能夠運用系統提供的模板
 
 
 
@@ -617,30 +779,32 @@ int main() {
 
 
 
-### 1.3 类模板
-
-#### 1.3.1 类模板语法
-
-类模板作用：
-
-* 建立一个通用类，类中的成员 数据类型可以不具体制定，用一个**虚拟的类型**来代表。
 
 
+### 1.3 類模板
 
-**语法：** 
+#### 1.3.1 類模板語法
+
+類模板作用：
+
+* 建立一個通用類，類中的成員 數據類型可以不具體制定，用一個**虛擬的類型**來代表。
+
+
+
+**語法：** 
 
 ```c++
 template<typename T>
-类
+類
 ```
 
-**解释：**
+**解釋：**
 
-template  ---  声明创建模板
+template  ---  聲明創建模板
 
-typename  --- 表面其后面的符号是一种数据类型，可以用class代替
+typename  --- 表面其後面的符號是一種數據類型，可以用class代替
 
-T    ---   通用的数据类型，名称可以替换，通常为大写字母
+T    ---   通用的數據類型，名稱可以替換，通常爲大寫字母
 
 
 
@@ -648,7 +812,7 @@ T    ---   通用的数据类型，名称可以替换，通常为大写字母
 
 ```C++
 #include <string>
-//类模板
+//類模板
 template<class NameType, class AgeType> 
 class Person
 {
@@ -669,8 +833,8 @@ public:
 
 void test01()
 {
-	// 指定NameType 为string类型，AgeType 为 int类型
-	Person<string, int>P1("孙悟空", 999);
+	// 指定NameType 爲string類型，AgeType 爲 int類型
+	Person<string, int>P1("孫悟空", 999);
 	P1.showPerson();
 }
 
@@ -684,7 +848,7 @@ int main() {
 }
 ```
 
-总结：类模板和函数模板语法相似，在声明模板template后面加类，此类称为类模板
+總結：類模板和函數模板語法相似，在聲明模板template後面加類，此類稱爲類模板
 
 
 
@@ -696,14 +860,14 @@ int main() {
 
 
 
-#### 1.3.2 类模板与函数模板区别
+#### 1.3.2 類模板與函數模板區別
 
 
 
-类模板与函数模板区别主要有两点：
+類模板與函數模板區別主要有兩點：
 
-1. 类模板没有自动类型推导的使用方式
-2. 类模板在模板参数列表中可以有默认参数
+1. 類模板沒有自動類型推導的使用方式
+2. 類模板在模板參數列表中可以有默認參數
 
 
 
@@ -712,7 +876,7 @@ int main() {
 
 ```C++
 #include <string>
-//类模板
+//類模板
 template<class NameType, class AgeType = int> 
 class Person
 {
@@ -731,18 +895,18 @@ public:
 	AgeType mAge;
 };
 
-//1、类模板没有自动类型推导的使用方式
+//1、類模板沒有自動類型推導的使用方式
 void test01()
 {
-	// Person p("孙悟空", 1000); // 错误 类模板使用时候，不可以用自动类型推导
-	Person <string ,int>p("孙悟空", 1000); //必须使用显示指定类型的方式，使用类模板
+	// Person p("孫悟空", 1000); // 錯誤 類模板使用時候，不可以用自動類型推導
+	Person <string ,int>p("孫悟空", 1000); //必須使用顯示指定類型的方式，使用類模板
 	p.showPerson();
 }
 
-//2、类模板在模板参数列表中可以有默认参数
+//2、類模板在模板參數列表中可以有默認參數
 void test02()
 {
-	Person <string> p("猪八戒", 999); //类模板中的模板参数列表 可以指定默认参数
+	Person <string> p("豬八戒", 999); //類模板中的模板參數列表 可以指定默認參數
 	p.showPerson();
 }
 
@@ -758,12 +922,10 @@ int main() {
 }
 ```
 
-总结：
+總結：
 
-* 类模板使用只能用显示指定类型方式
-* 类模板中的模板参数列表可以有默认参数
-
-
+* 類模板使用只能用顯示指定類型方式
+* 類模板中的模板參數列表可以有默認參數
 
 
 
@@ -773,14 +935,16 @@ int main() {
 
 
 
-#### 1.3.3 类模板中成员函数创建时机
+
+
+#### 1.3.3 類模板中成員函數創建時機
 
 
 
-类模板中成员函数和普通类中成员函数创建时机是有区别的：
+類模板中成員函數和普通類中成員函數創建時機是有區別的：
 
-* 普通类中的成员函数一开始就可以创建
-* 类模板中的成员函数在调用时才创建
+* 普通類中的成員函數一開始就可以創建
+* 類模板中的成員函數在調用時才創建
 
 
 
@@ -813,7 +977,7 @@ class MyClass
 public:
 	T obj;
 
-	//类模板中的成员函数，并不是一开始就创建的，而是在模板调用时再生成
+	//類模板中的成員函數，並不是一開始就創建的，而是在模板調用時再生成
 
 	void fun1() { obj.showPerson1(); }
 	void fun2() { obj.showPerson2(); }
@@ -826,7 +990,7 @@ void test01()
 	
 	m.fun1();
 
-	//m.fun2();//编译会出错，说明函数调用才会去创建成员函数
+	//m.fun2();//編譯會出錯，說明函數調用纔會去創建成員函數
 }
 
 int main() {
@@ -839,7 +1003,7 @@ int main() {
 }
 ```
 
-总结：类模板中的成员函数并不是一开始就创建的，在调用时才去创建
+總結：類模板中的成員函數並不是一開始就創建的，在調用時纔去創建
 
 
 
@@ -849,19 +1013,19 @@ int main() {
 
 
 
-#### 1.3.4 类模板对象做函数参数
+#### 1.3.4 類模板對象做函數參數
 
-学习目标：
+學習目標：
 
-* 类模板实例化出的对象，向函数传参的方式
+* 類模板實例化出的對象，向函數傳參的方式
 
 
 
-一共有三种传入方式：
+一共有三種傳入方式：
 
-1. 指定传入的类型   --- 直接显示对象的数据类型
-2. 参数模板化           --- 将对象中的参数变为模板进行传递
-3. 整个类模板化       --- 将这个对象类型 模板化进行传递
+1. 指定傳入的類型   --- 直接顯示對象的數據類型
+2. 參數模板化           --- 將對象中的參數變爲模板進行傳遞
+3. 整個類模板化       --- 將這個對象類型 模板化進行傳遞
 
 
 
@@ -871,7 +1035,7 @@ int main() {
 
 ```C++
 #include <string>
-//类模板
+//類模板
 template<class NameType, class AgeType = int> 
 class Person
 {
@@ -890,36 +1054,36 @@ public:
 	AgeType mAge;
 };
 
-//1、指定传入的类型
+//1、指定傳入的類型
 void printPerson1(Person<string, int> &p) 
 {
 	p.showPerson();
 }
 void test01()
 {
-	Person <string, int >p("孙悟空", 100);
+	Person <string, int >p("孫悟空", 100);
 	printPerson1(p);
 }
 
-//2、参数模板化
+//2、參數模板化
 template <class T1, class T2>
 void printPerson2(Person<T1, T2>&p)
 {
 	p.showPerson();
-	cout << "T1的类型为： " << typeid(T1).name() << endl;
-	cout << "T2的类型为： " << typeid(T2).name() << endl;
+	cout << "T1的類型爲： " << typeid(T1).name() << endl;
+	cout << "T2的類型爲： " << typeid(T2).name() << endl;
 }
 void test02()
 {
-	Person <string, int >p("猪八戒", 90);
+	Person <string, int >p("豬八戒", 90);
 	printPerson2(p);
 }
 
-//3、整个类模板化
+//3、整個類模板化
 template<class T>
 void printPerson3(T & p)
 {
-	cout << "T的类型为： " << typeid(T).name() << endl;
+	cout << "T的類型爲： " << typeid(T).name() << endl;
 	p.showPerson();
 
 }
@@ -941,12 +1105,10 @@ int main() {
 }
 ```
 
-总结：
+總結：
 
-* 通过类模板创建的对象，可以有三种方式向函数中进行传参
-* 使用比较广泛是第一种：指定传入的类型
-
-
+* 通過類模板創建的對象，可以有三種方式向函數中進行傳參
+* 使用比較廣泛是第一種：指定傳入的類型
 
 
 
@@ -954,15 +1116,17 @@ int main() {
 
 
 
-#### 1.3.5 类模板与继承
+
+
+#### 1.3.5 類模板與繼承
 
 
 
-当类模板碰到继承时，需要注意一下几点：
+當類模板碰到繼承時，需要注意一下幾點：
 
-* 当子类继承的父类是一个类模板时，子类在声明的时候，要指定出父类中T的类型
-* 如果不指定，编译器无法给子类分配内存
-* 如果想灵活指定出父类中T的类型，子类也需变为类模板
+* 當子類繼承的父類是一個類模板時，子類在聲明的時候，要指定出父類中T的類型
+* 如果不指定，編譯器無法給子類分配內存
+* 如果想靈活指定出父類中T的類型，子類也需變爲類模板
 
 
 
@@ -976,8 +1140,8 @@ class Base
 	T m;
 };
 
-//class Son:public Base  //错误，c++编译需要给子类分配内存，必须知道父类中T的类型才可以向下继承
-class Son :public Base<int> //必须指定一个类型
+//class Son:public Base  //錯誤，c++編譯需要給子類分配內存，必須知道父類中T的類型纔可以向下繼承
+class Son :public Base<int> //必須指定一個類型
 {
 };
 void test01()
@@ -985,7 +1149,7 @@ void test01()
 	Son c;
 }
 
-//类模板继承类模板 ,可以用T2指定父类中的T类型
+//類模板繼承類模板 ,可以用T2指定父類中的T類型
 template<class T1, class T2>
 class Son2 :public Base<T2>
 {
@@ -1015,7 +1179,7 @@ int main() {
 }
 ```
 
-总结：如果父类是类模板，子类需要指定出父类中T的数据类型
+總結：如果父類是類模板，子類需要指定出父類中T的數據類型
 
 
 
@@ -1025,11 +1189,11 @@ int main() {
 
 
 
-#### 1.3.6 类模板成员函数类外实现
+#### 1.3.6 類模板成員函數類外實現
 
 
 
-学习目标：能够掌握类模板中的成员函数类外实现
+學習目標：能夠掌握類模板中的成員函數類外實現
 
 
 
@@ -1038,11 +1202,11 @@ int main() {
 ```C++
 #include <string>
 
-//类模板中成员函数类外实现
+//類模板中成員函數類外實現
 template<class T1, class T2>
 class Person {
 public:
-	//成员函数类内声明
+	//成員函數類內聲明
 	Person(T1 name, T2 age);
 	void showPerson();
 
@@ -1051,17 +1215,17 @@ public:
 	T2 m_Age;
 };
 
-//构造函数 类外实现
+//構造函數 類外實現
 template<class T1, class T2>
 Person<T1, T2>::Person(T1 name, T2 age) {
 	this->m_Name = name;
 	this->m_Age = age;
 }
 
-//成员函数 类外实现
+//成員函數 類外實現
 template<class T1, class T2>
 void Person<T1, T2>::showPerson() {
-	cout << "姓名: " << this->m_Name << " 年龄:" << this->m_Age << endl;
+	cout << "姓名: " << this->m_Name << " 年齡:" << this->m_Age << endl;
 }
 
 void test01()
@@ -1080,7 +1244,7 @@ int main() {
 }
 ```
 
-总结：类模板中成员函数类外实现时，需要加上模板参数列表
+總結：類模板中成員函數類外實現時，需要加上模板參數列表
 
 
 
@@ -1090,30 +1254,30 @@ int main() {
 
 
 
-#### 1.3.7 类模板分文件编写
+#### 1.3.7 類模板分文件編寫
 
-学习目标：
+學習目標：
 
-* 掌握类模板成员函数分文件编写产生的问题以及解决方式
-
-
-
-问题：
-
-* 类模板中成员函数创建时机是在调用阶段，导致分文件编写时链接不到
+* 掌握類模板成員函數分文件編寫產生的問題以及解決方式
 
 
-解决：
 
-* 解决方式1：直接包含.cpp源文件
-* 解决方式2：将声明和实现写到同一个文件中，并更改后缀名为.hpp，hpp是约定的名称，并不是强制
+問題：
+
+* 類模板中成員函數創建時機是在調用階段，導致分文件編寫時鏈接不到
+
+
+解決：
+
+* 解決方式1：直接包含.cpp源文件
+* 解決方式2：將聲明和實現寫到同一個文件中，並更改後綴名爲.hpp，hpp是約定的名稱，並不是強制
 
 
 
 
 **示例：**
 
-person.hpp中代码：
+person.hpp中代碼：
 
 ```C++
 #pragma once
@@ -1131,32 +1295,32 @@ public:
 	T2 m_Age;
 };
 
-//构造函数 类外实现
+//構造函數 類外實現
 template<class T1, class T2>
 Person<T1, T2>::Person(T1 name, T2 age) {
 	this->m_Name = name;
 	this->m_Age = age;
 }
 
-//成员函数 类外实现
+//成員函數 類外實現
 template<class T1, class T2>
 void Person<T1, T2>::showPerson() {
-	cout << "姓名: " << this->m_Name << " 年龄:" << this->m_Age << endl;
+	cout << "姓名: " << this->m_Name << " 年齡:" << this->m_Age << endl;
 }
 ```
 
 
 
-类模板分文件编写.cpp中代码
+類模板分文件編寫.cpp中代碼
 
 ```C++
 #include<iostream>
 using namespace std;
 
 //#include "person.h"
-#include "person.cpp" //解决方式1，包含cpp源文件
+#include "person.cpp" //解決方式1，包含cpp源文件
 
-//解决方式2，将声明和实现写到一起，文件后缀名改为.hpp
+//解決方式2，將聲明和實現寫到一起，文件後綴名改爲.hpp
 #include "person.hpp"
 void test01()
 {
@@ -1174,7 +1338,7 @@ int main() {
 }
 ```
 
-总结：主流的解决方式是第二种，将类模板成员函数写到一起，并将后缀名改为.hpp
+總結：主流的解決方式是第二種，將類模板成員函數寫到一起，並將後綴名改爲.hpp
 
 
 
@@ -1184,19 +1348,19 @@ int main() {
 
 
 
-#### 1.3.8 类模板与友元
+#### 1.3.8 類模板與友元
 
 
 
-学习目标：
+學習目標：
 
-* 掌握类模板配合友元函数的类内和类外实现
+* 掌握類模板配合友元函數的類內和類外實現
 
 
 
-全局函数类内实现 - 直接在类内声明友元即可
+全局函數類內實現 - 直接在類內聲明友元即可
 
-全局函数类外实现 - 需要提前让编译器知道全局函数的存在
+全局函數類外實現 - 需要提前讓編譯器知道全局函數的存在
 
 
 
@@ -1205,29 +1369,29 @@ int main() {
 ```C++
 #include <string>
 
-//2、全局函数配合友元  类外实现 - 先做函数模板声明，下方在做函数模板定义，在做友元
+//2、全局函數配合友元  類外實現 - 先做函數模板聲明，下方在做函數模板定義，在做友元
 template<class T1, class T2> class Person;
 
-//如果声明了函数模板，可以将实现写到后面，否则需要将实现体写到类的前面让编译器提前看到
+//如果聲明瞭函數模板，可以將實現寫到後面，否則需要將實現體寫到類的前面讓編譯器提前看到
 //template<class T1, class T2> void printPerson2(Person<T1, T2> & p); 
 
 template<class T1, class T2>
 void printPerson2(Person<T1, T2> & p)
 {
-	cout << "类外实现 ---- 姓名： " << p.m_Name << " 年龄：" << p.m_Age << endl;
+	cout << "類外實現 ---- 姓名： " << p.m_Name << " 年齡：" << p.m_Age << endl;
 }
 
 template<class T1, class T2>
 class Person
 {
-	//1、全局函数配合友元   类内实现
+	//1、全局函數配合友元   類內實現
 	friend void printPerson(Person<T1, T2> & p)
 	{
-		cout << "姓名： " << p.m_Name << " 年龄：" << p.m_Age << endl;
+		cout << "姓名： " << p.m_Name << " 年齡：" << p.m_Age << endl;
 	}
 
 
-	//全局函数配合友元  类外实现
+	//全局函數配合友元  類外實現
 	friend void printPerson2<>(Person<T1, T2> & p);
 
 public:
@@ -1245,7 +1409,7 @@ private:
 
 };
 
-//1、全局函数在类内实现
+//1、全局函數在類內實現
 void test01()
 {
 	Person <string, int >p("Tom", 20);
@@ -1253,7 +1417,7 @@ void test01()
 }
 
 
-//2、全局函数在类外实现
+//2、全局函數在類外實現
 void test02()
 {
 	Person <string, int >p("Jerry", 30);
@@ -1272,7 +1436,7 @@ int main() {
 }
 ```
 
-总结：建议全局函数做类内实现，用法简单，而且编译器可以直接识别
+總結：建議全局函數做類內實現，用法簡單，而且編譯器可以直接識別
 
 
 
@@ -1284,19 +1448,19 @@ int main() {
 
 
 
-#### 1.3.9 类模板案例
+#### 1.3.9 類模板案例
 
-案例描述:  实现一个通用的数组类，要求如下：
+案例描述:  實現一個通用的數組類，要求如下：
 
 
 
-* 可以对内置数据类型以及自定义数据类型的数据进行存储
-* 将数组中的数据存储到堆区
-* 构造函数中可以传入数组的容量
-* 提供对应的拷贝构造函数以及operator=防止浅拷贝问题
-* 提供尾插法和尾删法对数组中的数据进行增加和删除
-* 可以通过下标的方式访问数组中的元素
-* 可以获取数组中当前元素个数和数组的容量
+* 可以對內置數據類型以及自定義數據類型的數據進行存儲
+* 將數組中的數據存儲到堆區
+* 構造函數中可以傳入數組的容量
+* 提供對應的拷貝構造函數以及operator=防止淺拷貝問題
+* 提供尾插法和尾刪法對數組中的數據進行增加和刪除
+* 可以通過下標的方式訪問數組中的元素
+* 可以獲取數組中當前元素個數和數組的容量
 
 
 
@@ -1304,7 +1468,7 @@ int main() {
 
 **示例：**
 
-myArray.hpp中代码
+myArray.hpp中代碼
 
 ```C++
 #pragma once
@@ -1316,7 +1480,7 @@ class MyArray
 {
 public:
     
-	//构造函数
+	//構造函數
 	MyArray(int capacity)
 	{
 		this->m_Capacity = capacity;
@@ -1324,7 +1488,7 @@ public:
 		pAddress = new T[this->m_Capacity];
 	}
 
-	//拷贝构造
+	//拷貝構造
 	MyArray(const MyArray & arr)
 	{
 		this->m_Capacity = arr.m_Capacity;
@@ -1332,13 +1496,13 @@ public:
 		this->pAddress = new T[this->m_Capacity];
 		for (int i = 0; i < this->m_Size; i++)
 		{
-			//如果T为对象，而且还包含指针，必须需要重载 = 操作符，因为这个等号不是 构造 而是赋值，
-			// 普通类型可以直接= 但是指针类型需要深拷贝
+			//如果T爲對象，而且還包含指針，必須需要重載 = 操作符，因爲這個等號不是 構造 而是賦值，
+			// 普通類型可以直接= 但是指針類型需要深拷貝
 			this->pAddress[i] = arr.pAddress[i];
 		}
 	}
 
-	//重载= 操作符  防止浅拷贝问题
+	//重載= 操作符  防止淺拷貝問題
 	MyArray& operator=(const MyArray& myarray) {
 
 		if (this->pAddress != NULL) {
@@ -1356,10 +1520,10 @@ public:
 		return *this;
 	}
 
-	//重载[] 操作符  arr[0]
+	//重載[] 操作符  arr[0]
 	T& operator [](int index)
 	{
-		return this->pAddress[index]; //不考虑越界，用户自己去处理
+		return this->pAddress[index]; //不考慮越界，用戶自己去處理
 	}
 
 	//尾插法
@@ -1373,7 +1537,7 @@ public:
 		this->m_Size++;
 	}
 
-	//尾删法
+	//尾刪法
 	void Pop_back()
 	{
 		if (this->m_Size == 0)
@@ -1383,20 +1547,20 @@ public:
 		this->m_Size--;
 	}
 
-	//获取数组容量
+	//獲取數組容量
 	int getCapacity()
 	{
 		return this->m_Capacity;
 	}
 
-	//获取数组大小
+	//獲取數組大小
 	int	getSize()
 	{
 		return this->m_Size;
 	}
 
 
-	//析构
+	//析構
 	~MyArray()
 	{
 		if (this->pAddress != NULL)
@@ -1409,7 +1573,7 @@ public:
 	}
 
 private:
-	T * pAddress;  //指向一个堆空间，这个空间存储真正的数据
+	T * pAddress;  //指向一個堆空間，這個空間存儲真正的數據
 	int m_Capacity; //容量
 	int m_Size;   // 大小
 };
@@ -1417,7 +1581,7 @@ private:
 
 
 
-类模板案例—数组类封装.cpp中
+類模板案例—數組類封裝.cpp中
 
 ```C++
 #include "myArray.hpp"
@@ -1430,7 +1594,7 @@ void printIntArray(MyArray<int>& arr) {
 	cout << endl;
 }
 
-//测试内置数据类型
+//測試內置數據類型
 void test01()
 {
 	MyArray<int> array1(10);
@@ -1438,7 +1602,7 @@ void test01()
 	{
 		array1.Push_back(i);
 	}
-	cout << "array1打印输出：" << endl;
+	cout << "array1打印輸出：" << endl;
 	printIntArray(array1);
 	cout << "array1的大小：" << array1.getSize() << endl;
 	cout << "array1的容量：" << array1.getCapacity() << endl;
@@ -1447,13 +1611,13 @@ void test01()
 
 	MyArray<int> array2(array1);
 	array2.Pop_back();
-	cout << "array2打印输出：" << endl;
+	cout << "array2打印輸出：" << endl;
 	printIntArray(array2);
 	cout << "array2的大小：" << array2.getSize() << endl;
 	cout << "array2的容量：" << array2.getCapacity() << endl;
 }
 
-//测试自定义数据类型
+//測試自定義數據類型
 class Person {
 public:
 	Person() {} 
@@ -1469,22 +1633,22 @@ public:
 void printPersonArray(MyArray<Person>& personArr)
 {
 	for (int i = 0; i < personArr.getSize(); i++) {
-		cout << "姓名：" << personArr[i].m_Name << " 年龄： " << personArr[i].m_Age << endl;
+		cout << "姓名：" << personArr[i].m_Name << " 年齡： " << personArr[i].m_Age << endl;
 	}
 
 }
 
 void test02()
 {
-	//创建数组
+	//創建數組
 	MyArray<Person> pArray(10);
-	Person p1("孙悟空", 30);
-	Person p2("韩信", 20);
+	Person p1("孫悟空", 30);
+	Person p2("韓信", 20);
 	Person p3("妲己", 18);
 	Person p4("王昭君", 15);
-	Person p5("赵云", 24);
+	Person p5("趙雲", 24);
 
-	//插入数据
+	//插入數據
 	pArray.Push_back(p1);
 	pArray.Push_back(p2);
 	pArray.Push_back(p3);
@@ -1510,27 +1674,27 @@ int main() {
 }
 ```
 
-总结：
+總結：
 
-能够利用所学知识点实现通用的数组
-
-
+能夠利用所學知識點實現通用的數組
 
 
 
-## 2 STL初识
-
-### 2.1 STL的诞生
 
 
+## 2 STL初識
 
-* 长久以来，软件界一直希望建立一种可重复利用的东西
+### 2.1 STL的誕生
 
-* C++的**面向对象**和**泛型编程**思想，目的就是**复用性的提升**
 
-* 大多情况下，数据结构和算法都未能有一套标准,导致被迫从事大量重复工作
 
-* 为了建立数据结构和算法的一套标准,诞生了**STL**
+* 長久以來，軟件界一直希望建立一種可重複利用的東西
+
+* C++的**面向對象**和**泛型編程**思想，目的就是**複用性的提升**
+
+* 大多情況下，數據結構和算法都未能有一套標準,導致被迫從事大量重複工作
+
+* 爲了建立數據結構和算法的一套標準,誕生了**STL**
 
   ​
 
@@ -1539,27 +1703,27 @@ int main() {
 
 
 
-* STL(Standard Template Library,**标准模板库**)
-* STL 从广义上分为: **容器(container) 算法(algorithm) 迭代器(iterator)**
-* **容器**和**算法**之间通过**迭代器**进行无缝连接。
-* STL 几乎所有的代码都采用了模板类或者模板函数
+* STL(Standard Template Library,**標準模板庫**)
+* STL 從廣義上分爲: **容器(container) 算法(algorithm) 迭代器(iterator)**
+* **容器**和**算法**之間通過**迭代器**進行無縫連接。
+* STL 幾乎所有的代碼都採用了模板類或者模板函數
 
 
 
 
 
-### 2.3 STL六大组件
+### 2.3 STL六大組件
 
-STL大体分为六大组件，分别是:**容器、算法、迭代器、仿函数、适配器（配接器）、空间配置器**
+STL大體分爲六大組件，分別是:**容器、算法、迭代器、仿函數、適配器（配接器）、空間配置器**
 
 
 
-1. 容器：各种数据结构，如vector、list、deque、set、map等,用来存放数据。
-2. 算法：各种常用的算法，如sort、find、copy、for_each等
-3. 迭代器：扮演了容器与算法之间的胶合剂。
-4. 仿函数：行为类似函数，可作为算法的某种策略。
-5. 适配器：一种用来修饰容器或者仿函数或迭代器接口的东西。
-6. 空间配置器：负责空间的配置与管理。
+1. 容器：各種數據結構，如vector、list、deque、set、map等,用來存放數據。
+2. 算法：各種常用的算法，如sort、find、copy、for_each等
+3. 迭代器：扮演了容器與算法之間的膠合劑。
+4. 仿函數：行爲類似函數，可作爲算法的某種策略。
+5. 適配器：一種用來修飾容器或者仿函數或迭代器接口的東西。
+6. 空間配置器：負責空間的配置與管理。
 
 
 
@@ -1571,68 +1735,68 @@ STL大体分为六大组件，分别是:**容器、算法、迭代器、仿函�
 
 **容器：**置物之所也
 
-STL**容器**就是将运用**最广泛的一些数据结构**实现出来
+STL**容器**就是將運用**最廣泛的一些數據結構**實現出來
 
-常用的数据结构：数组, 链表,树, 栈, 队列, 集合, 映射表 等
+常用的數據結構：數組, 鏈表,樹, 棧, 隊列, 集合, 映射表 等
 
-这些容器分为**序列式容器**和**关联式容器**两种:
+這些容器分爲**序列式容器**和**關聯式容器**兩種:
 
-​	**序列式容器**:强调值的排序，序列式容器中的每个元素均有固定的位置。
-	**关联式容器**:二叉树结构，各元素之间没有严格的物理上的顺序关系
-
-
-
-**算法：**问题之解法也
-
-有限的步骤，解决逻辑或数学上的问题，这一门学科我们叫做算法(Algorithms)
-
-算法分为:**质变算法**和**非质变算法**。
-
-质变算法：是指运算过程中会更改区间内的元素的内容。例如拷贝，替换，删除等等
-
-非质变算法：是指运算过程中不会更改区间内的元素内容，例如查找、计数、遍历、寻找极值等等
+​	**序列式容器**:強調值的排序，序列式容器中的每個元素均有固定的位置。
+	**關聯式容器**:二叉樹結構，各元素之間沒有嚴格的物理上的順序關係
 
 
 
-**迭代器：**容器和算法之间粘合剂
+**算法：**問題之解法也
 
-提供一种方法，使之能够依序寻访某个容器所含的各个元素，而又无需暴露该容器的内部表示方式。
+有限的步驟，解決邏輯或數學上的問題，這一門學科我們叫做算法(Algorithms)
 
-每个容器都有自己专属的迭代器
+算法分爲:**質變算法**和**非質變算法**。
 
-迭代器使用非常类似于指针，初学阶段我们可以先理解迭代器为指针
+質變算法：是指運算過程中會更改區間內的元素的內容。例如拷貝，替換，刪除等等
+
+非質變算法：是指運算過程中不會更改區間內的元素內容，例如查找、計數、遍歷、尋找極值等等
 
 
 
-迭代器种类：
+**迭代器：**容器和算法之間粘合劑
 
-| 种类           | 功能                                                     | 支持运算                                |
+提供一種方法，使之能夠依序尋訪某個容器所含的各個元素，而又無需暴露該容器的內部表示方式。
+
+每個容器都有自己專屬的迭代器
+
+迭代器使用非常類似於指針，初學階段我們可以先理解迭代器爲指針
+
+
+
+迭代器種類：
+
+| 種類           | 功能                                                     | 支持運算                                |
 | -------------- | -------------------------------------------------------- | --------------------------------------- |
-| 输入迭代器     | 对数据的只读访问                                         | 只读，支持++、==、！=                   |
-| 输出迭代器     | 对数据的只写访问                                         | 只写，支持++                            |
-| 前向迭代器     | 读写操作，并能向前推进迭代器                             | 读写，支持++、==、！=                   |
-| 双向迭代器     | 读写操作，并能向前和向后操作                             | 读写，支持++、--，                      |
-| 随机访问迭代器 | 读写操作，可以以跳跃的方式访问任意数据，功能最强的迭代器 | 读写，支持++、--、[n]、-n、<、<=、>、>= |
+| 輸入迭代器     | 對數據的只讀訪問                                         | 只讀，支持++、==、！=                   |
+| 輸出迭代器     | 對數據的只寫訪問                                         | 只寫，支持++                            |
+| 前向迭代器     | 讀寫操作，並能向前推進迭代器                             | 讀寫，支持++、==、！=                   |
+| 雙向迭代器     | 讀寫操作，並能向前和向後操作                             | 讀寫，支持++、--，                      |
+| 隨機訪問迭代器 | 讀寫操作，可以以跳躍的方式訪問任意數據，功能最強的迭代器 | 讀寫，支持++、--、[n]、-n、<、<=、>、>= |
 
-常用的容器中迭代器种类为双向迭代器，和随机访问迭代器
-
-
+常用的容器中迭代器種類爲雙向迭代器，和隨機訪問迭代器
 
 
 
 
 
-### 2.5 容器算法迭代器初识
+
+
+### 2.5 容器算法迭代器初識
 
 
 
-了解STL中容器、算法、迭代器概念之后，我们利用代码感受STL的魅力
+瞭解STL中容器、算法、迭代器概念之後，我們利用代碼感受STL的魅力
 
-STL中最常用的容器为Vector，可以理解为数组，下面我们将学习如何向这个容器中插入数据、并遍历这个容器
+STL中最常用的容器爲Vector，可以理解爲數組，下面我們將學習如何向這個容器中插入數據、並遍歷這個容器
 
 
 
-#### 2.5.1 vector存放内置数据类型
+#### 2.5.1 vector存放內置數據類型
 
 
 
@@ -1657,37 +1821,37 @@ void MyPrint(int val)
 
 void test01() {
 
-	//创建vector容器对象，并且通过模板参数指定容器中存放的数据的类型
+	//創建vector容器對象，並且通過模板參數指定容器中存放的數據的類型
 	vector<int> v;
-	//向容器中放数据
+	//向容器中放數據
 	v.push_back(10);
 	v.push_back(20);
 	v.push_back(30);
 	v.push_back(40);
 
-	//每一个容器都有自己的迭代器，迭代器是用来遍历容器中的元素
-	//v.begin()返回迭代器，这个迭代器指向容器中第一个数据
-	//v.end()返回迭代器，这个迭代器指向容器元素的最后一个元素的下一个位置
-	//vector<int>::iterator 拿到vector<int>这种容器的迭代器类型
+	//每一個容器都有自己的迭代器，迭代器是用來遍歷容器中的元素
+	//v.begin()返回迭代器，這個迭代器指向容器中第一個數據
+	//v.end()返回迭代器，這個迭代器指向容器元素的最後一個元素的下一個位置
+	//vector<int>::iterator 拿到vector<int>這種容器的迭代器類型
 
 	vector<int>::iterator pBegin = v.begin();
 	vector<int>::iterator pEnd = v.end();
 
-	//第一种遍历方式：
+	//第一種遍歷方式：
 	while (pBegin != pEnd) {
 		cout << *pBegin << endl;
 		pBegin++;
 	}
 
 	
-	//第二种遍历方式：
+	//第二種遍歷方式：
 	for (vector<int>::iterator it = v.begin(); it != v.end(); it++) {
 		cout << *it << endl;
 	}
 	cout << endl;
 
-	//第三种遍历方式：
-	//使用STL提供标准遍历算法  头文件 algorithm
+	//第三種遍歷方式：
+	//使用STL提供標準遍歷算法  頭文件 algorithm
 	for_each(v.begin(), v.end(), MyPrint);
 }
 
@@ -1703,11 +1867,11 @@ int main() {
 
 
 
-#### 2.5.2 Vector存放自定义数据类型
+#### 2.5.2 Vector存放自定義數據類型
 
 
 
-学习目标：vector中存放自定义数据类型，并打印输出
+學習目標：vector中存放自定義數據類型，並打印輸出
 
 
 
@@ -1717,7 +1881,7 @@ int main() {
 #include <vector>
 #include <string>
 
-//自定义数据类型
+//自定義數據類型
 class Person {
 public:
 	Person(string name, int age) {
@@ -1728,12 +1892,12 @@ public:
 	string mName;
 	int mAge;
 };
-//存放对象
+//存放對象
 void test01() {
 
 	vector<Person> v;
 
-	//创建数据
+	//創建數據
 	Person p1("aaa", 10);
 	Person p2("bbb", 20);
 	Person p3("ccc", 30);
@@ -1753,12 +1917,12 @@ void test01() {
 }
 
 
-//放对象指针
+//放對象指針
 void test02() {
 
 	vector<Person*> v;
 
-	//创建数据
+	//創建數據
 	Person p1("aaa", 10);
 	Person p2("bbb", 20);
 	Person p3("ccc", 30);
@@ -1796,7 +1960,7 @@ int main() {
 
 
 
-学习目标：容器中嵌套容器，我们将所有数据进行遍历输出
+學習目標：容器中嵌套容器，我們將所有數據進行遍歷輸出
 
 
 
@@ -1822,7 +1986,7 @@ void test01() {
 		v4.push_back(i + 4);
 	}
 
-	//将容器元素插入到vector v中
+	//將容器元素插入到vector v中
 	v.push_back(v1);
 	v.push_back(v2);
 	v.push_back(v3);
@@ -1861,37 +2025,37 @@ int main() {
 
 #### 3.1.1 string基本概念
 
-**本质：**
+**本質：**
 
-* string是C++风格的字符串，而string本质上是一个类
-
-
-
-**string和char * 区别：**
-
-* char * 是一个指针
-* string是一个类，类内部封装了char\*，管理这个字符串，是一个char*型的容器。
+* string是C++風格的字符串，而string本質上是一個類
 
 
 
-**特点：**
+**string和char * 區別：**
 
-string 类内部封装了很多成员方法
-
-例如：查找find，拷贝copy，删除delete 替换replace，插入insert
-
-string管理char*所分配的内存，不用担心复制越界和取值越界等，由类内部进行负责
+* char * 是一個指針
+* string是一個類，類內部封裝了char\*，管理這個字符串，是一個char*型的容器。
 
 
 
-#### 3.1.2 string构造函数
+**特點：**
 
-构造函数原型：
+string 類內部封裝了很多成員方法
 
-* `string();`          				//创建一个空的字符串 例如: string str;
+例如：查找find，拷貝copy，刪除delete 替換replace，插入insert
+
+string管理char*所分配的內存，不用擔心複製越界和取值越界等，由類內部進行負責
+
+
+
+#### 3.1.2 string構造函數
+
+構造函數原型：
+
+* `string();`          				//創建一個空的字符串 例如: string str;
 	 `string(const char* s);`	        //使用字符串s初始化
-* `string(const string& str);`    //使用一个string对象初始化另一个string对象
-* `string(int n, char c);`           //使用n个字符c初始化 
+* `string(const string& str);`    //使用一個string對象初始化另一個string對象
+* `string(int n, char c);`           //使用n個字符c初始化 
 
 
 
@@ -1899,18 +2063,18 @@ string管理char*所分配的内存，不用担心复制越界和取值越界等
 
 ```C++
 #include <string>
-//string构造
+//string構造
 void test01()
 {
-	string s1; //创建空字符串，调用无参构造函数
+	string s1; //創建空字符串，調用無參構造函數
 	cout << "str1 = " << s1 << endl;
 
 	const char* str = "hello world";
-	string s2(str); //把c_string转换成了string
+	string s2(str); //把c_string轉換成了string
 
 	cout << "str2 = " << s2 << endl;
 
-	string s3(s2); //调用拷贝构造函数
+	string s3(s2); //調用拷貝構造函數
 	cout << "str3 = " << s3 << endl;
 
 	string s4(10, 'a');
@@ -1927,7 +2091,7 @@ int main() {
 }
 ```
 
-总结：string的多种构造方式没有可比性，灵活使用即可
+總結：string的多種構造方式沒有可比性，靈活使用即可
 
 
 
@@ -1937,23 +2101,23 @@ int main() {
 
 
 
-#### 3.1.3 string赋值操作
+#### 3.1.3 string賦值操作
 
 功能描述：
 
-* 给string字符串进行赋值
+* 給string字符串進行賦值
 
 
 
-赋值的函数原型：
+賦值的函數原型：
 
-* `string& operator=(const char* s);`             //char*类型字符串 赋值给当前的字符串
-* `string& operator=(const string &s);`         //把字符串s赋给当前的字符串
-* `string& operator=(char c);`                          //字符赋值给当前的字符串
-* `string& assign(const char *s);`                  //把字符串s赋给当前的字符串
-* `string& assign(const char *s, int n);`     //把字符串s的前n个字符赋给当前的字符串
-* `string& assign(const string &s);`              //把字符串s赋给当前字符串
-* `string& assign(int n, char c);`                  //用n个字符c赋给当前字符串
+* `string& operator=(const char* s);`             //char*類型字符串 賦值給當前的字符串
+* `string& operator=(const string &s);`         //把字符串s賦給當前的字符串
+* `string& operator=(char c);`                          //字符賦值給當前的字符串
+* `string& assign(const char *s);`                  //把字符串s賦給當前的字符串
+* `string& assign(const char *s, int n);`     //把字符串s的前n個字符賦給當前的字符串
+* `string& assign(const string &s);`              //把字符串s賦給當前字符串
+* `string& assign(int n, char c);`                  //用n個字符c賦給當前字符串
 
 
 
@@ -1961,7 +2125,7 @@ int main() {
 **示例：**
 
 ```C++
-//赋值
+//賦值
 void test01()
 {
 	string str1;
@@ -2004,9 +2168,9 @@ int main() {
 }
 ```
 
-总结：
+總結：
 
-​	string的赋值方式很多，`operator=`  这种方式是比较实用的
+​	string的賦值方式很多，`operator=`  這種方式是比較實用的
 
 
 
@@ -2020,19 +2184,19 @@ int main() {
 
 **功能描述：**
 
-* 实现在字符串末尾拼接字符串
+* 實現在字符串末尾拼接字符串
 
 
 
-**函数原型：**
+**函數原型：**
 
-* `string& operator+=(const char* str);`                   //重载+=操作符
-* `string& operator+=(const char c);`                         //重载+=操作符
-* `string& operator+=(const string& str);`                //重载+=操作符
-* `string& append(const char *s); `                               //把字符串s连接到当前字符串结尾
-* `string& append(const char *s, int n);`                 //把字符串s的前n个字符连接到当前字符串结尾
+* `string& operator+=(const char* str);`                   //重載+=操作符
+* `string& operator+=(const char c);`                         //重載+=操作符
+* `string& operator+=(const string& str);`                //重載+=操作符
+* `string& append(const char *s); `                               //把字符串s連接到當前字符串結尾
+* `string& append(const char *s, int n);`                 //把字符串s的前n個字符連接到當前字符串結尾
 * `string& append(const string &s);`                           //同operator+=(const string& str)
-* `string& append(const string &s, int pos, int n);`//字符串s中从pos开始的n个字符连接到字符串结尾
+* `string& append(const string &s, int pos, int n);`//字符串s中從pos開始的n個字符連接到字符串結尾
 
 
 
@@ -2046,7 +2210,7 @@ void test01()
 {
 	string str1 = "我";
 
-	str1 += "爱玩游戏";
+	str1 += "愛玩遊戲";
 
 	cout << "str1 = " << str1 << endl;
 	
@@ -2064,7 +2228,7 @@ void test01()
 	str3.append(" love ");
 	str3.append("game abcde", 4);
 	//str3.append(str2);
-	str3.append(str2, 4, 3); // 从下标4位置开始 ，截取3个字符，拼接到字符串末尾
+	str3.append(str2, 4, 3); // 從下標4位置開始 ，截取3個字符，拼接到字符串末尾
 	cout << "str3 = " << str3 << endl;
 }
 int main() {
@@ -2077,7 +2241,7 @@ int main() {
 }
 ```
 
-总结：字符串拼接的重载版本很多，初学阶段记住几种即可
+總結：字符串拼接的重載版本很多，初學階段記住幾種即可
 
 
 
@@ -2085,27 +2249,27 @@ int main() {
 
 
 
-#### 3.1.5 string查找和替换
+#### 3.1.5 string查找和替換
 
 **功能描述：**
 
 * 查找：查找指定字符串是否存在
-* 替换：在指定的位置替换字符串
+* 替換：在指定的位置替換字符串
 
 
 
-**函数原型：**
+**函數原型：**
 
-* `int find(const string& str, int pos = 0) const;`              //查找str第一次出现位置,从pos开始查找
-* `int find(const char* s, int pos = 0) const; `                     //查找s第一次出现位置,从pos开始查找
-* `int find(const char* s, int pos, int n) const; `               //从pos位置查找s的前n个字符第一次位置
-* `int find(const char c, int pos = 0) const; `                       //查找字符c第一次出现位置
-* `int rfind(const string& str, int pos = npos) const;`      //查找str最后一次位置,从pos开始查找
-* `int rfind(const char* s, int pos = npos) const;`              //查找s最后一次出现位置,从pos开始查找
-* `int rfind(const char* s, int pos, int n) const;`              //从pos查找s的前n个字符最后一次位置
-* `int rfind(const char c, int pos = 0) const;  `                      //查找字符c最后一次出现位置
-* `string& replace(int pos, int n, const string& str); `       //替换从pos开始n个字符为字符串str
-* `string& replace(int pos, int n,const char* s); `                 //替换从pos开始的n个字符为字符串s
+* `int find(const string& str, int pos = 0) const;`              //查找str第一次出現位置,從pos開始查找
+* `int find(const char* s, int pos = 0) const; `                     //查找s第一次出現位置,從pos開始查找
+* `int find(const char* s, int pos, int n) const; `               //從pos位置查找s的前n個字符第一次位置
+* `int find(const char c, int pos = 0) const; `                       //查找字符c第一次出現位置
+* `int rfind(const string& str, int pos = npos) const;`      //查找str最後一次位置,從pos開始查找
+* `int rfind(const char* s, int pos = npos) const;`              //查找s最後一次出現位置,從pos開始查找
+* `int rfind(const char* s, int pos, int n) const;`              //從pos查找s的前n個字符最後一次位置
+* `int rfind(const char c, int pos = 0) const;  `                      //查找字符c最後一次出現位置
+* `string& replace(int pos, int n, const string& str); `       //替換從pos開始n個字符爲字符串str
+* `string& replace(int pos, int n,const char* s); `                 //替換從pos開始的n個字符爲字符串s
 
 
 
@@ -2113,7 +2277,7 @@ int main() {
 **示例：**
 
 ```C++
-//查找和替换
+//查找和替換
 void test01()
 {
 	//查找
@@ -2139,7 +2303,7 @@ void test01()
 
 void test02()
 {
-	//替换
+	//替換
 	string str1 = "abcdefgde";
 	str1.replace(1, 3, "1111");
 
@@ -2157,13 +2321,11 @@ int main() {
 }
 ```
 
-总结：
+總結：
 
-* find查找是从左往后，rfind从右往左
-* find找到字符串后返回查找的第一个字符位置，找不到返回-1
-* replace在替换时，要指定从哪个位置起，多少个字符，替换成什么样的字符串
-
-
+* find查找是從左往後，rfind從右往左
+* find找到字符串後返回查找的第一個字符位置，找不到返回-1
+* replace在替換時，要指定從哪個位置起，多少個字符，替換成什麼樣的字符串
 
 
 
@@ -2178,15 +2340,17 @@ int main() {
 
 
 
-####    3.1.6 string字符串比较
+
+
+####    3.1.6 string字符串比較
 
 **功能描述：**
 
-* 字符串之间的比较
+* 字符串之間的比較
 
-**比较方式：**
+**比較方式：**
 
-* 字符串比较是按字符的ASCII码进行对比
+* 字符串比較是按字符的ASCII碼進行對比
 
 = 返回   0
 
@@ -2196,10 +2360,10 @@ int main() {
 
 
 
-**函数原型：**
+**函數原型：**
 
-* `int compare(const string &s) const; `  //与字符串s比较
-* `int compare(const char *s) const;`      //与字符串s比较
+* `int compare(const string &s) const; `  //與字符串s比較
+* `int compare(const char *s) const;`      //與字符串s比較
 
 
 
@@ -2208,7 +2372,7 @@ int main() {
 **示例：**
 
 ```C++
-//字符串比较
+//字符串比較
 void test01()
 {
 
@@ -2218,15 +2382,15 @@ void test01()
 	int ret = s1.compare(s2);
 
 	if (ret == 0) {
-		cout << "s1 等于 s2" << endl;
+		cout << "s1 等於 s2" << endl;
 	}
 	else if (ret > 0)
 	{
-		cout << "s1 大于 s2" << endl;
+		cout << "s1 大於 s2" << endl;
 	}
 	else
 	{
-		cout << "s1 小于 s2" << endl;
+		cout << "s1 小於 s2" << endl;
 	}
 
 }
@@ -2241,7 +2405,7 @@ int main() {
 }
 ```
 
-总结：字符串对比主要是用于比较两个字符串是否相等，判断谁大谁小的意义并不是很大
+總結：字符串對比主要是用於比較兩個字符串是否相等，判斷誰大誰小的意義並不是很大
 
 
 
@@ -2251,12 +2415,12 @@ int main() {
 
 
 
-string中单个字符存取方式有两种
+string中單個字符存取方式有兩種
 
 
 
-* `char& operator[](int n); `     //通过[]方式取字符
-* `char& at(int n);   `                    //通过at方法获取字符
+* `char& operator[](int n); `     //通過[]方式取字符
+* `char& at(int n);   `                    //通過at方法獲取字符
 
 
 
@@ -2299,7 +2463,7 @@ int main() {
 }
 ```
 
-总结：string字符串中单个字符存取有两种方式，利用 [ ] 或 at
+總結：string字符串中單個字符存取有兩種方式，利用 [ ] 或 at
 
 
 
@@ -2309,18 +2473,18 @@ int main() {
 
 
 
-#### 3.1.8 string插入和删除
+#### 3.1.8 string插入和刪除
 
 **功能描述：**
 
-* 对string字符串进行插入和删除字符操作
+* 對string字符串進行插入和刪除字符操作
 
-**函数原型：**
+**函數原型：**
 
 * `string& insert(int pos, const char* s);  `                //插入字符串
 * `string& insert(int pos, const string& str); `        //插入字符串
-* `string& insert(int pos, int n, char c);`                //在指定位置插入n个字符c
-* `string& erase(int pos, int n = npos);`                    //删除从Pos开始的n个字符 
+* `string& insert(int pos, int n, char c);`                //在指定位置插入n個字符c
+* `string& erase(int pos, int n = npos);`                    //刪除從Pos開始的n個字符 
 
 
 
@@ -2329,14 +2493,14 @@ int main() {
 **示例：**
 
 ```C++
-//字符串插入和删除
+//字符串插入和刪除
 void test01()
 {
 	string str = "hello";
 	str.insert(1, "111");
 	cout << str << endl;
 
-	str.erase(1, 3);  //从1号位置开始3个字符
+	str.erase(1, 3);  //從1號位置開始3個字符
 	cout << str << endl;
 }
 
@@ -2350,7 +2514,7 @@ int main() {
 }
 ```
 
-**总结：**插入和删除的起始下标都是从0开始
+**總結：**插入和刪除的起始下標都是從0開始
 
 
 
@@ -2366,13 +2530,13 @@ int main() {
 
 **功能描述：**
 
-* 从字符串中获取想要的子串
+* 從字符串中獲取想要的子串
 
 
 
-**函数原型：**
+**函數原型：**
 
-* `string substr(int pos = 0, int n = npos) const;`   //返回由pos开始的n个字符组成的字符串
+* `string substr(int pos = 0, int n = npos) const;`   //返回由pos開始的n個字符組成的字符串
 
 
 
@@ -2405,7 +2569,7 @@ int main() {
 }
 ```
 
-**总结：**灵活的运用求子串功能，可以在实际开发中获取有效的信息
+**總結：**靈活的運用求子串功能，可以在實際開發中獲取有效的信息
 
 
 
@@ -2421,48 +2585,48 @@ int main() {
 
 **功能：**
 
-* vector数据结构和**数组非常相似**，也称为**单端数组**
+* vector數據結構和**數組非常相似**，也稱爲**單端數組**
 
 
 
-**vector与普通数组区别：**
+**vector與普通數組區別：**
 
-* 不同之处在于数组是静态空间，而vector可以**动态扩展**
-
-
-
-**动态扩展：**
-
-* 并不是在原空间之后续接新空间，而是找更大的内存空间，然后将原数据拷贝新空间，释放原空间
+* 不同之處在於數組是靜態空間，而vector可以**動態擴展**
 
 
 
-![说明: 2015-11-10_151152](assets/clip_image002.jpg)
+**動態擴展：**
+
+* 並不是在原空間之後續接新空間，而是找更大的內存空間，然後將原數據拷貝新空間，釋放原空間
 
 
 
-* vector容器的迭代器是支持随机访问的迭代器
+![說明: 2015-11-10_151152](assets/clip_image002.jpg)
+
+
+
+* vector容器的迭代器是支持隨機訪問的迭代器
 
 
 
 
 
-#### 3.2.2 vector构造函数
+#### 3.2.2 vector構造函數
 
 
 
 **功能描述：**
 
-* 创建vector容器
+* 創建vector容器
 
 
 
-**函数原型：**
+**函數原型：**
 
-* `vector<T> v; `               		     //采用模板实现类实现，默认构造函数
-* `vector(v.begin(), v.end());   `       //将v[begin(), end())区间中的元素拷贝给本身。
-* `vector(n, elem);`                            //构造函数将n个elem拷贝给本身。
-* `vector(const vector &vec);`         //拷贝构造函数。
+* `vector<T> v; `               		     //採用模板實現類實現，默認構造函數
+* `vector(v.begin(), v.end());   `       //將v[begin(), end())區間中的元素拷貝給本身。
+* `vector(n, elem);`                            //構造函數將n個elem拷貝給本身。
+* `vector(const vector &vec);`         //拷貝構造函數。
 
 
 
@@ -2483,7 +2647,7 @@ void printVector(vector<int>& v) {
 
 void test01()
 {
-	vector<int> v1; //无参构造
+	vector<int> v1; //無參構造
 	for (int i = 0; i < 10; i++)
 	{
 		v1.push_back(i);
@@ -2510,7 +2674,7 @@ int main() {
 }
 ```
 
-**总结：**vector的多种构造方式没有可比性，灵活使用即可
+**總結：**vector的多種構造方式沒有可比性，靈活使用即可
 
 
 
@@ -2520,23 +2684,23 @@ int main() {
 
 
 
-#### 3.2.3 vector赋值操作
+#### 3.2.3 vector賦值操作
 
 
 
 **功能描述：**
 
-* 给vector容器进行赋值
+* 給vector容器進行賦值
 
 
 
-**函数原型：**
+**函數原型：**
 
-* `vector& operator=(const vector &vec);`//重载等号操作符
+* `vector& operator=(const vector &vec);`//重載等號操作符
 
 
-* `assign(beg, end);`       //将[beg, end)区间中的数据拷贝赋值给本身。
-* `assign(n, elem);`        //将n个elem拷贝赋值给本身。
+* `assign(beg, end);`       //將[beg, end)區間中的數據拷貝賦值給本身。
+* `assign(n, elem);`        //將n個elem拷貝賦值給本身。
 
 
 
@@ -2555,10 +2719,10 @@ void printVector(vector<int>& v) {
 	cout << endl;
 }
 
-//赋值操作
+//賦值操作
 void test01()
 {
-	vector<int> v1; //无参构造
+	vector<int> v1; //無參構造
 	for (int i = 0; i < 10; i++)
 	{
 		v1.push_back(i);
@@ -2589,7 +2753,7 @@ int main() {
 
 ```
 
-总结： vector赋值方式比较简单，使用operator=，或者assign都可以
+總結： vector賦值方式比較簡單，使用operator=，或者assign都可以
 
 
 
@@ -2601,25 +2765,25 @@ int main() {
 
 **功能描述：**
 
-* 对vector容器的容量和大小操作
+* 對vector容器的容量和大小操作
 
 
 
-**函数原型：**
+**函數原型：**
 
-* `empty(); `                            //判断容器是否为空
+* `empty(); `                            //判斷容器是否爲空
 
 * `capacity();`                      //容器的容量
 
-* `size();`                              //返回容器中元素的个数
+* `size();`                              //返回容器中元素的個數
 
-* `resize(int num);`             //重新指定容器的长度为num，若容器变长，则以默认值填充新位置。
+* `resize(int num);`             //重新指定容器的長度爲num，若容器變長，則以默認值填充新位置。
 
-  ​					      //如果容器变短，则末尾超出容器长度的元素被删除。
+  ​					      //如果容器變短，則末尾超出容器長度的元素被刪除。
 
-* `resize(int num, elem);`  //重新指定容器的长度为num，若容器变长，则以elem值填充新位置。
+* `resize(int num, elem);`  //重新指定容器的長度爲num，若容器變長，則以elem值填充新位置。
 
-  ​				              //如果容器变短，则末尾超出容器长度的元素被删除
+  ​				              //如果容器變短，則末尾超出容器長度的元素被刪除
 
 
 
@@ -2648,20 +2812,20 @@ void test01()
 	printVector(v1);
 	if (v1.empty())
 	{
-		cout << "v1为空" << endl;
+		cout << "v1爲空" << endl;
 	}
 	else
 	{
-		cout << "v1不为空" << endl;
+		cout << "v1不爲空" << endl;
 		cout << "v1的容量 = " << v1.capacity() << endl;
 		cout << "v1的大小 = " << v1.size() << endl;
 	}
 
-	//resize 重新指定大小 ，若指定的更大，默认用0填充新位置，可以利用重载版本替换默认填充
+	//resize 重新指定大小 ，若指定的更大，默認用0填充新位置，可以利用重載版本替換默認填充
 	v1.resize(15,10);
 	printVector(v1);
 
-	//resize 重新指定大小 ，若指定的更小，超出部分元素被删除
+	//resize 重新指定大小 ，若指定的更小，超出部分元素被刪除
 	v1.resize(5);
 	printVector(v1);
 }
@@ -2677,10 +2841,10 @@ int main() {
 
 ```
 
-总结：
+總結：
 
-* 判断是否为空  --- empty
-* 返回元素个数  --- size
+* 判斷是否爲空  --- empty
+* 返回元素個數  --- size
 * 返回容器容量  --- capacity
 * 重新指定大小  ---  resize
 
@@ -2696,23 +2860,23 @@ int main() {
 
 
 
-#### 3.2.5 vector插入和删除
+#### 3.2.5 vector插入和刪除
 
 **功能描述：**
 
-* 对vector容器进行插入、删除操作
+* 對vector容器進行插入、刪除操作
 
 
 
-**函数原型：**
+**函數原型：**
 
 * `push_back(ele);`                                         //尾部插入元素ele
-* `pop_back();`                                                //删除最后一个元素
+* `pop_back();`                                                //刪除最後一個元素
 * `insert(const_iterator pos, ele);`        //迭代器指向位置pos插入元素ele
-* `insert(const_iterator pos, int count,ele);`//迭代器指向位置pos插入count个元素ele
-* `erase(const_iterator pos);`                     //删除迭代器指向的元素
-* `erase(const_iterator start, const_iterator end);`//删除迭代器从start到end之间的元素
-* `clear();`                                                        //删除容器中所有元素
+* `insert(const_iterator pos, int count,ele);`//迭代器指向位置pos插入count個元素ele
+* `erase(const_iterator pos);`                     //刪除迭代器指向的元素
+* `erase(const_iterator start, const_iterator end);`//刪除迭代器從start到end之間的元素
+* `clear();`                                                        //刪除容器中所有元素
 
 
 
@@ -2732,7 +2896,7 @@ void printVector(vector<int>& v) {
 	cout << endl;
 }
 
-//插入和删除
+//插入和刪除
 void test01()
 {
 	vector<int> v1;
@@ -2743,7 +2907,7 @@ void test01()
 	v1.push_back(40);
 	v1.push_back(50);
 	printVector(v1);
-	//尾删
+	//尾刪
 	v1.pop_back();
 	printVector(v1);
 	//插入
@@ -2753,7 +2917,7 @@ void test01()
 	v1.insert(v1.begin(), 2, 1000);
 	printVector(v1);
 
-	//删除
+	//刪除
 	v1.erase(v1.begin());
 	printVector(v1);
 
@@ -2773,12 +2937,12 @@ int main() {
 }
 ```
 
-总结：
+總結：
 
 * 尾插  --- push_back
-* 尾删  --- pop_back
+* 尾刪  --- pop_back
 * 插入  --- insert    (位置迭代器)
-* 删除  --- erase  （位置迭代器）
+* 刪除  --- erase  （位置迭代器）
 * 清空  ---  clear  
 
 
@@ -2793,22 +2957,22 @@ int main() {
 
 
 
-#### 3.2.6 vector数据存取
+#### 3.2.6 vector數據存取
 
 
 
 **功能描述：**
 
-* 对vector中的数据的存取操作
+* 對vector中的數據的存取操作
 
 
 
-**函数原型：**
+**函數原型：**
 
-* `at(int idx); `     //返回索引idx所指的数据
-* `operator[]; `       //返回索引idx所指的数据
-* `front(); `            //返回容器中第一个数据元素
-* `back();`              //返回容器中最后一个数据元素
+* `at(int idx); `     //返回索引idx所指的數據
+* `operator[]; `       //返回索引idx所指的數據
+* `front(); `            //返回容器中第一個數據元素
+* `back();`              //返回容器中最後一個數據元素
 
 
 
@@ -2839,8 +3003,8 @@ void test01()
 	}
 	cout << endl;
 
-	cout << "v1的第一个元素为： " << v1.front() << endl;
-	cout << "v1的最后一个元素为： " << v1.back() << endl;
+	cout << "v1的第一個元素爲： " << v1.front() << endl;
+	cout << "v1的最後一個元素爲： " << v1.back() << endl;
 }
 
 int main() {
@@ -2853,13 +3017,11 @@ int main() {
 }
 ```
 
-总结：
+總結：
 
-* 除了用迭代器获取vector容器中元素，[ ]和at也可以
-* front返回容器第一个元素
-* back返回容器最后一个元素
-
-
+* 除了用迭代器獲取vector容器中元素，[ ]和at也可以
+* front返回容器第一個元素
+* back返回容器最後一個元素
 
 
 
@@ -2869,17 +3031,19 @@ int main() {
 
 
 
-#### 3.2.7 vector互换容器
+
+
+#### 3.2.7 vector互換容器
 
 **功能描述：**
 
-* 实现两个容器内元素进行互换
+* 實現兩個容器內元素進行互換
 
 
 
-**函数原型：**
+**函數原型：**
 
-* `swap(vec);`  // 将vec与本身的元素互换
+* `swap(vec);`  // 將vec與本身的元素互換
 
 
 
@@ -2914,8 +3078,8 @@ void test01()
 	}
 	printVector(v2);
 
-	//互换容器
-	cout << "互换后" << endl;
+	//互換容器
+	cout << "互換後" << endl;
 	v1.swap(v2);
 	printVector(v1);
 	printVector(v2);
@@ -2928,19 +3092,19 @@ void test02()
 		v.push_back(i);
 	}
 
-	cout << "v的容量为：" << v.capacity() << endl;
-	cout << "v的大小为：" << v.size() << endl;
+	cout << "v的容量爲：" << v.capacity() << endl;
+	cout << "v的大小爲：" << v.size() << endl;
 
 	v.resize(3);
 
-	cout << "v的容量为：" << v.capacity() << endl;
-	cout << "v的大小为：" << v.size() << endl;
+	cout << "v的容量爲：" << v.capacity() << endl;
+	cout << "v的大小爲：" << v.size() << endl;
 
-	//收缩内存
-	vector<int>(v).swap(v); //匿名对象
+	//收縮內存
+	vector<int>(v).swap(v); //匿名對象
 
-	cout << "v的容量为：" << v.capacity() << endl;
-	cout << "v的大小为：" << v.size() << endl;
+	cout << "v的容量爲：" << v.capacity() << endl;
+	cout << "v的大小爲：" << v.size() << endl;
 }
 
 int main() {
@@ -2956,7 +3120,7 @@ int main() {
 
 ```
 
-总结：swap可以使两个容器互换，可以达到实用的收缩内存效果
+總結：swap可以使兩個容器互換，可以達到實用的收縮內存效果
 
 
 
@@ -2966,17 +3130,17 @@ int main() {
 
 
 
-#### 3.2.8 vector预留空间
+#### 3.2.8 vector預留空間
 
 **功能描述：**
 
-* 减少vector在动态扩展容量时的扩展次数
+* 減少vector在動態擴展容量時的擴展次數
 
 
 
-**函数原型：**
+**函數原型：**
 
-* `reserve(int len);`//容器预留len个元素长度，预留位置不初始化，元素不可访问。
+* `reserve(int len);`//容器預留len個元素長度，預留位置不初始化，元素不可訪問。
 
   ​
 
@@ -2989,7 +3153,7 @@ void test01()
 {
 	vector<int> v;
 
-	//预留空间
+	//預留空間
 	v.reserve(100000);
 
 	int num = 0;
@@ -3015,7 +3179,7 @@ int main() {
 }
 ```
 
-总结：如果数据量较大，可以一开始利用reserve预留空间
+總結：如果數據量較大，可以一開始利用reserve預留空間
 
 
 
@@ -3035,46 +3199,46 @@ int main() {
 
 **功能：**
 
-* 双端数组，可以对头端进行插入删除操作
+* 雙端數組，可以對頭端進行插入刪除操作
 
 
 
-**deque与vector区别：**
+**deque與vector區別：**
 
-* vector对于头部的插入删除效率低，数据量越大，效率越低
-* deque相对而言，对头部的插入删除速度回比vector快
-* vector访问元素时的速度会比deque快,这和两者内部实现有关
+* vector對於頭部的插入刪除效率低，數據量越大，效率越低
+* deque相對而言，對頭部的插入刪除速度回比vector快
+* vector訪問元素時的速度會比deque快,這和兩者內部實現有關
 
-![说明: 2015-11-19_204101](assets/clip_image002-1547547642923.jpg)
+![說明: 2015-11-19_204101](assets/clip_image002-1547547642923.jpg)
 
 
 
-deque内部工作原理:
+deque內部工作原理:
 
-deque内部有个**中控器**，维护每段缓冲区中的内容，缓冲区中存放真实数据
+deque內部有個**中控器**，維護每段緩衝區中的內容，緩衝區中存放真實數據
 
-中控器维护的是每个缓冲区的地址，使得使用deque时像一片连续的内存空间
+中控器維護的是每個緩衝區的地址，使得使用deque時像一片連續的內存空間
 
 ![clip_image002-1547547896341](assets/clip_image002-1547547896341.jpg)
 
-* deque容器的迭代器也是支持随机访问的
+* deque容器的迭代器也是支持隨機訪問的
 
 
 
-#### 3.3.2 deque构造函数
+#### 3.3.2 deque構造函數
 
 **功能描述：**
 
-* deque容器构造
+* deque容器構造
 
 
 
-**函数原型：**
+**函數原型：**
 
-* `deque<T>` deqT;                      //默认构造形式
-* `deque(beg, end);`                  //构造函数将[beg, end)区间中的元素拷贝给本身。
-* `deque(n, elem);`                    //构造函数将n个elem拷贝给本身。
-* `deque(const deque &deq);`   //拷贝构造函数
+* `deque<T>` deqT;                      //默認構造形式
+* `deque(beg, end);`                  //構造函數將[beg, end)區間中的元素拷貝給本身。
+* `deque(n, elem);`                    //構造函數將n個elem拷貝給本身。
+* `deque(const deque &deq);`   //拷貝構造函數
 
 
 
@@ -3093,10 +3257,10 @@ void printDeque(const deque<int>& d)
 	}
 	cout << endl;
 }
-//deque构造
+//deque構造
 void test01() {
 
-	deque<int> d1; //无参构造函数
+	deque<int> d1; //無參構造函數
 	for (int i = 0; i < 10; i++)
 	{
 		d1.push_back(i);
@@ -3122,7 +3286,7 @@ int main() {
 }
 ```
 
-**总结：**deque容器和vector容器的构造方式几乎一致，灵活使用即可
+**總結：**deque容器和vector容器的構造方式幾乎一致，靈活使用即可
 
 
 
@@ -3132,23 +3296,23 @@ int main() {
 
 
 
-#### 3.3.3 deque赋值操作
+#### 3.3.3 deque賦值操作
 
 
 
 **功能描述：**
 
-* 给deque容器进行赋值
+* 給deque容器進行賦值
 
 
 
-**函数原型：**
+**函數原型：**
 
-* `deque& operator=(const deque &deq); `         //重载等号操作符
+* `deque& operator=(const deque &deq); `         //重載等號操作符
 
 
-* `assign(beg, end);`                                           //将[beg, end)区间中的数据拷贝赋值给本身。
-* `assign(n, elem);`                                             //将n个elem拷贝赋值给本身。
+* `assign(beg, end);`                                           //將[beg, end)區間中的數據拷貝賦值給本身。
+* `assign(n, elem);`                                             //將n個elem拷貝賦值給本身。
 
 
 
@@ -3167,7 +3331,7 @@ void printDeque(const deque<int>& d)
 	}
 	cout << endl;
 }
-//赋值操作
+//賦值操作
 void test01()
 {
 	deque<int> d1;
@@ -3201,7 +3365,7 @@ int main() {
 }
 ```
 
-总结：deque赋值操作也与vector相同，需熟练掌握
+總結：deque賦值操作也與vector相同，需熟練掌握
 
 
 
@@ -3213,23 +3377,23 @@ int main() {
 
 **功能描述：**
 
-* 对deque容器的大小进行操作
+* 對deque容器的大小進行操作
 
 
 
-**函数原型：**
+**函數原型：**
 
-* `deque.empty();`                       //判断容器是否为空
+* `deque.empty();`                       //判斷容器是否爲空
 
-* `deque.size();`                         //返回容器中元素的个数
+* `deque.size();`                         //返回容器中元素的個數
 
-* `deque.resize(num);`                //重新指定容器的长度为num,若容器变长，则以默认值填充新位置。
+* `deque.resize(num);`                //重新指定容器的長度爲num,若容器變長，則以默認值填充新位置。
 
-  ​			                             //如果容器变短，则末尾超出容器长度的元素被删除。
+  ​			                             //如果容器變短，則末尾超出容器長度的元素被刪除。
 
-* `deque.resize(num, elem);`     //重新指定容器的长度为num,若容器变长，则以elem值填充新位置。
+* `deque.resize(num, elem);`     //重新指定容器的長度爲num,若容器變長，則以elem值填充新位置。
 
-  ​                                                     //如果容器变短，则末尾超出容器长度的元素被删除。
+  ​                                                     //如果容器變短，則末尾超出容器長度的元素被刪除。
 
   ​
 
@@ -3259,14 +3423,14 @@ void test01()
 	}
 	printDeque(d1);
 
-	//判断容器是否为空
+	//判斷容器是否爲空
 	if (d1.empty()) {
-		cout << "d1为空!" << endl;
+		cout << "d1爲空!" << endl;
 	}
 	else {
-		cout << "d1不为空!" << endl;
-		//统计大小
-		cout << "d1的大小为：" << d1.size() << endl;
+		cout << "d1不爲空!" << endl;
+		//統計大小
+		cout << "d1的大小爲：" << d1.size() << endl;
 	}
 
 	//重新指定大小
@@ -3287,14 +3451,12 @@ int main() {
 }
 ```
 
-总结：
+總結：
 
-* deque没有容量的概念
-* 判断是否为空   --- empty
-* 返回元素个数   --- size
-* 重新指定个数   --- resize
-
-
+* deque沒有容量的概念
+* 判斷是否爲空   --- empty
+* 返回元素個數   --- size
+* 重新指定個數   --- resize
 
 
 
@@ -3302,36 +3464,38 @@ int main() {
 
 
 
-#### 3.3.5 deque 插入和删除
+
+
+#### 3.3.5 deque 插入和刪除
 
 **功能描述：**
 
-* 向deque容器中插入和删除数据
+* 向deque容器中插入和刪除數據
 
 
 
-**函数原型：**
+**函數原型：**
 
-两端插入操作：
+兩端插入操作：
 
-- `push_back(elem);`          //在容器尾部添加一个数据
-- `push_front(elem);`        //在容器头部插入一个数据
-- `pop_back();`                   //删除容器最后一个数据
-- `pop_front();`                 //删除容器第一个数据
+- `push_back(elem);`          //在容器尾部添加一個數據
+- `push_front(elem);`        //在容器頭部插入一個數據
+- `pop_back();`                   //刪除容器最後一個數據
+- `pop_front();`                 //刪除容器第一個數據
 
 指定位置操作：
 
-* `insert(pos,elem);`         //在pos位置插入一个elem元素的拷贝，返回新数据的位置。
+* `insert(pos,elem);`         //在pos位置插入一個elem元素的拷貝，返回新數據的位置。
 
-* `insert(pos,n,elem);`     //在pos位置插入n个elem数据，无返回值。
+* `insert(pos,n,elem);`     //在pos位置插入n個elem數據，無返回值。
 
-* `insert(pos,beg,end);`    //在pos位置插入[beg,end)区间的数据，无返回值。
+* `insert(pos,beg,end);`    //在pos位置插入[beg,end)區間的數據，無返回值。
 
-* `clear();`                           //清空容器的所有数据
+* `clear();`                           //清空容器的所有數據
 
-* `erase(beg,end);`             //删除[beg,end)区间的数据，返回下一个数据的位置。
+* `erase(beg,end);`             //刪除[beg,end)區間的數據，返回下一個數據的位置。
 
-* `erase(pos);`                    //删除pos位置的数据，返回下一个数据的位置。
+* `erase(pos);`                    //刪除pos位置的數據，返回下一個數據的位置。
 
   ​
 
@@ -3352,22 +3516,22 @@ void printDeque(const deque<int>& d)
 	}
 	cout << endl;
 }
-//两端操作
+//兩端操作
 void test01()
 {
 	deque<int> d;
 	//尾插
 	d.push_back(10);
 	d.push_back(20);
-	//头插
+	//頭插
 	d.push_front(100);
 	d.push_front(200);
 
 	printDeque(d);
 
-	//尾删
+	//尾刪
 	d.pop_back();
-	//头删
+	//頭刪
 	d.pop_front();
 	printDeque(d);
 }
@@ -3398,7 +3562,7 @@ void test02()
 
 }
 
-//删除
+//刪除
 void test03()
 {
 	deque<int> d;
@@ -3431,13 +3595,13 @@ int main() {
 
 ```
 
-总结：
+總結：
 
-* 插入和删除提供的位置是迭代器！
+* 插入和刪除提供的位置是迭代器！
 * 尾插   ---  push_back
-* 尾删   ---  pop_back
-* 头插   ---  push_front
-* 头删   ---  pop_front
+* 尾刪   ---  pop_back
+* 頭插   ---  push_front
+* 頭刪   ---  pop_front
 
 
 
@@ -3449,22 +3613,22 @@ int main() {
 
 
 
-#### 3.3.6 deque 数据存取
+#### 3.3.6 deque 數據存取
 
 
 
 **功能描述：**
 
-* 对deque 中的数据的存取操作
+* 對deque 中的數據的存取操作
 
 
 
-**函数原型：**
+**函數原型：**
 
-- `at(int idx); `     //返回索引idx所指的数据
-- `operator[]; `      //返回索引idx所指的数据
-- `front(); `            //返回容器中第一个数据元素
-- `back();`              //返回容器中最后一个数据元素
+- `at(int idx); `     //返回索引idx所指的數據
+- `operator[]; `      //返回索引idx所指的數據
+- `front(); `            //返回容器中第一個數據元素
+- `back();`              //返回容器中最後一個數據元素
 
 
 
@@ -3482,7 +3646,7 @@ void printDeque(const deque<int>& d)
 	cout << endl;
 }
 
-//数据存取
+//數據存取
 void test01()
 {
 
@@ -3519,11 +3683,11 @@ int main() {
 }
 ```
 
-总结：
+總結：
 
-- 除了用迭代器获取deque容器中元素，[ ]和at也可以
-- front返回容器第一个元素
-- back返回容器最后一个元素
+- 除了用迭代器獲取deque容器中元素，[ ]和at也可以
+- front返回容器第一個元素
+- back返回容器最後一個元素
 
 
 
@@ -3541,13 +3705,13 @@ int main() {
 
 **功能描述：**
 
-* 利用算法实现对deque容器进行排序
+* 利用算法實現對deque容器進行排序
 
 
 
 **算法：**
 
-* `sort(iterator beg, iterator end)`  //对beg和end区间内元素进行排序
+* `sort(iterator beg, iterator end)`  //對beg和end區間內元素進行排序
 
 
 
@@ -3593,7 +3757,7 @@ int main() {
 }
 ```
 
-总结：sort算法非常实用，使用时包含头文件 algorithm即可
+總結：sort算法非常實用，使用時包含頭文件 algorithm即可
 
 
 
@@ -3605,32 +3769,32 @@ int main() {
 
 
 
-### 3.4 案例-评委打分
+### 3.4 案例-評委打分
 
 
 
 #### 3.4.1 案例描述
 
-有5名选手：选手ABCDE，10个评委分别对每一名选手打分，去除最高分，去除评委中最低分，取平均分。
+有5名選手：選手ABCDE，10個評委分別對每一名選手打分，去除最高分，去除評委中最低分，取平均分。
 
 
 
-#### 3.4.2 实现步骤
+#### 3.4.2 實現步驟
 
-1. 创建五名选手，放到vector中
-2. 遍历vector容器，取出来每一个选手，执行for循环，可以把10个评分打分存到deque容器中
-3. sort算法对deque容器中分数排序，去除最高和最低分
-4. deque容器遍历一遍，累加总分
-5. 获取平均分
-
-
+1. 創建五名選手，放到vector中
+2. 遍歷vector容器，取出來每一個選手，執行for循環，可以把10個評分打分存到deque容器中
+3. sort算法對deque容器中分數排序，去除最高和最低分
+4. deque容器遍歷一遍，累加總分
+5. 獲取平均分
 
 
 
-**示例代码：**
+
+
+**示例代碼：**
 
 ```C++
-//选手类
+//選手類
 class Person
 {
 public:
@@ -3649,14 +3813,14 @@ void createPerson(vector<Person>&v)
 	string nameSeed = "ABCDE";
 	for (int i = 0; i < 5; i++)
 	{
-		string name = "选手";
+		string name = "選手";
 		name += nameSeed[i];
 
 		int score = 0;
 
 		Person p(name, score);
 
-		//将创建的person对象 放入到容器中
+		//將創建的person對象 放入到容器中
 		v.push_back(p);
 	}
 }
@@ -3666,7 +3830,7 @@ void setScore(vector<Person>&v)
 {
 	for (vector<Person>::iterator it = v.begin(); it != v.end(); it++)
 	{
-		//将评委的分数 放入到deque容器中
+		//將評委的分數 放入到deque容器中
 		deque<int>d;
 		for (int i = 0; i < 10; i++)
 		{
@@ -3674,7 +3838,7 @@ void setScore(vector<Person>&v)
 			d.push_back(score);
 		}
 
-		//cout << "选手： " << it->m_Name << " 打分： " << endl;
+		//cout << "選手： " << it->m_Name << " 打分： " << endl;
 		//for (deque<int>::iterator dit = d.begin(); dit != d.end(); dit++)
 		//{
 		//	cout << *dit << " ";
@@ -3692,12 +3856,12 @@ void setScore(vector<Person>&v)
 		int sum = 0;
 		for (deque<int>::iterator dit = d.begin(); dit != d.end(); dit++)
 		{
-			sum += *dit; //累加每个评委的分数
+			sum += *dit; //累加每個評委的分數
 		}
 
 		int avg = sum / d.size();
 
-		//将平均分 赋值给选手身上
+		//將平均分 賦值給選手身上
 		it->m_Score = avg;
 	}
 
@@ -3713,23 +3877,23 @@ void showScore(vector<Person>&v)
 
 int main() {
 
-	//随机数种子
+	//隨機數種子
 	srand((unsigned int)time(NULL));
 
-	//1、创建5名选手
-	vector<Person>v;  //存放选手容器
+	//1、創建5名選手
+	vector<Person>v;  //存放選手容器
 	createPerson(v);
 
-	//测试
+	//測試
 	//for (vector<Person>::iterator it = v.begin(); it != v.end(); it++)
 	//{
-	//	cout << "姓名： " << (*it).m_Name << " 分数： " << (*it).m_Score << endl;
+	//	cout << "姓名： " << (*it).m_Name << " 分數： " << (*it).m_Score << endl;
 	//}
 
-	//2、给5名选手打分
+	//2、給5名選手打分
 	setScore(v);
 
-	//3、显示最后得分
+	//3、顯示最後得分
 	showScore(v);
 
 	system("pause");
@@ -3738,7 +3902,7 @@ int main() {
 }
 ```
 
-**总结：** 选取不同的容器操作数据，可以提升代码的效率
+**總結：** 選取不同的容器操作數據，可以提升代碼的效率
 
 
 
@@ -3752,23 +3916,23 @@ int main() {
 
 
 
-**概念：**stack是一种**先进后出**(First In Last Out,FILO)的数据结构，它只有一个出口
+**概念：**stack是一種**先進後出**(First In Last Out,FILO)的數據結構，它只有一個出口
 
 
 
 
 
-![说明: 2015-11-15_195707](assets/clip_image002-1547604555425.jpg)
+![說明: 2015-11-15_195707](assets/clip_image002-1547604555425.jpg)
 
-栈中只有顶端的元素才可以被外界使用，因此栈不允许有遍历行为
+棧中只有頂端的元素纔可以被外界使用，因此棧不允許有遍歷行爲
 
-栈中进入数据称为  --- **入栈**  `push`
+棧中進入數據稱爲  --- **入棧**  `push`
 
-栈中弹出数据称为  --- **出栈**  `pop`
+棧中彈出數據稱爲  --- **出棧**  `pop`
 
 
 
-生活中的栈：
+生活中的棧：
 
 ![img](assets/clip_image002.png)
 
@@ -3782,29 +3946,29 @@ int main() {
 
 #### 3.5.2 stack 常用接口
 
-功能描述：栈容器常用的对外接口
+功能描述：棧容器常用的對外接口
 
 
 
-构造函数：
+構造函數：
 
-* `stack<T> stk;`                                 //stack采用模板类实现， stack对象的默认构造形式
-* `stack(const stack &stk);`            //拷贝构造函数
+* `stack<T> stk;`                                 //stack採用模板類實現， stack對象的默認構造形式
+* `stack(const stack &stk);`            //拷貝構造函數
 
-赋值操作：
+賦值操作：
 
-* `stack& operator=(const stack &stk);`           //重载等号操作符
+* `stack& operator=(const stack &stk);`           //重載等號操作符
 
-数据存取：
+數據存取：
 
-* `push(elem);`      //向栈顶添加元素
-* `pop();`                //从栈顶移除第一个元素
-* `top(); `                //返回栈顶元素
+* `push(elem);`      //向棧頂添加元素
+* `pop();`                //從棧頂移除第一個元素
+* `top(); `                //返回棧頂元素
 
 大小操作：
 
-* `empty();`            //判断堆栈是否为空
-* `size(); `              //返回栈的大小
+* `empty();`            //判斷堆棧是否爲空
+* `size(); `              //返回棧的大小
 
 
 
@@ -3815,24 +3979,24 @@ int main() {
 ```C++
 #include <stack>
 
-//栈容器常用接口
+//棧容器常用接口
 void test01()
 {
-	//创建栈容器 栈容器必须符合先进后出
+	//創建棧容器 棧容器必須符合先進後出
 	stack<int> s;
 
-	//向栈中添加元素，叫做 压栈 入栈
+	//向棧中添加元素，叫做 壓棧 入棧
 	s.push(10);
 	s.push(20);
 	s.push(30);
 
 	while (!s.empty()) {
-		//输出栈顶元素
-		cout << "栈顶元素为： " << s.top() << endl;
-		//弹出栈顶元素
+		//輸出棧頂元素
+		cout << "棧頂元素爲： " << s.top() << endl;
+		//彈出棧頂元素
 		s.pop();
 	}
-	cout << "栈的大小为：" << s.size() << endl;
+	cout << "棧的大小爲：" << s.size() << endl;
 
 }
 
@@ -3846,13 +4010,13 @@ int main() {
 }
 ```
 
-总结：
+總結：
 
-* 入栈   --- push
-* 出栈   --- pop
-* 返回栈顶   --- top
-* 判断栈是否为空   --- empty
-* 返回栈大小   --- size
+* 入棧   --- push
+* 出棧   --- pop
+* 返回棧頂   --- top
+* 判斷棧是否爲空   --- empty
+* 返回棧大小   --- size
 
 
 
@@ -3870,7 +4034,7 @@ int main() {
 
 
 
-**概念：**Queue是一种**先进先出**(First In First Out,FIFO)的数据结构，它有两个出口
+**概念：**Queue是一種**先進先出**(First In First Out,FIFO)的數據結構，它有兩個出口
 
 
 
@@ -3878,19 +4042,19 @@ int main() {
 
 
 
-![说明: 2015-11-15_214429](assets/clip_image002-1547606475892.jpg)
+![說明: 2015-11-15_214429](assets/clip_image002-1547606475892.jpg)
 
-队列容器允许从一端新增元素，从另一端移除元素
+隊列容器允許從一端新增元素，從另一端移除元素
 
-队列中只有队头和队尾才可以被外界使用，因此队列不允许有遍历行为
+隊列中只有隊頭和隊尾纔可以被外界使用，因此隊列不允許有遍歷行爲
 
-队列中进数据称为 --- **入队**    `push`
+隊列中進數據稱爲 --- **入隊**    `push`
 
-队列中出数据称为 --- **出队**    `pop`
+隊列中出數據稱爲 --- **出隊**    `pop`
 
 
 
-生活中的队列：
+生活中的隊列：
 
 ![1547606785041](assets/1547606785041.png)
 
@@ -3904,30 +4068,30 @@ int main() {
 
 
 
-功能描述：栈容器常用的对外接口
+功能描述：棧容器常用的對外接口
 
 
 
-构造函数：
+構造函數：
 
-- `queue<T> que;`                                 //queue采用模板类实现，queue对象的默认构造形式
-- `queue(const queue &que);`            //拷贝构造函数
+- `queue<T> que;`                                 //queue採用模板類實現，queue對象的默認構造形式
+- `queue(const queue &que);`            //拷貝構造函數
 
-赋值操作：
+賦值操作：
 
-- `queue& operator=(const queue &que);`           //重载等号操作符
+- `queue& operator=(const queue &que);`           //重載等號操作符
 
-数据存取：
+數據存取：
 
-- `push(elem);`                             //往队尾添加元素
-- `pop();`                                      //从队头移除第一个元素
-- `back();`                                    //返回最后一个元素
-- `front(); `                                  //返回第一个元素
+- `push(elem);`                             //往隊尾添加元素
+- `pop();`                                      //從隊頭移除第一個元素
+- `back();`                                    //返回最後一個元素
+- `front(); `                                  //返回第一個元素
 
 大小操作：
 
-- `empty();`            //判断堆栈是否为空
-- `size(); `              //返回栈的大小
+- `empty();`            //判斷堆棧是否爲空
+- `size(); `              //返回棧的大小
 
 
 
@@ -3951,36 +4115,36 @@ public:
 
 void test01() {
 
-	//创建队列
+	//創建隊列
 	queue<Person> q;
 
-	//准备数据
+	//準備數據
 	Person p1("唐僧", 30);
-	Person p2("孙悟空", 1000);
-	Person p3("猪八戒", 900);
+	Person p2("孫悟空", 1000);
+	Person p3("豬八戒", 900);
 	Person p4("沙僧", 800);
 
-	//向队列中添加元素  入队操作
+	//向隊列中添加元素  入隊操作
 	q.push(p1);
 	q.push(p2);
 	q.push(p3);
 	q.push(p4);
 
-	//队列不提供迭代器，更不支持随机访问	
+	//隊列不提供迭代器，更不支持隨機訪問	
 	while (!q.empty()) {
-		//输出队头元素
-		cout << "队头元素-- 姓名： " << q.front().m_Name 
-              << " 年龄： "<< q.front().m_Age << endl;
+		//輸出隊頭元素
+		cout << "隊頭元素-- 姓名： " << q.front().m_Name 
+              << " 年齡： "<< q.front().m_Age << endl;
         
-		cout << "队尾元素-- 姓名： " << q.back().m_Name  
-              << " 年龄： " << q.back().m_Age << endl;
+		cout << "隊尾元素-- 姓名： " << q.back().m_Name  
+              << " 年齡： " << q.back().m_Age << endl;
         
 		cout << endl;
-		//弹出队头元素
+		//彈出隊頭元素
 		q.pop();
 	}
 
-	cout << "队列大小为：" << q.size() << endl;
+	cout << "隊列大小爲：" << q.size() << endl;
 }
 
 int main() {
@@ -3993,14 +4157,14 @@ int main() {
 }
 ```
 
-总结：
+總結：
 
-- 入队   --- push
-- 出队   --- pop
-- 返回队头元素   --- front
-- 返回队尾元素   --- back
-- 判断队是否为空   --- empty
-- 返回队列大小   --- size
+- 入隊   --- push
+- 出隊   --- pop
+- 返回隊頭元素   --- front
+- 返回隊尾元素   --- back
+- 判斷隊是否爲空   --- empty
+- 返回隊列大小   --- size
 
 
 
@@ -4022,65 +4186,65 @@ int main() {
 
 
 
-**功能：**将数据进行链式存储
+**功能：**將數據進行鏈式存儲
 
-**链表**（list）是一种物理存储单元上非连续的存储结构，数据元素的逻辑顺序是通过链表中的指针链接实现的
-
-
-
-链表的组成：链表由一系列**结点**组成
+**鏈表**（list）是一種物理存儲單元上非連續的存儲結構，數據元素的邏輯順序是通過鏈表中的指針鏈接實現的
 
 
 
-结点的组成：一个是存储数据元素的**数据域**，另一个是存储下一个结点地址的**指针域**
+鏈表的組成：鏈表由一系列**結點**組成
 
 
 
-STL中的链表是一个双向循环链表
+結點的組成：一個是存儲數據元素的**數據域**，另一個是存儲下一個結點地址的**指針域**
 
 
 
-![说明: 2015-11-15_225145](assets/clip_image002-1547608564071.jpg)
-
-由于链表的存储方式并不是连续的内存空间，因此链表list中的迭代器只支持前移和后移，属于**双向迭代器**
+STL中的鏈表是一個雙向循環鏈表
 
 
 
-list的优点：
+![說明: 2015-11-15_225145](assets/clip_image002-1547608564071.jpg)
 
-* 采用动态存储分配，不会造成内存浪费和溢出
-* 链表执行插入和删除操作十分方便，修改指针即可，不需要移动大量元素
-
-list的缺点：
-
-* 链表灵活，但是空间(指针域) 和 时间（遍历）额外耗费较大
+由於鏈表的存儲方式並不是連續的內存空間，因此鏈表list中的迭代器只支持前移和後移，屬於**雙向迭代器**
 
 
 
-List有一个重要的性质，插入操作和删除操作都不会造成原有list迭代器的失效，这在vector是不成立的。
+list的優點：
+
+* 採用動態存儲分配，不會造成內存浪費和溢出
+* 鏈表執行插入和刪除操作十分方便，修改指針即可，不需要移動大量元素
+
+list的缺點：
+
+* 鏈表靈活，但是空間(指針域) 和 時間（遍歷）額外耗費較大
 
 
 
-总结：STL中**List和vector是两个最常被使用的容器**，各有优缺点
+List有一個重要的性質，插入操作和刪除操作都不會造成原有list迭代器的失效，這在vector是不成立的。
+
+
+
+總結：STL中**List和vector是兩個最常被使用的容器**，各有優缺點
 
 
 
 
 
-#### 3.7.2  list构造函数
+#### 3.7.2  list構造函數
 
 **功能描述：**
 
-* 创建list容器
+* 創建list容器
 
 
 
-**函数原型：**
+**函數原型：**
 
-* `list<T> lst;`                               //list采用采用模板类实现,对象的默认构造形式：
-* `list(beg,end);`                           //构造函数将[beg, end)区间中的元素拷贝给本身。
-* `list(n,elem);`                             //构造函数将n个elem拷贝给本身。
-* `list(const list &lst);`            //拷贝构造函数。
+* `list<T> lst;`                               //list採用採用模板類實現,對象的默認構造形式：
+* `list(beg,end);`                           //構造函數將[beg, end)區間中的元素拷貝給本身。
+* `list(n,elem);`                             //構造函數將n個elem拷貝給本身。
+* `list(const list &lst);`            //拷貝構造函數。
 
 
 
@@ -4129,7 +4293,7 @@ int main() {
 }
 ```
 
-总结：list构造方式同其他几个STL常用容器，熟练掌握即可
+總結：list構造方式同其他幾個STL常用容器，熟練掌握即可
 
 
 
@@ -4143,18 +4307,18 @@ int main() {
 
 
 
-#### 3.7.3 list 赋值和交换
+#### 3.7.3 list 賦值和交換
 
 **功能描述：**
 
-* 给list容器进行赋值，以及交换list容器
+* 給list容器進行賦值，以及交換list容器
 
-**函数原型：**
+**函數原型：**
 
-* `assign(beg, end);`            //将[beg, end)区间中的数据拷贝赋值给本身。
-* `assign(n, elem);`              //将n个elem拷贝赋值给本身。
-* `list& operator=(const list &lst);`         //重载等号操作符
-* `swap(lst);`                         //将lst与本身的元素互换。
+* `assign(beg, end);`            //將[beg, end)區間中的數據拷貝賦值給本身。
+* `assign(n, elem);`              //將n個elem拷貝賦值給本身。
+* `list& operator=(const list &lst);`         //重載等號操作符
+* `swap(lst);`                         //將lst與本身的元素互換。
 
 
 
@@ -4171,7 +4335,7 @@ void printList(const list<int>& L) {
 	cout << endl;
 }
 
-//赋值和交换
+//賦值和交換
 void test01()
 {
 	list<int>L1;
@@ -4181,7 +4345,7 @@ void test01()
 	L1.push_back(40);
 	printList(L1);
 
-	//赋值
+	//賦值
 	list<int>L2;
 	L2 = L1;
 	printList(L2);
@@ -4196,7 +4360,7 @@ void test01()
 
 }
 
-//交换
+//交換
 void test02()
 {
 
@@ -4209,7 +4373,7 @@ void test02()
 	list<int>L2;
 	L2.assign(10, 100);
 
-	cout << "交换前： " << endl;
+	cout << "交換前： " << endl;
 	printList(L1);
 	printList(L2);
 
@@ -4217,7 +4381,7 @@ void test02()
 
 	L1.swap(L2);
 
-	cout << "交换后： " << endl;
+	cout << "交換後： " << endl;
 	printList(L1);
 	printList(L2);
 
@@ -4235,7 +4399,7 @@ int main() {
 }
 ```
 
-总结：list赋值和交换操作能够灵活运用即可
+總結：list賦值和交換操作能夠靈活運用即可
 
 
 
@@ -4255,23 +4419,23 @@ int main() {
 
 **功能描述：**
 
-* 对list容器的大小进行操作
+* 對list容器的大小進行操作
 
 
 
-**函数原型：**
+**函數原型：**
 
-* `size(); `                             //返回容器中元素的个数
+* `size(); `                             //返回容器中元素的個數
 
-* `empty(); `                           //判断容器是否为空
+* `empty(); `                           //判斷容器是否爲空
 
-* `resize(num);`                   //重新指定容器的长度为num，若容器变长，则以默认值填充新位置。
+* `resize(num);`                   //重新指定容器的長度爲num，若容器變長，則以默認值填充新位置。
 
-  ​					    //如果容器变短，则末尾超出容器长度的元素被删除。
+  ​					    //如果容器變短，則末尾超出容器長度的元素被刪除。
 
-* `resize(num, elem); `       //重新指定容器的长度为num，若容器变长，则以elem值填充新位置。
+* `resize(num, elem); `       //重新指定容器的長度爲num，若容器變長，則以elem值填充新位置。
 
-   			 	 	​					    //如果容器变短，则末尾超出容器长度的元素被删除。
+   			 	 	​					    //如果容器變短，則末尾超出容器長度的元素被刪除。
 
 
 
@@ -4299,12 +4463,12 @@ void test01()
 
 	if (L1.empty())
 	{
-		cout << "L1为空" << endl;
+		cout << "L1爲空" << endl;
 	}
 	else
 	{
-		cout << "L1不为空" << endl;
-		cout << "L1的大小为： " << L1.size() << endl;
+		cout << "L1不爲空" << endl;
+		cout << "L1的大小爲： " << L1.size() << endl;
 	}
 
 	//重新指定大小
@@ -4325,13 +4489,11 @@ int main() {
 }
 ```
 
-总结：
+總結：
 
-- 判断是否为空   --- empty
-- 返回元素个数   --- size
-- 重新指定个数   --- resize
-
-
+- 判斷是否爲空   --- empty
+- 返回元素個數   --- size
+- 重新指定個數   --- resize
 
 
 
@@ -4341,27 +4503,29 @@ int main() {
 
 
 
-#### 3.7.5 list 插入和删除
+
+
+#### 3.7.5 list 插入和刪除
 
 **功能描述：**
 
-* 对list容器进行数据的插入和删除
+* 對list容器進行數據的插入和刪除
 
 
 
-**函数原型：**
+**函數原型：**
 
-* push_back(elem);//在容器尾部加入一个元素
-* pop_back();//删除容器中最后一个元素
-* push_front(elem);//在容器开头插入一个元素
-* pop_front();//从容器开头移除第一个元素
-* insert(pos,elem);//在pos位置插elem元素的拷贝，返回新数据的位置。
-* insert(pos,n,elem);//在pos位置插入n个elem数据，无返回值。
-* insert(pos,beg,end);//在pos位置插入[beg,end)区间的数据，无返回值。
-* clear();//移除容器的所有数据
-* erase(beg,end);//删除[beg,end)区间的数据，返回下一个数据的位置。
-* erase(pos);//删除pos位置的数据，返回下一个数据的位置。
-* remove(elem);//删除容器中所有与elem值匹配的元素。
+* push_back(elem);//在容器尾部加入一個元素
+* pop_back();//刪除容器中最後一個元素
+* push_front(elem);//在容器開頭插入一個元素
+* pop_front();//從容器開頭移除第一個元素
+* insert(pos,elem);//在pos位置插elem元素的拷貝，返回新數據的位置。
+* insert(pos,n,elem);//在pos位置插入n個elem數據，無返回值。
+* insert(pos,beg,end);//在pos位置插入[beg,end)區間的數據，無返回值。
+* clear();//移除容器的所有數據
+* erase(beg,end);//刪除[beg,end)區間的數據，返回下一個數據的位置。
+* erase(pos);//刪除pos位置的數據，返回下一個數據的位置。
+* remove(elem);//刪除容器中所有與elem值匹配的元素。
 
 
 
@@ -4380,7 +4544,7 @@ void printList(const list<int>& L) {
 	cout << endl;
 }
 
-//插入和删除
+//插入和刪除
 void test01()
 {
 	list<int> L;
@@ -4388,18 +4552,18 @@ void test01()
 	L.push_back(10);
 	L.push_back(20);
 	L.push_back(30);
-	//头插
+	//頭插
 	L.push_front(100);
 	L.push_front(200);
 	L.push_front(300);
 
 	printList(L);
 
-	//尾删
+	//尾刪
 	L.pop_back();
 	printList(L);
 
-	//头删
+	//頭刪
 	L.pop_front();
 	printList(L);
 
@@ -4408,7 +4572,7 @@ void test01()
 	L.insert(++it, 1000);
 	printList(L);
 
-	//删除
+	//刪除
 	it = L.begin();
 	L.erase(++it);
 	printList(L);
@@ -4436,14 +4600,14 @@ int main() {
 }
 ```
 
-总结：
+總結：
 
 * 尾插   --- push_back
-* 尾删   --- pop_back
-* 头插   --- push_front
-* 头删   --- pop_front
+* 尾刪   --- pop_back
+* 頭插   --- push_front
+* 頭刪   --- pop_front
 * 插入   --- insert
-* 删除   --- erase
+* 刪除   --- erase
 * 移除   --- remove
 * 清空   --- clear
 
@@ -4463,18 +4627,18 @@ int main() {
 
 
 
-#### 3.7.6 list 数据存取
+#### 3.7.6 list 數據存取
 
 **功能描述：**
 
-* 对list容器中数据进行存取
+* 對list容器中數據進行存取
 
 
 
-**函数原型：**
+**函數原型：**
 
-* `front();`        //返回第一个元素。
-* `back();`         //返回最后一个元素。
+* `front();`        //返回第一個元素。
+* `back();`         //返回最後一個元素。
 
 
 
@@ -4485,7 +4649,7 @@ int main() {
 ```C++
 #include <list>
 
-//数据存取
+//數據存取
 void test01()
 {
 	list<int>L1;
@@ -4495,14 +4659,14 @@ void test01()
 	L1.push_back(40);
 
 	
-	//cout << L1.at(0) << endl;//错误 不支持at访问数据
-	//cout << L1[0] << endl; //错误  不支持[]方式访问数据
-	cout << "第一个元素为： " << L1.front() << endl;
-	cout << "最后一个元素为： " << L1.back() << endl;
+	//cout << L1.at(0) << endl;//錯誤 不支持at訪問數據
+	//cout << L1[0] << endl; //錯誤  不支持[]方式訪問數據
+	cout << "第一個元素爲： " << L1.front() << endl;
+	cout << "最後一個元素爲： " << L1.back() << endl;
 
-	//list容器的迭代器是双向迭代器，不支持随机访问
+	//list容器的迭代器是雙向迭代器，不支持隨機訪問
 	list<int>::iterator it = L1.begin();
-	//it = it + 1;//错误，不可以跳跃访问，即使是+1
+	//it = it + 1;//錯誤，不可以跳躍訪問，即使是+1
 }
 
 int main() {
@@ -4516,13 +4680,11 @@ int main() {
 
 ```
 
-总结：
+總結：
 
-* list容器中不可以通过[]或者at方式访问数据
-* 返回第一个元素   --- front
-* 返回最后一个元素   --- back
-
-
+* list容器中不可以通過[]或者at方式訪問數據
+* 返回第一個元素   --- front
+* 返回最後一個元素   --- back
 
 
 
@@ -4532,18 +4694,20 @@ int main() {
 
 
 
-#### 3.7.7 list 反转和排序
+
+
+#### 3.7.7 list 反轉和排序
 
 **功能描述：**
 
-* 将容器中的元素反转，以及将容器中的数据进行排序
+* 將容器中的元素反轉，以及將容器中的數據進行排序
 
 
 
-**函数原型：**
+**函數原型：**
 
-* `reverse();`   //反转链表
-* `sort();`        //链表排序
+* `reverse();`   //反轉鏈表
+* `sort();`        //鏈表排序
 
 
 
@@ -4565,7 +4729,7 @@ bool myCompare(int val1 , int val2)
 	return val1 > val2;
 }
 
-//反转和排序
+//反轉和排序
 void test01()
 {
 	list<int> L;
@@ -4575,15 +4739,15 @@ void test01()
 	L.push_back(70);
 	printList(L);
 
-	//反转容器的元素
+	//反轉容器的元素
 	L.reverse();
 	printList(L);
 
 	//排序
-	L.sort(); //默认的排序规则 从小到大
+	L.sort(); //默認的排序規則 從小到大
 	printList(L);
 
-	L.sort(myCompare); //指定规则，从大到小
+	L.sort(myCompare); //指定規則，從大到小
 	printList(L);
 }
 
@@ -4597,10 +4761,10 @@ int main() {
 }
 ```
 
-总结：
+總結：
 
-* 反转   --- reverse
-* 排序   --- sort （成员函数）
+* 反轉   --- reverse
+* 排序   --- sort （成員函數）
 
 
 
@@ -4614,9 +4778,9 @@ int main() {
 
 #### 3.7.8 排序案例
 
-案例描述：将Person自定义数据类型进行排序，Person中属性有姓名、年龄、身高
+案例描述：將Person自定義數據類型進行排序，Person中屬性有姓名、年齡、身高
 
-排序规则：按照年龄进行升序，如果年龄相同按照身高进行降序
+排序規則：按照年齡進行升序，如果年齡相同按照身高進行降序
 
 
 
@@ -4635,7 +4799,7 @@ public:
 
 public:
 	string m_Name;  //姓名
-	int m_Age;      //年龄
+	int m_Age;      //年齡
 	int m_Height;   //身高
 };
 
@@ -4656,12 +4820,12 @@ void test01() {
 
 	list<Person> L;
 
-	Person p1("刘备", 35 , 175);
+	Person p1("劉備", 35 , 175);
 	Person p2("曹操", 45 , 180);
-	Person p3("孙权", 40 , 170);
-	Person p4("赵云", 25 , 190);
-	Person p5("张飞", 35 , 160);
-	Person p6("关羽", 35 , 200);
+	Person p3("孫權", 40 , 170);
+	Person p4("趙雲", 25 , 190);
+	Person p5("張飛", 35 , 160);
+	Person p6("關羽", 35 , 200);
 
 	L.push_back(p1);
 	L.push_back(p2);
@@ -4671,7 +4835,7 @@ void test01() {
 	L.push_back(p6);
 
 	for (list<Person>::iterator it = L.begin(); it != L.end(); it++) {
-		cout << "姓名： " << it->m_Name << " 年龄： " << it->m_Age 
+		cout << "姓名： " << it->m_Name << " 年齡： " << it->m_Age 
               << " 身高： " << it->m_Height << endl;
 	}
 
@@ -4679,7 +4843,7 @@ void test01() {
 	L.sort(ComparePerson); //排序
 
 	for (list<Person>::iterator it = L.begin(); it != L.end(); it++) {
-		cout << "姓名： " << it->m_Name << " 年龄： " << it->m_Age 
+		cout << "姓名： " << it->m_Name << " 年齡： " << it->m_Age 
               << " 身高： " << it->m_Height << endl;
 	}
 }
@@ -4696,12 +4860,12 @@ int main() {
 
 
 
-总结：
+總結：
 
-* 对于自定义数据类型，必须要指定排序规则，否则编译器不知道如何进行排序
+* 對於自定義數據類型，必須要指定排序規則，否則編譯器不知道如何進行排序
 
 
-* 高级排序只是在排序规则上再进行一次逻辑规则制定，并不复杂
+* 高級排序只是在排序規則上再進行一次邏輯規則制定，並不複雜
 
 
 
@@ -4725,45 +4889,45 @@ int main() {
 
 #### 3.8.1 set基本概念
 
-**简介：**
+**簡介：**
 
-* 所有元素都会在插入时自动被排序
-
-
-
-
-
-**本质：**
-
-* set/multiset属于**关联式容器**，底层结构是用**二叉树**实现。
+* 所有元素都會在插入時自動被排序
 
 
 
 
 
-**set和multiset区别**：
+**本質：**
 
-* set不允许容器中有重复的元素
-* multiset允许容器中有重复的元素
-
+* set/multiset屬於**關聯式容器**，底層結構是用**二叉樹**實現。
 
 
 
 
-#### 3.8.2 set构造和赋值
 
-功能描述：创建set容器以及赋值
+**set和multiset區別**：
+
+* set不允許容器中有重複的元素
+* multiset允許容器中有重複的元素
 
 
 
-构造：
 
-* `set<T> st;`                        //默认构造函数：
-* `set(const set &st);`       //拷贝构造函数
 
-赋值：
+#### 3.8.2 set構造和賦值
 
-* `set& operator=(const set &st);`    //重载等号操作符
+功能描述：創建set容器以及賦值
+
+
+
+構造：
+
+* `set<T> st;`                        //默認構造函數：
+* `set(const set &st);`       //拷貝構造函數
+
+賦值：
+
+* `set& operator=(const set &st);`    //重載等號操作符
 
 
 
@@ -4781,7 +4945,7 @@ void printSet(set<int> & s)
 	cout << endl;
 }
 
-//构造和赋值
+//構造和賦值
 void test01()
 {
 	set<int> s1;
@@ -4792,11 +4956,11 @@ void test01()
 	s1.insert(40);
 	printSet(s1);
 
-	//拷贝构造
+	//拷貝構造
 	set<int>s2(s1);
 	printSet(s2);
 
-	//赋值
+	//賦值
 	set<int>s3;
 	s3 = s2;
 	printSet(s3);
@@ -4812,12 +4976,10 @@ int main() {
 }
 ```
 
-总结：
+總結：
 
-* set容器插入数据时用insert
-* set容器插入数据的数据会自动排序
-
-
+* set容器插入數據時用insert
+* set容器插入數據的數據會自動排序
 
 
 
@@ -4827,19 +4989,21 @@ int main() {
 
 
 
-#### 3.8.3 set大小和交换
+
+
+#### 3.8.3 set大小和交換
 
 **功能描述：**
 
-* 统计set容器大小以及交换set容器
+* 統計set容器大小以及交換set容器
 
 
 
-**函数原型：**
+**函數原型：**
 
-* `size();`          //返回容器中元素的数目
-* `empty();`        //判断容器是否为空
-* `swap(st);`      //交换两个集合容器
+* `size();`          //返回容器中元素的數目
+* `empty();`        //判斷容器是否爲空
+* `swap(st);`      //交換兩個集合容器
 
 
 
@@ -4870,17 +5034,17 @@ void test01()
 
 	if (s1.empty())
 	{
-		cout << "s1为空" << endl;
+		cout << "s1爲空" << endl;
 	}
 	else
 	{
-		cout << "s1不为空" << endl;
-		cout << "s1的大小为： " << s1.size() << endl;
+		cout << "s1不爲空" << endl;
+		cout << "s1的大小爲： " << s1.size() << endl;
 	}
 
 }
 
-//交换
+//交換
 void test02()
 {
 	set<int> s1;
@@ -4897,12 +5061,12 @@ void test02()
 	s2.insert(200);
 	s2.insert(400);
 
-	cout << "交换前" << endl;
+	cout << "交換前" << endl;
 	printSet(s1);
 	printSet(s2);
 	cout << endl;
 
-	cout << "交换后" << endl;
+	cout << "交換後" << endl;
 	s1.swap(s2);
 	printSet(s1);
 	printSet(s2);
@@ -4920,13 +5084,11 @@ int main() {
 }
 ```
 
-总结：
+總結：
 
-* 统计大小   --- size
-* 判断是否为空   --- empty
-* 交换容器   --- swap
-
-
+* 統計大小   --- size
+* 判斷是否爲空   --- empty
+* 交換容器   --- swap
 
 
 
@@ -4942,23 +5104,25 @@ int main() {
 
 
 
-#### 3.8.4 set插入和删除
+
+
+#### 3.8.4 set插入和刪除
 
 **功能描述：**
 
-* set容器进行插入数据和删除数据
+* set容器進行插入數據和刪除數據
 
 
 
 
 
-**函数原型：**
+**函數原型：**
 
 * `insert(elem);`           //在容器中插入元素。
 * `clear();`                    //清除所有元素
-* `erase(pos);`              //删除pos迭代器所指的元素，返回下一个元素的迭代器。
-* `erase(beg, end);`    //删除区间[beg,end)的所有元素 ，返回下一个元素的迭代器。
-* `erase(elem);`            //删除容器中值为elem的元素。
+* `erase(pos);`              //刪除pos迭代器所指的元素，返回下一個元素的迭代器。
+* `erase(beg, end);`    //刪除區間[beg,end)的所有元素 ，返回下一個元素的迭代器。
+* `erase(elem);`            //刪除容器中值爲elem的元素。
 
 
 
@@ -4978,7 +5142,7 @@ void printSet(set<int> & s)
 	cout << endl;
 }
 
-//插入和删除
+//插入和刪除
 void test01()
 {
 	set<int> s1;
@@ -4989,7 +5153,7 @@ void test01()
 	s1.insert(40);
 	printSet(s1);
 
-	//删除
+	//刪除
 	s1.erase(s1.begin());
 	printSet(s1);
 
@@ -5012,10 +5176,10 @@ int main() {
 }
 ```
 
-总结：
+總結：
 
 * 插入   --- insert
-* 删除   --- erase
+* 刪除   --- erase
 * 清空   --- clear
 
 
@@ -5028,18 +5192,18 @@ int main() {
 
 
 
-#### 3.8.5 set查找和统计
+#### 3.8.5 set查找和統計
 
 **功能描述：**
 
-* 对set容器进行查找数据以及统计数据
+* 對set容器進行查找數據以及統計數據
 
 
 
-**函数原型：**
+**函數原型：**
 
-* `find(key);`                  //查找key是否存在,若存在，返回该键的元素的迭代器；若不存在，返回set.end();
-* `count(key);`                //统计key的元素个数
+* `find(key);`                  //查找key是否存在,若存在，返回該鍵的元素的迭代器；若不存在，返回set.end();
+* `count(key);`                //統計key的元素個數
 
 
 
@@ -5050,7 +5214,7 @@ int main() {
 ```C++
 #include <set>
 
-//查找和统计
+//查找和統計
 void test01()
 {
 	set<int> s1;
@@ -5072,7 +5236,7 @@ void test01()
 		cout << "未找到元素" << endl;
 	}
 
-	//统计
+	//統計
 	int num = s1.count(30);
 	cout << "num = " << num << endl;
 }
@@ -5087,10 +5251,10 @@ int main() {
 }
 ```
 
-总结：
+總結：
 
 * 查找   ---  find    （返回的是迭代器）
-* 统计   ---  count  （对于set，结果为0或者1）
+* 統計   ---  count  （對於set，結果爲0或者1）
 
 
 
@@ -5108,19 +5272,19 @@ int main() {
 
 
 
-#### 3.8.6 set和multiset区别
+#### 3.8.6 set和multiset區別
 
-**学习目标：**
+**學習目標：**
 
-* 掌握set和multiset的区别
+* 掌握set和multiset的區別
 
 
 
-**区别：**
+**區別：**
 
-* set不可以插入重复数据，而multiset可以
-* set插入数据的同时会返回插入结果，表示插入是否成功
-* multiset不会检测数据，因此可以插入重复数据
+* set不可以插入重複數據，而multiset可以
+* set插入數據的同時會返回插入結果，表示插入是否成功
+* multiset不會檢測數據，因此可以插入重複數據
 
 
 
@@ -5131,7 +5295,7 @@ int main() {
 ```C++
 #include <set>
 
-//set和multiset区别
+//set和multiset區別
 void test01()
 {
 	set<int> s;
@@ -5140,7 +5304,7 @@ void test01()
 		cout << "第一次插入成功!" << endl;
 	}
 	else {
-		cout << "第一次插入失败!" << endl;
+		cout << "第一次插入失敗!" << endl;
 	}
 
 	ret = s.insert(10);
@@ -5148,7 +5312,7 @@ void test01()
 		cout << "第二次插入成功!" << endl;
 	}
 	else {
-		cout << "第二次插入失败!" << endl;
+		cout << "第二次插入失敗!" << endl;
 	}
     
 	//multiset
@@ -5172,12 +5336,10 @@ int main() {
 }
 ```
 
-总结：
+總結：
 
-* 如果不允许插入重复数据可以利用set
-* 如果需要插入重复数据利用multiset
-
-
+* 如果不允許插入重複數據可以利用set
+* 如果需要插入重複數據利用multiset
 
 
 
@@ -5187,17 +5349,19 @@ int main() {
 
 
 
-#### 3.8.7 pair对组创建
+
+
+#### 3.8.7 pair對組創建
 
 **功能描述：**
 
-* 成对出现的数据，利用对组可以返回两个数据
+* 成對出現的數據，利用對組可以返回兩個數據
 
 
 
 
 
-**两种创建方式：**
+**兩種創建方式：**
 
 * `pair<type, type> p ( value1, value2 );`
 * `pair<type, type> p = make_pair( value1, value2 );`
@@ -5211,14 +5375,14 @@ int main() {
 ```C++
 #include <string>
 
-//对组创建
+//對組創建
 void test01()
 {
 	pair<string, int> p(string("Tom"), 20);
-	cout << "姓名： " <<  p.first << " 年龄： " << p.second << endl;
+	cout << "姓名： " <<  p.first << " 年齡： " << p.second << endl;
 
 	pair<string, int> p2 = make_pair("Jerry", 10);
-	cout << "姓名： " << p2.first << " 年龄： " << p2.second << endl;
+	cout << "姓名： " << p2.first << " 年齡： " << p2.second << endl;
 }
 
 int main() {
@@ -5231,9 +5395,9 @@ int main() {
 }
 ```
 
-总结：
+總結：
 
-两种方式都可以创建对组，记住一种即可
+兩種方式都可以創建對組，記住一種即可
 
 
 
@@ -5249,21 +5413,21 @@ int main() {
 
 #### 3.8.8 set容器排序
 
-学习目标：
+學習目標：
 
-* set容器默认排序规则为从小到大，掌握如何改变排序规则
-
-
-
-主要技术点：
-
-* 利用仿函数，可以改变排序规则
+* set容器默認排序規則爲從小到大，掌握如何改變排序規則
 
 
 
+主要技術點：
+
+* 利用仿函數，可以改變排序規則
 
 
-**示例一**   set存放内置数据类型
+
+
+
+**示例一**   set存放內置數據類型
 
 ```C++
 #include <set>
@@ -5284,13 +5448,13 @@ void test01()
 	s1.insert(30);
 	s1.insert(50);
 
-	//默认从小到大
+	//默認從小到大
 	for (set<int>::iterator it = s1.begin(); it != s1.end(); it++) {
 		cout << *it << " ";
 	}
 	cout << endl;
 
-	//指定排序规则
+	//指定排序規則
 	set<int,MyCompare> s2;
 	s2.insert(10);
 	s2.insert(40);
@@ -5314,11 +5478,11 @@ int main() {
 }
 ```
 
-总结：利用仿函数可以指定set容器的排序规则
+總結：利用仿函數可以指定set容器的排序規則
 
 
 
-**示例二** set存放自定义数据类型
+**示例二** set存放自定義數據類型
 
 ```C++
 #include <set>
@@ -5342,7 +5506,7 @@ class comparePerson
 public:
 	bool operator()(const Person& p1, const Person &p2)
 	{
-		//按照年龄进行排序  降序
+		//按照年齡進行排序  降序
 		return p1.m_Age > p2.m_Age;
 	}
 };
@@ -5351,10 +5515,10 @@ void test01()
 {
 	set<Person, comparePerson> s;
 
-	Person p1("刘备", 23);
-	Person p2("关羽", 27);
-	Person p3("张飞", 25);
-	Person p4("赵云", 21);
+	Person p1("劉備", 23);
+	Person p2("關羽", 27);
+	Person p3("張飛", 25);
+	Person p4("趙雲", 21);
 
 	s.insert(p1);
 	s.insert(p2);
@@ -5363,7 +5527,7 @@ void test01()
 
 	for (set<Person, comparePerson>::iterator it = s.begin(); it != s.end(); it++)
 	{
-		cout << "姓名： " << it->m_Name << " 年龄： " << it->m_Age << endl;
+		cout << "姓名： " << it->m_Name << " 年齡： " << it->m_Age << endl;
 	}
 }
 int main() {
@@ -5376,9 +5540,9 @@ int main() {
 }
 ```
 
-总结：
+總結：
 
-对于自定义数据类型，set必须指定排序规则才可以插入数据
+對於自定義數據類型，set必須指定排序規則纔可以插入數據
 
 
 
@@ -5394,52 +5558,52 @@ int main() {
 
 #### 3.9.1 map基本概念
 
-**简介：**
+**簡介：**
 
 * map中所有元素都是pair
-* pair中第一个元素为key（键值），起到索引作用，第二个元素为value（实值）
-* 所有元素都会根据元素的键值自动排序
+* pair中第一個元素爲key（鍵值），起到索引作用，第二個元素爲value（實值）
+* 所有元素都會根據元素的鍵值自動排序
 
 
 
-**本质：**
+**本質：**
 
-* map/multimap属于**关联式容器**，底层结构是用二叉树实现。
-
-
-
-**优点：**
-
-* 可以根据key值快速找到value值
+* map/multimap屬於**關聯式容器**，底層結構是用二叉樹實現。
 
 
 
-map和multimap**区别**：
+**優點：**
 
-- map不允许容器中有重复key值元素
-- multimap允许容器中有重复key值元素
-
+* 可以根據key值快速找到value值
 
 
 
-#### 3.9.2  map构造和赋值
+map和multimap**區別**：
+
+- map不允許容器中有重複key值元素
+- multimap允許容器中有重複key值元素
+
+
+
+
+#### 3.9.2  map構造和賦值
 
 **功能描述：**
 
-* 对map容器进行构造和赋值操作
+* 對map容器進行構造和賦值操作
 
-**函数原型：**
+**函數原型：**
 
-**构造：**
+**構造：**
 
-* `map<T1, T2> mp;`                     //map默认构造函数: 
-* `map(const map &mp);`             //拷贝构造函数
+* `map<T1, T2> mp;`                     //map默認構造函數: 
+* `map(const map &mp);`             //拷貝構造函數
 
 
 
-**赋值：**
+**賦值：**
 
-* `map& operator=(const map &mp);`    //重载等号操作符
+* `map& operator=(const map &mp);`    //重載等號操作符
 
 
 
@@ -5459,17 +5623,17 @@ void printMap(map<int,int>&m)
 
 void test01()
 {
-	map<int,int>m; //默认构造
+	map<int,int>m; //默認構造
 	m.insert(pair<int, int>(1, 10));
 	m.insert(pair<int, int>(2, 20));
 	m.insert(pair<int, int>(3, 30));
 	printMap(m);
 
-	map<int, int>m2(m); //拷贝构造
+	map<int, int>m2(m); //拷貝構造
 	printMap(m2);
 
 	map<int, int>m3;
-	m3 = m2; //赋值
+	m3 = m2; //賦值
 	printMap(m3);
 }
 
@@ -5483,7 +5647,7 @@ int main() {
 }
 ```
 
-总结：map中所有元素都是成对出现，插入数据时候要使用对组
+總結：map中所有元素都是成對出現，插入數據時候要使用對組
 
 
 
@@ -5495,21 +5659,21 @@ int main() {
 
 
 
-#### 3.9.3 map大小和交换
+#### 3.9.3 map大小和交換
 
 **功能描述：**
 
-* 统计map容器大小以及交换map容器
+* 統計map容器大小以及交換map容器
 
 
 
 
 
-函数原型：
+函數原型：
 
-- `size();`          //返回容器中元素的数目
-- `empty();`        //判断容器是否为空
-- `swap(st);`      //交换两个集合容器
+- `size();`          //返回容器中元素的數目
+- `empty();`        //判斷容器是否爲空
+- `swap(st);`      //交換兩個集合容器
 
 
 
@@ -5538,17 +5702,17 @@ void test01()
 
 	if (m.empty())
 	{
-		cout << "m为空" << endl;
+		cout << "m爲空" << endl;
 	}
 	else
 	{
-		cout << "m不为空" << endl;
-		cout << "m的大小为： " << m.size() << endl;
+		cout << "m不爲空" << endl;
+		cout << "m的大小爲： " << m.size() << endl;
 	}
 }
 
 
-//交换
+//交換
 void test02()
 {
 	map<int, int>m;
@@ -5561,11 +5725,11 @@ void test02()
 	m2.insert(pair<int, int>(5, 200));
 	m2.insert(pair<int, int>(6, 300));
 
-	cout << "交换前" << endl;
+	cout << "交換前" << endl;
 	printMap(m);
 	printMap(m2);
 
-	cout << "交换后" << endl;
+	cout << "交換後" << endl;
 	m.swap(m2);
 	printMap(m);
 	printMap(m2);
@@ -5583,13 +5747,11 @@ int main() {
 }
 ```
 
-总结：
+總結：
 
-- 统计大小   --- size
-- 判断是否为空   --- empty
-- 交换容器   --- swap
-
-
+- 統計大小   --- size
+- 判斷是否爲空   --- empty
+- 交換容器   --- swap
 
 
 
@@ -5599,23 +5761,25 @@ int main() {
 
 
 
-#### 3.9.4 map插入和删除
+
+
+#### 3.9.4 map插入和刪除
 
 **功能描述：**
 
-- map容器进行插入数据和删除数据
+- map容器進行插入數據和刪除數據
 
 
 
 
 
-**函数原型：**
+**函數原型：**
 
 - `insert(elem);`           //在容器中插入元素。
 - `clear();`                    //清除所有元素
-- `erase(pos);`              //删除pos迭代器所指的元素，返回下一个元素的迭代器。
-- `erase(beg, end);`    //删除区间[beg,end)的所有元素 ，返回下一个元素的迭代器。
-- `erase(key);`            //删除容器中值为key的元素。
+- `erase(pos);`              //刪除pos迭代器所指的元素，返回下一個元素的迭代器。
+- `erase(beg, end);`    //刪除區間[beg,end)的所有元素 ，返回下一個元素的迭代器。
+- `erase(key);`            //刪除容器中值爲key的元素。
 
 
 
@@ -5637,17 +5801,17 @@ void test01()
 {
 	//插入
 	map<int, int> m;
-	//第一种插入方式
+	//第一種插入方式
 	m.insert(pair<int, int>(1, 10));
-	//第二种插入方式
+	//第二種插入方式
 	m.insert(make_pair(2, 20));
-	//第三种插入方式
+	//第三種插入方式
 	m.insert(map<int, int>::value_type(3, 30));
-	//第四种插入方式
+	//第四種插入方式
 	m[4] = 40; 
 	printMap(m);
 
-	//删除
+	//刪除
 	m.erase(m.begin());
 	printMap(m);
 
@@ -5670,12 +5834,12 @@ int main() {
 }
 ```
 
-总结：
+總結：
 
-* map插入方式很多，记住其一即可
+* map插入方式很多，記住其一即可
 
 - 插入   --- insert 
-- 删除   --- erase
+- 刪除   --- erase
 - 清空   --- clear
 
 
@@ -5690,18 +5854,18 @@ int main() {
 
 
 
-#### 3.9.5 map查找和统计
+#### 3.9.5 map查找和統計
 
 **功能描述：**
 
-- 对map容器进行查找数据以及统计数据
+- 對map容器進行查找數據以及統計數據
 
 
 
-**函数原型：**
+**函數原型：**
 
-- `find(key);`                  //查找key是否存在,若存在，返回该键的元素的迭代器；若不存在，返回set.end();
-- `count(key);`                //统计key的元素个数
+- `find(key);`                  //查找key是否存在,若存在，返回該鍵的元素的迭代器；若不存在，返回set.end();
+- `count(key);`                //統計key的元素個數
 
 
 
@@ -5710,7 +5874,7 @@ int main() {
 ```C++
 #include <map>
 
-//查找和统计
+//查找和統計
 void test01()
 {
 	map<int, int>m; 
@@ -5730,7 +5894,7 @@ void test01()
 		cout << "未找到元素" << endl;
 	}
 
-	//统计
+	//統計
 	int num = m.count(3);
 	cout << "num = " << num << endl;
 }
@@ -5745,10 +5909,10 @@ int main() {
 }
 ```
 
-总结：
+總結：
 
 - 查找   ---  find    （返回的是迭代器）
-- 统计   ---  count  （对于map，结果为0或者1）
+- 統計   ---  count  （對於map，結果爲0或者1）
 
 
 
@@ -5766,17 +5930,17 @@ int main() {
 
 #### 3.9.6 map容器排序
 
-**学习目标：**
+**學習目標：**
 
-- map容器默认排序规则为 按照key值进行 从小到大排序，掌握如何改变排序规则
-
-
+- map容器默認排序規則爲 按照key值進行 從小到大排序，掌握如何改變排序規則
 
 
 
-**主要技术点:**
 
-- 利用仿函数，可以改变排序规则
+
+**主要技術點:**
+
+- 利用仿函數，可以改變排序規則
 
 
 
@@ -5796,8 +5960,8 @@ public:
 
 void test01() 
 {
-	//默认从小到大排序
-	//利用仿函数实现从大到小排序
+	//默認從小到大排序
+	//利用仿函數實現從大到小排序
 	map<int, int, MyCompare> m;
 
 	m.insert(make_pair(1, 10));
@@ -5820,12 +5984,10 @@ int main() {
 }
 ```
 
-总结：
+總結：
 
-* 利用仿函数可以指定map容器的排序规则
-* 对于自定义数据类型，map必须要指定排序规则,同set容器
-
-
+* 利用仿函數可以指定map容器的排序規則
+* 對於自定義數據類型，map必須要指定排序規則,同set容器
 
 
 
@@ -5837,32 +5999,34 @@ int main() {
 
 
 
-### 3.10 案例-员工分组
+
+
+### 3.10 案例-員工分組
 
 #### 3.10.1 案例描述
 
-* 公司今天招聘了10个员工（ABCDEFGHIJ），10名员工进入公司之后，需要指派员工在那个部门工作
-* 员工信息有: 姓名  工资组成；部门分为：策划、美术、研发
-* 随机给10名员工分配部门和工资
-* 通过multimap进行信息的插入  key(部门编号) value(员工)
-* 分部门显示员工信息
+* 公司今天招聘了10個員工（ABCDEFGHIJ），10名員工進入公司之後，需要指派員工在那個部門工作
+* 員工信息有: 姓名  工資組成；部門分爲：策劃、美術、研發
+* 隨機給10名員工分配部門和工資
+* 通過multimap進行信息的插入  key(部門編號) value(員工)
+* 分部門顯示員工信息
 
 
 
 
 
-#### 3.10.2 实现步骤
+#### 3.10.2 實現步驟
 
-1. 创建10名员工，放到vector中
-2. 遍历vector容器，取出每个员工，进行随机分组
-3. 分组后，将员工部门编号作为key，具体员工作为value，放入到multimap容器中
-4. 分部门显示员工信息
-
-
+1. 創建10名員工，放到vector中
+2. 遍歷vector容器，取出每個員工，進行隨機分組
+3. 分組後，將員工部門編號作爲key，具體員工作爲value，放入到multimap容器中
+4. 分部門顯示員工信息
 
 
 
-**案例代码：**
+
+
+**案例代碼：**
 
 ```C++
 #include<iostream>
@@ -5873,11 +6037,11 @@ using namespace std;
 #include <ctime>
 
 /*
-- 公司今天招聘了10个员工（ABCDEFGHIJ），10名员工进入公司之后，需要指派员工在那个部门工作
-- 员工信息有: 姓名  工资组成；部门分为：策划、美术、研发
-- 随机给10名员工分配部门和工资
-- 通过multimap进行信息的插入  key(部门编号) value(员工)
-- 分部门显示员工信息
+- 公司今天招聘了10個員工（ABCDEFGHIJ），10名員工進入公司之後，需要指派員工在那個部門工作
+- 員工信息有: 姓名  工資組成；部門分爲：策劃、美術、研發
+- 隨機給10名員工分配部門和工資
+- 通過multimap進行信息的插入  key(部門編號) value(員工)
+- 分部門顯示員工信息
 */
 
 #define CEHUA  0
@@ -5897,25 +6061,25 @@ void createWorker(vector<Worker>&v)
 	for (int i = 0; i < 10; i++)
 	{
 		Worker worker;
-		worker.m_Name = "员工";
+		worker.m_Name = "員工";
 		worker.m_Name += nameSeed[i];
 
 		worker.m_Salary = rand() % 10000 + 10000; // 10000 ~ 19999
-		//将员工放入到容器中
+		//將員工放入到容器中
 		v.push_back(worker);
 	}
 }
 
-//员工分组
+//員工分組
 void setGroup(vector<Worker>&v,multimap<int,Worker>&m)
 {
 	for (vector<Worker>::iterator it = v.begin(); it != v.end(); it++)
 	{
-		//产生随机部门编号
+		//產生隨機部門編號
 		int deptId = rand() % 3; // 0 1 2 
 
-		//将员工插入到分组中
-		//key部门编号，value具体员工
+		//將員工插入到分組中
+		//key部門編號，value具體員工
 		m.insert(make_pair(deptId, *it));
 	}
 }
@@ -5923,34 +6087,34 @@ void setGroup(vector<Worker>&v,multimap<int,Worker>&m)
 void showWorkerByGourp(multimap<int,Worker>&m)
 {
 	// 0  A  B  C   1  D  E   2  F G ...
-	cout << "策划部门：" << endl;
+	cout << "策劃部門：" << endl;
 
 	multimap<int,Worker>::iterator pos = m.find(CEHUA);
-	int count = m.count(CEHUA); // 统计具体人数
+	int count = m.count(CEHUA); // 統計具體人數
 	int index = 0;
 	for (; pos != m.end() && index < count; pos++ , index++)
 	{
-		cout << "姓名： " << pos->second.m_Name << " 工资： " << pos->second.m_Salary << endl;
+		cout << "姓名： " << pos->second.m_Name << " 工資： " << pos->second.m_Salary << endl;
 	}
 
 	cout << "----------------------" << endl;
-	cout << "美术部门： " << endl;
+	cout << "美術部門： " << endl;
 	pos = m.find(MEISHU);
-	count = m.count(MEISHU); // 统计具体人数
+	count = m.count(MEISHU); // 統計具體人數
 	index = 0;
 	for (; pos != m.end() && index < count; pos++, index++)
 	{
-		cout << "姓名： " << pos->second.m_Name << " 工资： " << pos->second.m_Salary << endl;
+		cout << "姓名： " << pos->second.m_Name << " 工資： " << pos->second.m_Salary << endl;
 	}
 
 	cout << "----------------------" << endl;
-	cout << "研发部门： " << endl;
+	cout << "研發部門： " << endl;
 	pos = m.find(YANFA);
-	count = m.count(YANFA); // 统计具体人数
+	count = m.count(YANFA); // 統計具體人數
 	index = 0;
 	for (; pos != m.end() && index < count; pos++, index++)
 	{
-		cout << "姓名： " << pos->second.m_Name << " 工资： " << pos->second.m_Salary << endl;
+		cout << "姓名： " << pos->second.m_Name << " 工資： " << pos->second.m_Salary << endl;
 	}
 
 }
@@ -5959,22 +6123,22 @@ int main() {
 
 	srand((unsigned int)time(NULL));
 
-	//1、创建员工
+	//1、創建員工
 	vector<Worker>vWorker;
 	createWorker(vWorker);
 
-	//2、员工分组
+	//2、員工分組
 	multimap<int, Worker>mWorker;
 	setGroup(vWorker, mWorker);
 
 
-	//3、分组显示员工
+	//3、分組顯示員工
 	showWorkerByGourp(mWorker);
 
-	////测试
+	////測試
 	//for (vector<Worker>::iterator it = vWorker.begin(); it != vWorker.end(); it++)
 	//{
-	//	cout << "姓名： " << it->m_Name << " 工资： " << it->m_Salary << endl;
+	//	cout << "姓名： " << it->m_Name << " 工資： " << it->m_Salary << endl;
 	//}
 
 	system("pause");
@@ -5983,42 +6147,42 @@ int main() {
 }
 ```
 
-总结：
+總結：
 
-* 当数据以键值对形式存在，可以考虑用map 或 multimap
-
-
+* 當數據以鍵值對形式存在，可以考慮用map 或 multimap
 
 
 
 
 
-## 4 STL- 函数对象
 
-### 4.1 函数对象
 
-#### 4.1.1 函数对象概念
+## 4 STL- 函數對象
+
+### 4.1 函數對象
+
+#### 4.1.1 函數對象概念
 
 **概念：**
 
-* 重载**函数调用操作符**的类，其对象常称为**函数对象**
-* **函数对象**使用重载的()时，行为类似函数调用，也叫**仿函数**
+* 重載**函數調用操作符**的類，其對象常稱爲**函數對象**
+* **函數對象**使用重載的()時，行爲類似函數調用，也叫**仿函數**
 
 
 
-**本质：**
+**本質：**
 
-函数对象(仿函数)是一个**类**，不是一个函数
+函數對象(仿函數)是一個**類**，不是一個函數
 
 
 
-#### 4.1.2  函数对象使用
+#### 4.1.2  函數對象使用
 
-**特点：**
+**特點：**
 
-* 函数对象在使用时，可以像普通函数那样调用, 可以有参数，可以有返回值
-* 函数对象超出普通函数的概念，函数对象可以有自己的状态
-* 函数对象可以作为参数传递
+* 函數對象在使用時，可以像普通函數那樣調用, 可以有參數，可以有返回值
+* 函數對象超出普通函數的概念，函數對象可以有自己的狀態
+* 函數對象可以作爲參數傳遞
 
 
 
@@ -6029,7 +6193,7 @@ int main() {
 ```C++
 #include <string>
 
-//1、函数对象在使用时，可以像普通函数那样调用, 可以有参数，可以有返回值
+//1、函數對象在使用時，可以像普通函數那樣調用, 可以有參數，可以有返回值
 class MyAdd
 {
 public :
@@ -6045,7 +6209,7 @@ void test01()
 	cout << myAdd(10, 10) << endl;
 }
 
-//2、函数对象可以有自己的状态
+//2、函數對象可以有自己的狀態
 class MyPrint
 {
 public:
@@ -6056,10 +6220,10 @@ public:
 	void operator()(string test)
 	{
 		cout << test << endl;
-		count++; //统计使用次数
+		count++; //統計使用次數
 	}
 
-	int count; //内部自己的状态
+	int count; //內部自己的狀態
 };
 void test02()
 {
@@ -6067,10 +6231,10 @@ void test02()
 	myPrint("hello world");
 	myPrint("hello world");
 	myPrint("hello world");
-	cout << "myPrint调用次数为： " << myPrint.count << endl;
+	cout << "myPrint調用次數爲： " << myPrint.count << endl;
 }
 
-//3、函数对象可以作为参数传递
+//3、函數對象可以作爲參數傳遞
 void doPrint(MyPrint &mp , string test)
 {
 	mp(test);
@@ -6094,11 +6258,9 @@ int main() {
 }
 ```
 
-总结：
+總結：
 
-* 仿函数写法非常灵活，可以作为参数进行传递。
-
-
+* 仿函數寫法非常靈活，可以作爲參數進行傳遞。
 
 
 
@@ -6110,23 +6272,25 @@ int main() {
 
 
 
-### 4.2  谓词
 
-#### 4.2.1 谓词概念
+
+### 4.2  謂詞
+
+#### 4.2.1 謂詞概念
 
 
 
 **概念：**
 
-* 返回bool类型的仿函数称为**谓词**
-* 如果operator()接受一个参数，那么叫做一元谓词
-* 如果operator()接受两个参数，那么叫做二元谓词
+* 返回bool類型的仿函數稱爲**謂詞**
+* 如果operator()接受一個參數，那麼叫做一元謂詞
+* 如果operator()接受兩個參數，那麼叫做二元謂詞
 
 
 
 
 
-#### 4.2.2 一元谓词
+#### 4.2.2 一元謂詞
 
 **示例：**
 
@@ -6134,7 +6298,7 @@ int main() {
 #include <vector>
 #include <algorithm>
 
-//1.一元谓词
+//1.一元謂詞
 struct GreaterFive{
 	bool operator()(int val) {
 		return val > 5;
@@ -6151,7 +6315,7 @@ void test01() {
 
 	vector<int>::iterator it = find_if(v.begin(), v.end(), GreaterFive());
 	if (it == v.end()) {
-		cout << "没找到!" << endl;
+		cout << "沒找到!" << endl;
 	}
 	else {
 		cout << "找到:" << *it << endl;
@@ -6169,7 +6333,7 @@ int main() {
 }
 ```
 
-总结：参数只有一个的谓词，称为一元谓词
+總結：參數只有一個的謂詞，稱爲一元謂詞
 
 
 
@@ -6181,14 +6345,14 @@ int main() {
 
 
 
-#### 4.2.3 二元谓词
+#### 4.2.3 二元謂詞
 
 **示例：**
 
 ```C++
 #include <vector>
 #include <algorithm>
-//二元谓词
+//二元謂詞
 class MyCompare
 {
 public:
@@ -6207,7 +6371,7 @@ void test01()
 	v.push_back(30);
 	v.push_back(50);
 
-	//默认从小到大
+	//默認從小到大
 	sort(v.begin(), v.end());
 	for (vector<int>::iterator it = v.begin(); it != v.end(); it++)
 	{
@@ -6216,7 +6380,7 @@ void test01()
 	cout << endl;
 	cout << "----------------------------" << endl;
 
-	//使用函数对象改变算法策略，排序从大到小
+	//使用函數對象改變算法策略，排序從大到小
 	sort(v.begin(), v.end(), MyCompare());
 	for (vector<int>::iterator it = v.begin(); it != v.end(); it++)
 	{
@@ -6235,7 +6399,7 @@ int main() {
 }
 ```
 
-总结：参数只有两个的谓词，称为二元谓词
+總結：參數只有兩個的謂詞，稱爲二元謂詞
 
 
 
@@ -6253,28 +6417,28 @@ int main() {
 
 
 
-### 4.3 内建函数对象
+### 4.3 內建函數對象
 
-#### 4.3.1 内建函数对象意义
+#### 4.3.1 內建函數對象意義
 
 **概念：**
 
-* STL内建了一些函数对象
+* STL內建了一些函數對象
 
 
 
-**分类:**
+**分類:**
 
-* 算术仿函数
+* 算術仿函數
 
-* 关系仿函数
+* 關係仿函數
 
-* 逻辑仿函数
+* 邏輯仿函數
 
 **用法：**
 
-* 这些仿函数所产生的对象，用法和一般函数完全相同
-* 使用内建函数对象，需要引入头文件 `#include<functional>`
+* 這些仿函數所產生的對象，用法和一般函數完全相同
+* 使用內建函數對象，需要引入頭文件 `#include<functional>`
 
 
 
@@ -6282,23 +6446,23 @@ int main() {
 
 
 
-#### 4.3.2 算术仿函数
+#### 4.3.2 算術仿函數
 
 **功能描述：**
 
-* 实现四则运算
-* 其中negate是一元运算，其他都是二元运算
+* 實現四則運算
+* 其中negate是一元運算，其他都是二元運算
 
 
 
-**仿函数原型：**
+**仿函數原型：**
 
-* `template<class T> T plus<T>`                //加法仿函数
-* `template<class T> T minus<T>`              //减法仿函数
-* `template<class T> T multiplies<T>`    //乘法仿函数
-* `template<class T> T divides<T>`         //除法仿函数
-* `template<class T> T modulus<T>`         //取模仿函数
-* `template<class T> T negate<T>`           //取反仿函数
+* `template<class T> T plus<T>`                //加法仿函數
+* `template<class T> T minus<T>`              //減法仿函數
+* `template<class T> T multiplies<T>`    //乘法仿函數
+* `template<class T> T divides<T>`         //除法仿函數
+* `template<class T> T modulus<T>`         //取模仿函數
+* `template<class T> T negate<T>`           //取反仿函數
 
 
 
@@ -6331,7 +6495,7 @@ int main() {
 }
 ```
 
-总结：使用内建函数对象时，需要引入头文件 `#include <functional>`
+總結：使用內建函數對象時，需要引入頭文件 `#include <functional>`
 
 
 
@@ -6341,22 +6505,22 @@ int main() {
 
 
 
-#### 4.3.3 关系仿函数
+#### 4.3.3 關係仿函數
 
 **功能描述：**
 
-- 实现关系对比
+- 實現關係對比
 
 
 
-**仿函数原型：**
+**仿函數原型：**
 
-* `template<class T> bool equal_to<T>`                    //等于
-* `template<class T> bool not_equal_to<T>`            //不等于
-* `template<class T> bool greater<T>`                      //大于
-* `template<class T> bool greater_equal<T>`          //大于等于
-* `template<class T> bool less<T>`                           //小于
-* `template<class T> bool less_equal<T>`               //小于等于
+* `template<class T> bool equal_to<T>`                    //等於
+* `template<class T> bool not_equal_to<T>`            //不等於
+* `template<class T> bool greater<T>`                      //大於
+* `template<class T> bool greater_equal<T>`          //大於等於
+* `template<class T> bool less<T>`                           //小於
+* `template<class T> bool less_equal<T>`               //小於等於
 
 
 
@@ -6390,9 +6554,9 @@ void test01()
 	}
 	cout << endl;
 
-	//自己实现仿函数
+	//自己實現仿函數
 	//sort(v.begin(), v.end(), MyCompare());
-	//STL内建仿函数  大于仿函数
+	//STL內建仿函數  大於仿函數
 	sort(v.begin(), v.end(), greater<int>());
 
 	for (vector<int>::iterator it = v.begin(); it != v.end(); it++) {
@@ -6411,7 +6575,7 @@ int main() {
 }
 ```
 
-总结：关系仿函数中最常用的就是greater<>大于
+總結：關係仿函數中最常用的就是greater<>大於
 
 
 
@@ -6423,19 +6587,19 @@ int main() {
 
 
 
-#### 4.3.4 逻辑仿函数
+#### 4.3.4 邏輯仿函數
 
 **功能描述：**
 
-- 实现逻辑运算
+- 實現邏輯運算
 
 
 
-**函数原型：**
+**函數原型：**
 
-* `template<class T> bool logical_and<T>`              //逻辑与
-* `template<class T> bool logical_or<T>`                //逻辑或
-* `template<class T> bool logical_not<T>`              //逻辑非
+* `template<class T> bool logical_and<T>`              //邏輯與
+* `template<class T> bool logical_or<T>`                //邏輯或
+* `template<class T> bool logical_not<T>`              //邏輯非
 
 
 
@@ -6459,7 +6623,7 @@ void test01()
 	}
 	cout << endl;
 
-	//逻辑非  将v容器搬运到v2中，并执行逻辑非运算
+	//邏輯非  將v容器搬運到v2中，並執行邏輯非運算
 	vector<bool> v2;
 	v2.resize(v.size());
 	transform(v.begin(), v.end(),  v2.begin(), logical_not<bool>());
@@ -6480,7 +6644,7 @@ int main() {
 }
 ```
 
-总结：逻辑仿函数实际应用较少，了解即可
+總結：邏輯仿函數實際應用較少，瞭解即可
 
 
 
@@ -6494,30 +6658,30 @@ int main() {
 
 **概述**:
 
-* 算法主要是由头文件`<algorithm>` `<functional>` `<numeric>`组成。
+* 算法主要是由頭文件`<algorithm>` `<functional>` `<numeric>`組成。
 
 
 
-* `<algorithm>`是所有STL头文件中最大的一个，范围涉及到比较、 交换、查找、遍历操作、复制、修改等等
-* `<numeric>`体积很小，只包括几个在序列上面进行简单数学运算的模板函数
-* `<functional>`定义了一些模板类,用以声明函数对象。
+* `<algorithm>`是所有STL頭文件中最大的一個，範圍涉及到比較、 交換、查找、遍歷操作、複製、修改等等
+* `<numeric>`體積很小，只包括幾個在序列上面進行簡單數學運算的模板函數
+* `<functional>`定義了一些模板類,用以聲明函數對象。
 
 
 
 
 
-### 5.1 常用遍历算法
+### 5.1 常用遍歷算法
 
-**学习目标：**
+**學習目標：**
 
-* 掌握常用的遍历算法
+* 掌握常用的遍歷算法
 
 
 
-**算法简介：**
+**算法簡介：**
 
-* `for_each`     //遍历容器
-* `transform`   //搬运容器到另一个容器中
+* `for_each`     //遍歷容器
+* `transform`   //搬運容器到另一個容器中
 
 
 
@@ -6527,19 +6691,19 @@ int main() {
 
 **功能描述：**
 
-* 实现遍历容器
+* 實現遍歷容器
 
-**函数原型：**
+**函數原型：**
 
 * `for_each(iterator beg, iterator end, _func);  `
 
-  // 遍历算法 遍历容器元素
+  // 遍歷算法 遍歷容器元素
 
-  // beg 开始迭代器
+  // beg 開始迭代器
 
-  // end 结束迭代器
+  // end 結束迭代器
 
-  // _func 函数或者函数对象
+  // _func 函數或者函數對象
 
 
 
@@ -6549,12 +6713,12 @@ int main() {
 #include <algorithm>
 #include <vector>
 
-//普通函数
+//普通函數
 void print01(int val) 
 {
 	cout << val << " ";
 }
-//函数对象
+//函數對象
 class print02 
 {
  public:
@@ -6573,7 +6737,7 @@ void test01() {
 		v.push_back(i);
 	}
 
-	//遍历算法
+	//遍歷算法
 	for_each(v.begin(), v.end(), print01);
 	cout << endl;
 
@@ -6591,7 +6755,7 @@ int main() {
 }
 ```
 
-**总结：**for_each在实际开发中是最常用遍历算法，需要熟练掌握
+**總結：**for_each在實際開發中是最常用遍歷算法，需要熟練掌握
 
 
 
@@ -6605,19 +6769,19 @@ int main() {
 
 **功能描述：**
 
-* 搬运容器到另一个容器中
+* 搬運容器到另一個容器中
 
-**函数原型：**
+**函數原型：**
 
 * `transform(iterator beg1, iterator end1, iterator beg2, _func);`
 
-//beg1 源容器开始迭代器
+//beg1 源容器開始迭代器
 
-//end1 源容器结束迭代器
+//end1 源容器結束迭代器
 
-//beg2 目标容器开始迭代器
+//beg2 目標容器開始迭代器
 
-//_func 函数或者函数对象
+//_func 函數或者函數對象
 
 
 
@@ -6627,7 +6791,7 @@ int main() {
 #include<vector>
 #include<algorithm>
 
-//常用遍历算法  搬运 transform
+//常用遍歷算法  搬運 transform
 
 class TransForm
 {
@@ -6656,9 +6820,9 @@ void test01()
 		v.push_back(i);
 	}
 
-	vector<int>vTarget; //目标容器
+	vector<int>vTarget; //目標容器
 
-	vTarget.resize(v.size()); // 目标容器需要提前开辟空间
+	vTarget.resize(v.size()); // 目標容器需要提前開闢空間
 
 	transform(v.begin(), v.end(), vTarget.begin(), TransForm());
 
@@ -6675,7 +6839,7 @@ int main() {
 }
 ```
 
-**总结：** 搬运的目标容器必须要提前开辟空间，否则无法正常搬运
+**總結：** 搬運的目標容器必須要提前開闢空間，否則無法正常搬運
 
 
 
@@ -6685,7 +6849,7 @@ int main() {
 
 ### 5.2 常用查找算法
 
-学习目标：
+學習目標：
 
 - 掌握常用的查找算法
 
@@ -6693,14 +6857,14 @@ int main() {
 
 
 
-**算法简介：**
+**算法簡介：**
 
 - `find`                     //查找元素
-- `find_if`               //按条件查找元素
-- `adjacent_find`    //查找相邻重复元素
+- `find_if`               //按條件查找元素
+- `adjacent_find`    //查找相鄰重複元素
 - `binary_search`    //二分查找法
-- `count`                   //统计元素个数
-- `count_if`             //按条件统计元素个数
+- `count`                   //統計元素個數
+- `count_if`             //按條件統計元素個數
 
 
 
@@ -6709,19 +6873,19 @@ int main() {
 
 **功能描述：**
 
-* 查找指定元素，找到返回指定元素的迭代器，找不到返回结束迭代器end()
+* 查找指定元素，找到返回指定元素的迭代器，找不到返回結束迭代器end()
 
 
 
-**函数原型：**
+**函數原型：**
 
 - `find(iterator beg, iterator end, value);  `
 
-  // 按值查找元素，找到返回指定位置迭代器，找不到返回结束迭代器位置
+  // 按值查找元素，找到返回指定位置迭代器，找不到返回結束迭代器位置
 
-  // beg 开始迭代器
+  // beg 開始迭代器
 
-  // end 结束迭代器
+  // end 結束迭代器
 
   // value 查找的元素
 
@@ -6741,11 +6905,11 @@ void test01() {
 	for (int i = 0; i < 10; i++) {
 		v.push_back(i + 1);
 	}
-	//查找容器中是否有 5 这个元素
+	//查找容器中是否有 5 這個元素
 	vector<int>::iterator it = find(v.begin(), v.end(), 5);
 	if (it == v.end()) 
 	{
-		cout << "没有找到!" << endl;
+		cout << "沒有找到!" << endl;
 	}
 	else 
 	{
@@ -6760,7 +6924,7 @@ public:
 		this->m_Name = name;
 		this->m_Age = age;
 	}
-	//重载==
+	//重載==
 	bool operator==(const Person& p) 
 	{
 		if (this->m_Name == p.m_Name && this->m_Age == p.m_Age) 
@@ -6779,7 +6943,7 @@ void test02() {
 
 	vector<Person> v;
 
-	//创建数据
+	//創建數據
 	Person p1("aaa", 10);
 	Person p2("bbb", 20);
 	Person p3("ccc", 30);
@@ -6793,16 +6957,16 @@ void test02() {
 	vector<Person>::iterator it = find(v.begin(), v.end(), p2);
 	if (it == v.end()) 
 	{
-		cout << "没有找到!" << endl;
+		cout << "沒有找到!" << endl;
 	}
 	else 
 	{
-		cout << "找到姓名:" << it->m_Name << " 年龄: " << it->m_Age << endl;
+		cout << "找到姓名:" << it->m_Name << " 年齡: " << it->m_Age << endl;
 	}
 }
 ```
 
-总结： 利用find可以在容器中找指定的元素，返回值是**迭代器**
+總結： 利用find可以在容器中找指定的元素，返回值是**迭代器**
 
 
 
@@ -6820,19 +6984,19 @@ void test02() {
 
 **功能描述：**
 
-* 按条件查找元素
+* 按條件查找元素
 
-**函数原型：**
+**函數原型：**
 
 - `find_if(iterator beg, iterator end, _Pred);  `
 
-  // 按值查找元素，找到返回指定位置迭代器，找不到返回结束迭代器位置
+  // 按值查找元素，找到返回指定位置迭代器，找不到返回結束迭代器位置
 
-  // beg 开始迭代器
+  // beg 開始迭代器
 
-  // end 结束迭代器
+  // end 結束迭代器
 
-  // _Pred 函数或者谓词（返回bool类型的仿函数）
+  // _Pred 函數或者謂詞（返回bool類型的仿函數）
 
 
 
@@ -6843,7 +7007,7 @@ void test02() {
 #include <vector>
 #include <string>
 
-//内置数据类型
+//內置數據類型
 class GreaterFive
 {
 public:
@@ -6862,14 +7026,14 @@ void test01() {
 
 	vector<int>::iterator it = find_if(v.begin(), v.end(), GreaterFive());
 	if (it == v.end()) {
-		cout << "没有找到!" << endl;
+		cout << "沒有找到!" << endl;
 	}
 	else {
-		cout << "找到大于5的数字:" << *it << endl;
+		cout << "找到大於5的數字:" << *it << endl;
 	}
 }
 
-//自定义数据类型
+//自定義數據類型
 class Person {
 public:
 	Person(string name, int age)
@@ -6896,7 +7060,7 @@ void test02() {
 
 	vector<Person> v;
 
-	//创建数据
+	//創建數據
 	Person p1("aaa", 10);
 	Person p2("bbb", 20);
 	Person p3("ccc", 30);
@@ -6910,11 +7074,11 @@ void test02() {
 	vector<Person>::iterator it = find_if(v.begin(), v.end(), Greater20());
 	if (it == v.end())
 	{
-		cout << "没有找到!" << endl;
+		cout << "沒有找到!" << endl;
 	}
 	else
 	{
-		cout << "找到姓名:" << it->m_Name << " 年龄: " << it->m_Age << endl;
+		cout << "找到姓名:" << it->m_Name << " 年齡: " << it->m_Age << endl;
 	}
 }
 
@@ -6930,7 +7094,7 @@ int main() {
 }
 ```
 
-总结：find_if按条件查找使查找更加灵活，提供的仿函数可以改变不同的策略
+總結：find_if按條件查找使查找更加靈活，提供的仿函數可以改變不同的策略
 
 
 
@@ -6950,19 +7114,19 @@ int main() {
 
 **功能描述：**
 
-* 查找相邻重复元素
+* 查找相鄰重複元素
 
 
 
-**函数原型：**
+**函數原型：**
 
 - `adjacent_find(iterator beg, iterator end);  `
 
-  // 查找相邻重复元素,返回相邻元素的第一个位置的迭代器
+  // 查找相鄰重複元素,返回相鄰元素的第一個位置的迭代器
 
-  // beg 开始迭代器
+  // beg 開始迭代器
 
-  // end 结束迭代器
+  // end 結束迭代器
 
   ​
 
@@ -6985,18 +7149,18 @@ void test01()
 	v.push_back(4);
 	v.push_back(3);
 
-	//查找相邻重复元素
+	//查找相鄰重複元素
 	vector<int>::iterator it = adjacent_find(v.begin(), v.end());
 	if (it == v.end()) {
 		cout << "找不到!" << endl;
 	}
 	else {
-		cout << "找到相邻重复元素为:" << *it << endl;
+		cout << "找到相鄰重複元素爲:" << *it << endl;
 	}
 }
 ```
 
-总结：面试题中如果出现查找相邻重复元素，记得用STL中的adjacent_find算法
+總結：面試題中如果出現查找相鄰重複元素，記得用STL中的adjacent_find算法
 
 
 
@@ -7014,17 +7178,17 @@ void test01()
 
 
 
-**函数原型：**
+**函數原型：**
 
 - `bool binary_search(iterator beg, iterator end, value);  `
 
-  // 查找指定的元素，查到 返回true  否则false
+  // 查找指定的元素，查到 返回true  否則false
 
-  // 注意: 在**无序序列中不可用**
+  // 注意: 在**無序序列中不可用**
 
-  // beg 开始迭代器
+  // beg 開始迭代器
 
-  // end 结束迭代器
+  // end 結束迭代器
 
   // value 查找的元素
 
@@ -7068,7 +7232,7 @@ int main() {
 }
 ```
 
-**总结：**二分查找法查找效率很高，值得注意的是查找的容器中元素必须的有序序列
+**總結：**二分查找法查找效率很高，值得注意的是查找的容器中元素必須的有序序列
 
 
 
@@ -7082,21 +7246,21 @@ int main() {
 
 **功能描述：**
 
-* 统计元素个数
+* 統計元素個數
 
 
 
-**函数原型：**
+**函數原型：**
 
 - `count(iterator beg, iterator end, value);  `
 
-  // 统计元素出现次数
+  // 統計元素出現次數
 
-  // beg 开始迭代器
+  // beg 開始迭代器
 
-  // end 结束迭代器
+  // end 結束迭代器
 
-  // value 统计的元素
+  // value 統計的元素
 
 
 
@@ -7108,7 +7272,7 @@ int main() {
 #include <algorithm>
 #include <vector>
 
-//内置数据类型
+//內置數據類型
 void test01()
 {
 	vector<int> v;
@@ -7122,10 +7286,10 @@ void test01()
 
 	int num = count(v.begin(), v.end(), 4);
 
-	cout << "4的个数为： " << num << endl;
+	cout << "4的個數爲： " << num << endl;
 }
 
-//自定义数据类型
+//自定義數據類型
 class Person
 {
 public:
@@ -7153,10 +7317,10 @@ void test02()
 {
 	vector<Person> v;
 
-	Person p1("刘备", 35);
-	Person p2("关羽", 35);
-	Person p3("张飞", 35);
-	Person p4("赵云", 30);
+	Person p1("劉備", 35);
+	Person p2("關羽", 35);
+	Person p3("張飛", 35);
+	Person p4("趙雲", 30);
 	Person p5("曹操", 25);
 
 	v.push_back(p1);
@@ -7165,7 +7329,7 @@ void test02()
 	v.push_back(p4);
 	v.push_back(p5);
     
-    Person p("诸葛亮",35);
+    Person p("諸葛亮",35);
 
 	int num = count(v.begin(), v.end(), p);
 	cout << "num = " << num << endl;
@@ -7182,7 +7346,7 @@ int main() {
 }
 ```
 
-**总结：** 统计自定义数据类型时候，需要配合重载 `operator==`
+**總結：** 統計自定義數據類型時候，需要配合重載 `operator==`
 
 
 
@@ -7204,19 +7368,19 @@ int main() {
 
 **功能描述：**
 
-* 按条件统计元素个数
+* 按條件統計元素個數
 
-**函数原型：**
+**函數原型：**
 
 - `count_if(iterator beg, iterator end, _Pred);  `
 
-  // 按条件统计元素出现次数
+  // 按條件統計元素出現次數
 
-  // beg 开始迭代器
+  // beg 開始迭代器
 
-  // end 结束迭代器
+  // end 結束迭代器
 
-  // _Pred 谓词
+  // _Pred 謂詞
 
   ​
 
@@ -7235,7 +7399,7 @@ public:
 	}
 };
 
-//内置数据类型
+//內置數據類型
 void test01()
 {
 	vector<int> v;
@@ -7249,10 +7413,10 @@ void test01()
 
 	int num = count_if(v.begin(), v.end(), Greater4());
 
-	cout << "大于4的个数为： " << num << endl;
+	cout << "大於4的個數爲： " << num << endl;
 }
 
-//自定义数据类型
+//自定義數據類型
 class Person
 {
 public:
@@ -7278,10 +7442,10 @@ void test02()
 {
 	vector<Person> v;
 
-	Person p1("刘备", 35);
-	Person p2("关羽", 35);
-	Person p3("张飞", 35);
-	Person p4("赵云", 30);
+	Person p1("劉備", 35);
+	Person p2("關羽", 35);
+	Person p3("張飛", 35);
+	Person p4("趙雲", 30);
 	Person p5("曹操", 25);
 
 	v.push_back(p1);
@@ -7291,7 +7455,7 @@ void test02()
 	v.push_back(p5);
 
 	int num = count_if(v.begin(), v.end(), AgeLess35());
-	cout << "小于35岁的个数：" << num << endl;
+	cout << "小於35歲的個數：" << num << endl;
 }
 
 
@@ -7307,7 +7471,7 @@ int main() {
 }
 ```
 
-**总结：**按值统计用count，按条件统计用count_if
+**總結：**按值統計用count，按條件統計用count_if
 
 
 
@@ -7323,16 +7487,16 @@ int main() {
 
 ### 5.3 常用排序算法
 
-**学习目标：**
+**學習目標：**
 
 - 掌握常用的排序算法
 
-**算法简介：**
+**算法簡介：**
 
-- `sort`             //对容器内元素进行排序
-- `random_shuffle`   //洗牌   指定范围内的元素随机调整次序
-- `merge `           // 容器元素合并，并存储到另一容器中
-- `reverse`       // 反转指定范围的元素
+- `sort`             //對容器內元素進行排序
+- `random_shuffle`   //洗牌   指定範圍內的元素隨機調整次序
+- `merge `           // 容器元素合併，並存儲到另一容器中
+- `reverse`       // 反轉指定範圍的元素
 
 
 
@@ -7342,23 +7506,23 @@ int main() {
 
 **功能描述：**
 
-* 对容器内元素进行排序
+* 對容器內元素進行排序
 
 
 
 
 
-**函数原型：**
+**函數原型：**
 
 - `sort(iterator beg, iterator end, _Pred);  `
 
-  // 按值查找元素，找到返回指定位置迭代器，找不到返回结束迭代器位置
+  // 按值查找元素，找到返回指定位置迭代器，找不到返回結束迭代器位置
 
-  //  beg    开始迭代器
+  //  beg    開始迭代器
 
-  //  end    结束迭代器
+  //  end    結束迭代器
 
-  // _Pred  谓词
+  // _Pred  謂詞
 
 
 
@@ -7383,12 +7547,12 @@ void test01() {
 	v.push_back(20);
 	v.push_back(40);
 
-	//sort默认从小到大排序
+	//sort默認從小到大排序
 	sort(v.begin(), v.end());
 	for_each(v.begin(), v.end(), myPrint);
 	cout << endl;
 
-	//从大到小排序
+	//從大到小排序
 	sort(v.begin(), v.end(), greater<int>());
 	for_each(v.begin(), v.end(), myPrint);
 	cout << endl;
@@ -7404,7 +7568,7 @@ int main() {
 }
 ```
 
-**总结：**sort属于开发中最常用的算法之一，需熟练掌握
+**總結：**sort屬於開發中最常用的算法之一，需熟練掌握
 
 
 
@@ -7422,19 +7586,19 @@ int main() {
 
 **功能描述：**
 
-* 洗牌   指定范围内的元素随机调整次序
+* 洗牌   指定範圍內的元素隨機調整次序
 
 
 
-**函数原型：**
+**函數原型：**
 
 - `random_shuffle(iterator beg, iterator end);  `
 
-  // 指定范围内的元素随机调整次序
+  // 指定範圍內的元素隨機調整次序
 
-  // beg 开始迭代器
+  // beg 開始迭代器
 
-  // end 结束迭代器
+  // end 結束迭代器
 
   ​
 
@@ -7465,7 +7629,7 @@ void test01()
 	for_each(v.begin(), v.end(), myPrint());
 	cout << endl;
 
-	//打乱顺序
+	//打亂順序
 	random_shuffle(v.begin(), v.end());
 	for_each(v.begin(), v.end(), myPrint());
 	cout << endl;
@@ -7481,7 +7645,7 @@ int main() {
 }
 ```
 
-**总结：**random_shuffle洗牌算法比较实用，使用时记得加随机数种子
+**總結：**random_shuffle洗牌算法比較實用，使用時記得加隨機數種子
 
 
 
@@ -7501,23 +7665,23 @@ int main() {
 
 **功能描述：**
 
-* 两个容器元素合并，并存储到另一容器中
+* 兩個容器元素合併，並存儲到另一容器中
 
 
 
-**函数原型：**
+**函數原型：**
 
 - `merge(iterator beg1, iterator end1, iterator beg2, iterator end2, iterator dest);  `
 
-  // 容器元素合并，并存储到另一容器中
+  // 容器元素合併，並存儲到另一容器中
 
-  // 注意: 两个容器必须是**有序的**
+  // 注意: 兩個容器必須是**有序的**
 
-  // beg1   容器1开始迭代器
-  // end1   容器1结束迭代器
-  // beg2   容器2开始迭代器
-  // end2   容器2结束迭代器
-  // dest    目标容器开始迭代器
+  // beg1   容器1開始迭代器
+  // end1   容器1結束迭代器
+  // beg2   容器2開始迭代器
+  // end2   容器2結束迭代器
+  // dest    目標容器開始迭代器
 
   ​
 
@@ -7547,9 +7711,9 @@ void test01()
 	}
 
 	vector<int> vtarget;
-	//目标容器需要提前开辟空间
+	//目標容器需要提前開闢空間
 	vtarget.resize(v1.size() + v2.size());
-	//合并  需要两个有序序列
+	//合併  需要兩個有序序列
 	merge(v1.begin(), v1.end(), v2.begin(), v2.end(), vtarget.begin());
 	for_each(vtarget.begin(), vtarget.end(), myPrint());
 	cout << endl;
@@ -7565,7 +7729,7 @@ int main() {
 }
 ```
 
-**总结：**merge合并的两个容器必须的有序序列
+**總結：**merge合併的兩個容器必須的有序序列
 
 
 
@@ -7581,19 +7745,19 @@ int main() {
 
 **功能描述：**
 
-* 将容器内元素进行反转
+* 將容器內元素進行反轉
 
 
 
-**函数原型：**
+**函數原型：**
 
 - `reverse(iterator beg, iterator end);  `
 
-  // 反转指定范围的元素
+  // 反轉指定範圍的元素
 
-  // beg 开始迭代器
+  // beg 開始迭代器
 
-  // end 结束迭代器
+  // end 結束迭代器
 
   ​
 
@@ -7621,11 +7785,11 @@ void test01()
 	v.push_back(20);
 	v.push_back(40);
 
-	cout << "反转前： " << endl;
+	cout << "反轉前： " << endl;
 	for_each(v.begin(), v.end(), myPrint());
 	cout << endl;
 
-	cout << "反转后： " << endl;
+	cout << "反轉後： " << endl;
 
 	reverse(v.begin(), v.end());
 	for_each(v.begin(), v.end(), myPrint());
@@ -7642,7 +7806,7 @@ int main() {
 }
 ```
 
-**总结：**reverse反转区间内元素，面试题可能涉及到
+**總結：**reverse反轉區間內元素，面試題可能涉及到
 
 
 
@@ -7652,18 +7816,18 @@ int main() {
 
 
 
-### 5.4 常用拷贝和替换算法
+### 5.4 常用拷貝和替換算法
 
-**学习目标：**
+**學習目標：**
 
-- 掌握常用的拷贝和替换算法
+- 掌握常用的拷貝和替換算法
 
-**算法简介：**
+**算法簡介：**
 
-- `copy`                      // 容器内指定范围的元素拷贝到另一容器中
-- `replace`                // 将容器内指定范围的旧元素修改为新元素
-- `replace_if `          // 容器内指定范围满足条件的元素替换为新元素
-- `swap`                     // 互换两个容器的元素
+- `copy`                      // 容器內指定範圍的元素拷貝到另一容器中
+- `replace`                // 將容器內指定範圍的舊元素修改爲新元素
+- `replace_if `          // 容器內指定範圍滿足條件的元素替換爲新元素
+- `swap`                     // 互換兩個容器的元素
 
 
 
@@ -7672,21 +7836,21 @@ int main() {
 
 **功能描述：**
 
-* 容器内指定范围的元素拷贝到另一容器中
+* 容器內指定範圍的元素拷貝到另一容器中
 
 
 
-**函数原型：**
+**函數原型：**
 
 - `copy(iterator beg, iterator end, iterator dest);  `
 
-  // 按值查找元素，找到返回指定位置迭代器，找不到返回结束迭代器位置
+  // 按值查找元素，找到返回指定位置迭代器，找不到返回結束迭代器位置
 
-  // beg  开始迭代器
+  // beg  開始迭代器
 
-  // end  结束迭代器
+  // end  結束迭代器
 
-  // dest 目标起始迭代器
+  // dest 目標起始迭代器
 
 
 
@@ -7729,7 +7893,7 @@ int main() {
 }
 ```
 
-**总结：**利用copy算法在拷贝时，目标容器记得提前开辟空间
+**總結：**利用copy算法在拷貝時，目標容器記得提前開闢空間
 
 
 
@@ -7749,21 +7913,21 @@ int main() {
 
 **功能描述：**
 
-* 将容器内指定范围的旧元素修改为新元素
+* 將容器內指定範圍的舊元素修改爲新元素
 
 
 
-**函数原型：**
+**函數原型：**
 
 - `replace(iterator beg, iterator end, oldvalue, newvalue);  `
 
-  // 将区间内旧元素 替换成 新元素
+  // 將區間內舊元素 替換成 新元素
 
-  // beg 开始迭代器
+  // beg 開始迭代器
 
-  // end 结束迭代器
+  // end 結束迭代器
 
-  // oldvalue 旧元素
+  // oldvalue 舊元素
 
   // newvalue 新元素
 
@@ -7795,12 +7959,12 @@ void test01()
 	v.push_back(10);
 	v.push_back(20);
 
-	cout << "替换前：" << endl;
+	cout << "替換前：" << endl;
 	for_each(v.begin(), v.end(), myPrint());
 	cout << endl;
 
-	//将容器中的20 替换成 2000
-	cout << "替换后：" << endl;
+	//將容器中的20 替換成 2000
+	cout << "替換後：" << endl;
 	replace(v.begin(), v.end(), 20,2000);
 	for_each(v.begin(), v.end(), myPrint());
 	cout << endl;
@@ -7816,7 +7980,7 @@ int main() {
 }
 ```
 
-**总结：**replace会替换区间内满足条件的元素
+**總結：**replace會替換區間內滿足條件的元素
 
 
 
@@ -7834,23 +7998,23 @@ int main() {
 
 **功能描述:**  
 
-* 将区间内满足条件的元素，替换成指定元素
+* 將區間內滿足條件的元素，替換成指定元素
 
 
 
-**函数原型：**
+**函數原型：**
 
 - `replace_if(iterator beg, iterator end, _pred, newvalue);  `
 
-  // 按条件替换元素，满足条件的替换成指定元素
+  // 按條件替換元素，滿足條件的替換成指定元素
 
-  // beg 开始迭代器
+  // beg 開始迭代器
 
-  // end 结束迭代器
+  // end 結束迭代器
 
-  // _pred 谓词
+  // _pred 謂詞
 
-  // newvalue 替换的新元素
+  // newvalue 替換的新元素
 
 
 
@@ -7890,12 +8054,12 @@ void test01()
 	v.push_back(10);
 	v.push_back(20);
 
-	cout << "替换前：" << endl;
+	cout << "替換前：" << endl;
 	for_each(v.begin(), v.end(), myPrint());
 	cout << endl;
 
-	//将容器中大于等于的30 替换成 3000
-	cout << "替换后：" << endl;
+	//將容器中大於等於的30 替換成 3000
+	cout << "替換後：" << endl;
 	replace_if(v.begin(), v.end(), ReplaceGreater30(), 3000);
 	for_each(v.begin(), v.end(), myPrint());
 	cout << endl;
@@ -7911,7 +8075,7 @@ int main() {
 }
 ```
 
-**总结：**replace_if按条件查找，可以利用仿函数灵活筛选满足的条件
+**總結：**replace_if按條件查找，可以利用仿函數靈活篩選滿足的條件
 
 
 
@@ -7923,15 +8087,15 @@ int main() {
 
 **功能描述：**
 
-* 互换两个容器的元素
+* 互換兩個容器的元素
 
 
 
-**函数原型：**
+**函數原型：**
 
 - `swap(container c1, container c2);  `
 
-  // 互换两个容器的元素
+  // 互換兩個容器的元素
 
   // c1容器1
 
@@ -7963,13 +8127,13 @@ void test01()
 		v2.push_back(i+100);
 	}
 
-	cout << "交换前： " << endl;
+	cout << "交換前： " << endl;
 	for_each(v1.begin(), v1.end(), myPrint());
 	cout << endl;
 	for_each(v2.begin(), v2.end(), myPrint());
 	cout << endl;
 
-	cout << "交换后： " << endl;
+	cout << "交換後： " << endl;
 	swap(v1, v2);
 	for_each(v1.begin(), v1.end(), myPrint());
 	cout << endl;
@@ -7987,7 +8151,7 @@ int main() {
 }
 ```
 
-**总结：**swap交换容器时，注意交换的容器要同种类型
+**總結：**swap交換容器時，注意交換的容器要同種類型
 
 
 
@@ -8001,23 +8165,23 @@ int main() {
 
 
 
-### 5.5 常用算术生成算法
+### 5.5 常用算術生成算法
 
-**学习目标：**
+**學習目標：**
 
-- 掌握常用的算术生成算法
+- 掌握常用的算術生成算法
 
 
 
 **注意：**
 
-* 算术生成算法属于小型算法，使用时包含的头文件为 `#include <numeric>`
+* 算術生成算法屬於小型算法，使用時包含的頭文件爲 `#include <numeric>`
 
 
 
-**算法简介：**
+**算法簡介：**
 
-- `accumulate`      // 计算容器元素累计总和
+- `accumulate`      // 計算容器元素累計總和
 
 - `fill`                 // 向容器中添加元素
 
@@ -8027,19 +8191,19 @@ int main() {
 
 **功能描述：**
 
-*  计算区间内 容器元素累计总和
+*  計算區間內 容器元素累計總和
 
 
 
-**函数原型：**
+**函數原型：**
 
 - `accumulate(iterator beg, iterator end, value);  `
 
-  // 计算容器元素累计总和
+  // 計算容器元素累計總和
 
-  // beg 开始迭代器
+  // beg 開始迭代器
 
-  // end 结束迭代器
+  // end 結束迭代器
 
   // value 起始值
 
@@ -8072,7 +8236,7 @@ int main() {
 }
 ```
 
-**总结：**accumulate使用时头文件注意是 numeric，这个算法很实用
+**總結：**accumulate使用時頭文件注意是 numeric，這個算法很實用
 
 
 
@@ -8084,15 +8248,15 @@ int main() {
 
 
 
-**函数原型：**
+**函數原型：**
 
 - `fill(iterator beg, iterator end, value);  `
 
   // 向容器中填充元素
 
-  // beg 开始迭代器
+  // beg 開始迭代器
 
-  // end 结束迭代器
+  // end 結束迭代器
 
   // value 填充的值
 
@@ -8136,7 +8300,7 @@ int main() {
 }
 ```
 
-**总结：**利用fill可以将容器区间内元素填充为 指定的值
+**總結：**利用fill可以將容器區間內元素填充爲 指定的值
 
 
 
@@ -8144,19 +8308,19 @@ int main() {
 
 ### 5.6 常用集合算法
 
-**学习目标：**
+**學習目標：**
 
 - 掌握常用的集合算法
 
 
 
-**算法简介：**
+**算法簡介：**
 
-- `set_intersection`          // 求两个容器的交集
+- `set_intersection`          // 求兩個容器的交集
 
-- `set_union`                       // 求两个容器的并集
+- `set_union`                       // 求兩個容器的並集
 
-- `set_difference `              // 求两个容器的差集
+- `set_difference `              // 求兩個容器的差集
 
   ​
 
@@ -8166,23 +8330,23 @@ int main() {
 
 **功能描述：**
 
-* 求两个容器的交集
+* 求兩個容器的交集
 
 
 
-**函数原型：**
+**函數原型：**
 
 - `set_intersection(iterator beg1, iterator end1, iterator beg2, iterator end2, iterator dest);  `
 
-  // 求两个集合的交集
+  // 求兩個集合的交集
 
-  // **注意:两个集合必须是有序序列**
+  // **注意:兩個集合必須是有序序列**
 
-  // beg1 容器1开始迭代器
-  // end1 容器1结束迭代器
-  // beg2 容器2开始迭代器
-  // end2 容器2结束迭代器
-  // dest 目标容器开始迭代器
+  // beg1 容器1開始迭代器
+  // end1 容器1結束迭代器
+  // beg2 容器2開始迭代器
+  // end2 容器2結束迭代器
+  // dest 目標容器開始迭代器
 
 
 
@@ -8212,10 +8376,10 @@ void test01()
 	}
 
 	vector<int> vTarget;
-	//取两个里面较小的值给目标容器开辟空间
+	//取兩個裏面較小的值給目標容器開闢空間
 	vTarget.resize(min(v1.size(), v2.size()));
 
-	//返回目标容器的最后一个元素的迭代器地址
+	//返回目標容器的最後一個元素的迭代器地址
 	vector<int>::iterator itEnd = 
         set_intersection(v1.begin(), v1.end(), v2.begin(), v2.end(), vTarget.begin());
 
@@ -8233,11 +8397,11 @@ int main() {
 }
 ```
 
-**总结：** 
+**總結：** 
 
-* 求交集的两个集合必须的有序序列
-* 目标容器开辟空间需要从**两个容器中取小值**
-* set_intersection返回值既是交集中最后一个元素的位置
+* 求交集的兩個集合必須的有序序列
+* 目標容器開闢空間需要從**兩個容器中取小值**
+* set_intersection返回值既是交集中最後一個元素的位置
 
 
 
@@ -8255,23 +8419,23 @@ int main() {
 
 **功能描述：**
 
-* 求两个集合的并集
+* 求兩個集合的並集
 
 
 
-**函数原型：**
+**函數原型：**
 
 - `set_union(iterator beg1, iterator end1, iterator beg2, iterator end2, iterator dest);  `
 
-  // 求两个集合的并集
+  // 求兩個集合的並集
 
-  // **注意:两个集合必须是有序序列**
+  // **注意:兩個集合必須是有序序列**
 
-  // beg1 容器1开始迭代器
-  // end1 容器1结束迭代器
-  // beg2 容器2开始迭代器
-  // end2 容器2结束迭代器
-  // dest 目标容器开始迭代器
+  // beg1 容器1開始迭代器
+  // end1 容器1結束迭代器
+  // beg2 容器2開始迭代器
+  // end2 容器2結束迭代器
+  // dest 目標容器開始迭代器
 
   ​
 
@@ -8300,10 +8464,10 @@ void test01()
 	}
 
 	vector<int> vTarget;
-	//取两个容器的和给目标容器开辟空间
+	//取兩個容器的和給目標容器開闢空間
 	vTarget.resize(v1.size() + v2.size());
 
-	//返回目标容器的最后一个元素的迭代器地址
+	//返回目標容器的最後一個元素的迭代器地址
 	vector<int>::iterator itEnd = 
         set_union(v1.begin(), v1.end(), v2.begin(), v2.end(), vTarget.begin());
 
@@ -8321,11 +8485,11 @@ int main() {
 }
 ```
 
-**总结：** 
+**總結：** 
 
-- 求并集的两个集合必须的有序序列
-- 目标容器开辟空间需要**两个容器相加**
-- set_union返回值既是并集中最后一个元素的位置
+- 求並集的兩個集合必須的有序序列
+- 目標容器開闢空間需要**兩個容器相加**
+- set_union返回值既是並集中最後一個元素的位置
 
 
 
@@ -8338,23 +8502,23 @@ int main() {
 
 **功能描述：**
 
-* 求两个集合的差集
+* 求兩個集合的差集
 
 
 
-**函数原型：**
+**函數原型：**
 
 - `set_difference(iterator beg1, iterator end1, iterator beg2, iterator end2, iterator dest);  `
 
-  // 求两个集合的差集
+  // 求兩個集合的差集
 
-  // **注意:两个集合必须是有序序列**
+  // **注意:兩個集合必須是有序序列**
 
-  // beg1 容器1开始迭代器
-  // end1 容器1结束迭代器
-  // beg2 容器2开始迭代器
-  // end2 容器2结束迭代器
-  // dest 目标容器开始迭代器
+  // beg1 容器1開始迭代器
+  // end1 容器1結束迭代器
+  // beg2 容器2開始迭代器
+  // end2 容器2結束迭代器
+  // dest 目標容器開始迭代器
 
   ​
 
@@ -8383,18 +8547,18 @@ void test01()
 	}
 
 	vector<int> vTarget;
-	//取两个里面较大的值给目标容器开辟空间
+	//取兩個裏面較大的值給目標容器開闢空間
 	vTarget.resize( max(v1.size() , v2.size()));
 
-	//返回目标容器的最后一个元素的迭代器地址
-	cout << "v1与v2的差集为： " << endl;
+	//返回目標容器的最後一個元素的迭代器地址
+	cout << "v1與v2的差集爲： " << endl;
 	vector<int>::iterator itEnd = 
         set_difference(v1.begin(), v1.end(), v2.begin(), v2.end(), vTarget.begin());
 	for_each(vTarget.begin(), itEnd, myPrint());
 	cout << endl;
 
 
-	cout << "v2与v1的差集为： " << endl;
+	cout << "v2與v1的差集爲： " << endl;
 	itEnd = set_difference(v2.begin(), v2.end(), v1.begin(), v1.end(), vTarget.begin());
 	for_each(vTarget.begin(), itEnd, myPrint());
 	cout << endl;
@@ -8410,8 +8574,8 @@ int main() {
 }
 ```
 
-**总结：** 
+**總結：** 
 
-- 求差集的两个集合必须的有序序列
-- 目标容器开辟空间需要从**两个容器取较大值**
-- set_difference返回值既是差集中最后一个元素的位置
+- 求差集的兩個集合必須的有序序列
+- 目標容器開闢空間需要從**兩個容器取較大值**
+- set_difference返回值既是差集中最後一個元素的位置
