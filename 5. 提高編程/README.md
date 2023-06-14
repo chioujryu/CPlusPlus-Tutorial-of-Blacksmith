@@ -1873,6 +1873,22 @@ int main()
     test01();
 }
 ```
+輸出為：
+```
+MyArray的拷貝構造函數調用
+MyArray的有參構造函數調用
+MyArray的 operator= 調用
+0
+1
+GetCapacity = 5
+GetSize = 5
+尾刪後
+GetCapacity = 5
+GetSize = 4
+MyArray的析構函數調用
+MyArray的析構函數調用
+MyArray的析構函數調用
+```
 
 **總結：**
 
