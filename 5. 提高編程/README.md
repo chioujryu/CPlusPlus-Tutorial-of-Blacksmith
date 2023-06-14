@@ -2,7 +2,8 @@
 
 
 
-* 本階段主要針對C++==泛型編程==和==STL==技術做詳細講解，探討C++更深層的使用
+
+* 本階段主要針對C++**泛型編程**和**STL**技術做詳細講解，探討C++更深層的使用
 
 - [C++提高編程](#c提高編程)
 	- [1 模板](#1-模板)
@@ -195,7 +196,7 @@ PPT模板：
 
 
 
-* C++另一種編程思想稱爲 ==泛型編程== ，主要利用的技術就是模板
+* C++另一種編程思想稱爲 **泛型編程** ，主要利用的技術就是模板
 
 
 * C++提供兩種模板機制:**函數模板**和**類模板** 
@@ -954,51 +955,71 @@ int main()
 **示例：**
 
 ```C++
-class Person1
+# include <iostream>
+using namespace std;
+
+//類模板中成員函數創建時機
+
+
+class Person01
 {
 public:
-	void showPerson1()
-	{
-		cout << "Person1 show" << endl;
-	}
+    void ShowPerson01()
+    {
+        cout<<"Person01 show"<<endl;
+    }
+
 };
 
-class Person2
+class Person02
 {
 public:
-	void showPerson2()
-	{
-		cout << "Person2 show" << endl;
-	}
+    void ShowPerson02()
+    {
+        cout<<"Person02 show"<<endl;
+    }
 };
 
 template<class T>
 class MyClass
 {
 public:
-	T obj;
+    T obj; 
+
 
 	//類模板中的成員函數，並不是一開始就創建的，而是在模板調用時再生成
 
-	void fun1() { obj.showPerson1(); }
-	void fun2() { obj.showPerson2(); }
-
+    //類模板中的成員函數
+    void function01()
+    {
+        obj.ShowPerson01();
+    }   
+    void function02()
+    {
+        obj.ShowPerson02();
+    }
 };
 
 void test01()
 {
-	MyClass<Person1> m;
-	
-	m.fun1();
-
-	//m.fun2();//編譯會出錯，說明函數調用纔會去創建成員函數
+    MyClass<Person01>m;
+    m.function01(); 
+    //m.function02();   // Person01 不可以調 function02
 }
 
-int main() {
+void test02()
+{
+    MyClass<Person02>m;
+    //m.function01();   // Person02 不可以調 function01
+    m.function02();
+}
 
-	test01();
-
-	system("pause");
+int main()
+{
+    test01();
+    test02();
+    
+    system("pause");
 
 	return 0;
 }
@@ -1029,93 +1050,91 @@ int main() {
 3. 整個類模板化       --- 將這個對象類型 模板化進行傳遞
 
 
-
-
-
 **示例：**
 
 ```C++
-#include <string>
-//類模板
-template<class NameType, class AgeType = int> 
+# include <iostream>
+using namespace std;
+#include <typeinfo> 
+
+
+//類模板對象做函數參數
+template<class T1, class T2>
 class Person
 {
 public:
-	Person(NameType name, AgeType age)
-	{
-		this->mName = name;
-		this->mAge = age;
-	}
-	void showPerson()
-	{
-		cout << "name: " << this->mName << " age: " << this->mAge << endl;
-	}
-public:
-	NameType mName;
-	AgeType mAge;
+    Person(T1 name, T2 age)
+    {
+        this->m_Name = name;
+        this->m_Age = age;
+    }
+
+    void showPerson()
+    {
+        cout<<"姓名:"<<this->m_Name<<"年齡:"<<this->m_Age<<endl;
+    }
+
+    T1 m_Name;
+    T2 m_Age;
+
 };
 
-//1、指定傳入的類型
-void printPerson1(Person<string, int> &p) 
+
+
+//===============1. 指定傳入類型===============
+//這是最常用的方式，建議都用這種用法
+void PrintPerson01(Person<string, int> & p)
 {
-	p.showPerson();
+    p.showPerson();
 }
 void test01()
 {
-	Person <string, int >p("孫悟空", 100);
-	printPerson1(p);
+    Person<string, int> p("孫悟空", 100);
+    PrintPerson01(p);
 }
 
-//2、參數模板化
-template <class T1, class T2>
-void printPerson2(Person<T1, T2>&p)
+//===============2. 參數模板化===============
+template<class T1, class T2>
+void PrintPerson02(Person<T1, T2> & p)
 {
-	p.showPerson();
-	cout << "T1的類型爲： " << typeid(T1).name() << endl;
-	cout << "T2的類型爲： " << typeid(T2).name() << endl;
+    p.showPerson();
+    cout<<"T1 的類型為:"<< typeid(T1).name()<<endl;
+    cout<<"T2 的類型為:"<< typeid(T2).name()<<endl;
 }
 void test02()
 {
-	Person <string, int >p("豬八戒", 90);
-	printPerson2(p);
+    Person<string, int> p("豬八戒", 90);
+    PrintPerson02(p);
 }
 
-//3、整個類模板化
+//===============3. 整個類模板化===============
 template<class T>
-void printPerson3(T & p)
+void PrintPerson03(T & p)
 {
-	cout << "T的類型爲： " << typeid(T).name() << endl;
-	p.showPerson();
-
+    p.showPerson();
+    cout<<"T的數據類型為:"<<typeid(T).name()<<endl;
 }
 void test03()
 {
-	Person <string, int >p("唐僧", 30);
-	printPerson3(p);
+    Person<string, int> p("唐僧", 30);
+    PrintPerson03(p);
 }
 
-int main() {
 
-	test01();
-	test02();
-	test03();
-
-	system("pause");
+int main()
+{
+    test01();
+    test02();
+    test03();
 
 	return 0;
 }
 ```
 
-總結：
+**總結：**
 
 * 通過類模板創建的對象，可以有三種方式向函數中進行傳參
-* 使用比較廣泛是第一種：指定傳入的類型
-
-
-
-
-
-
+* **使用比較廣泛是第一種：指定傳入的類型**
 
 
 
@@ -1135,52 +1154,61 @@ int main() {
 **示例：**
 
 ```C++
-template<class T>
+# include <iostream>
+using namespace std;
+#include <typeinfo> 
+
+//類模板與繼承
+
+template<typename T>
 class Base
 {
-	T m;
+
+    //成員
+    T m;
 };
 
-//class Son:public Base  //錯誤，c++編譯需要給子類分配內存，必須知道父類中T的類型纔可以向下繼承
-class Son :public Base<int> //必須指定一個類型
+//class Son: public Base  // 錯誤，必須要知道父類中T的類型，才能繼承給子類，因為子類要知道父類的記憶體大小
+class Son01: public Base<int>
 {
+
 };
+
 void test01()
 {
-	Son c;
-}
+    Son01 s1;
+};
 
-//類模板繼承類模板 ,可以用T2指定父類中的T類型
-template<class T1, class T2>
-class Son2 :public Base<T2>
+//如果想靈活指定父類中T類型，子類也需要變類模板
+template <class T1, class T2>
+class Son02: public Base<T2>
 {
 public:
-	Son2()
-	{
-		cout << typeid(T1).name() << endl;
-		cout << typeid(T2).name() << endl;
-	}
+    Son02()
+    {
+        cout <<"T1的類型為"<< typeid(T1).name() << endl;
+		cout <<"T2的類型為"<< typeid(T2).name() << endl;
+    }
+    T1 obj;
 };
 
 void test02()
 {
-	Son2<int, char> child1;
-}
+    Son02<int, char> S2;
+};
 
 
-int main() {
-
-	test01();
-
-	test02();
-
-	system("pause");
+int main()
+{
+    test02();
 
 	return 0;
 }
 ```
 
-總結：如果父類是類模板，子類需要指定出父類中T的數據類型
+**總結：**
+* 如果父類是類模板，子類需要指定出父類中T的數據類型
+* 如果要靈活構建的話，那子類也要是類模板
 
 
 
@@ -1201,46 +1229,51 @@ int main() {
 **示例：**
 
 ```C++
-#include <string>
+# include <iostream>
+using namespace std;
+#include <typeinfo> 
 
-//類模板中成員函數類外實現
-template<class T1, class T2>
-class Person {
-public:
-	//成員函數類內聲明
-	Person(T1 name, T2 age);
-	void showPerson();
+//類模板與繼承
 
+// ============類模板============
+template<typename T1, typename T2>
+class Person
+{
 public:
-	T1 m_Name;
-	T2 m_Age;
+    Person(T1 name, T2 age);
+    void showPerson();
+
+    T1 m_name;
+    T2 m_age;
 };
 
-//構造函數 類外實現
-template<class T1, class T2>
-Person<T1, T2>::Person(T1 name, T2 age) {
-	this->m_Name = name;
-	this->m_Age = age;
-}
+// ============構造函數的類外實現============
+template<typename T1, typename T2>
+//Person::Person(T1 name, T2 age)   // 這是普通構造函數的類外實現，我們要類模板的普通構造函數類外實現
+Person<T1,T2>::Person(T1 name, T2 age)
+{
+    this->m_name = name;
+    this->m_age = age;
+};
 
-//成員函數 類外實現
-template<class T1, class T2>
-void Person<T1, T2>::showPerson() {
-	cout << "姓名: " << this->m_Name << " 年齡:" << this->m_Age << endl;
-}
+// ============成員函數的類外實現============
+template<typename T1, typename T2>
+void Person<T1, T2>::showPerson()
+{
+    cout<<"姓名:"<<this->m_name<<"\t"<<"年齡"<<this->m_age<<endl;
+};
 
+// ============類模板調用============
 void test01()
 {
-	Person<string, int> p("Tom", 20);
-	p.showPerson();
+    Person<string, int> p("孫悟空", 100);
+    p.showPerson();
 }
 
-int main() {
-
-	test01();
-
-	system("pause");
-
+// ============main函數============
+int main()
+{
+    test01();
 	return 0;
 }
 ```
@@ -1284,30 +1317,37 @@ person.hpp中代碼：
 #pragma once
 #include <iostream>
 using namespace std;
-#include <string>
 
-template<class T1, class T2>
-class Person {
+// ============類模板============
+template<typename T1, typename T2>
+class Person
+{
+private:
+
 public:
-	Person(T1 name, T2 age);
-	void showPerson();
-public:
-	T1 m_Name;
-	T2 m_Age;
+    Person(T1 name, T2 age);
+    void showPerson();
+
+    T1 m_name;
+    T2 m_age;
 };
 
+// ============實現函數============
 //構造函數 類外實現
-template<class T1, class T2>
-Person<T1, T2>::Person(T1 name, T2 age) {
-	this->m_Name = name;
-	this->m_Age = age;
-}
+template<typename T1, typename T2>
+Person<T1,T2>::Person(T1 name, T2 age)
+{
+    this->m_name = name;
+    this->m_age = age;
+};
 
+// ============實現函數============
 //成員函數 類外實現
-template<class T1, class T2>
-void Person<T1, T2>::showPerson() {
-	cout << "姓名: " << this->m_Name << " 年齡:" << this->m_Age << endl;
-}
+template<typename T1, typename T2>
+void Person<T1, T2>::showPerson()
+{
+    cout<<"姓名:"<<m_name<<"\t"<<"年齡:"<<m_age<<endl;
+};
 ```
 
 
@@ -1315,31 +1355,40 @@ void Person<T1, T2>::showPerson() {
 類模板分文件編寫.cpp中代碼
 
 ```C++
-#include<iostream>
+// 類模板分文件編寫
+
+# include <iostream>
+#include <typeinfo> 
 using namespace std;
 
-//#include "person.h"
-#include "person.cpp" //解決方式1，包含cpp源文件
+// ============第一種解決方式============
+// 解決方式:直接包含原文件
+// 編譯方式: g++ -o main 1.3.7_類模板分文件編寫.cpp person.cpp
+#include "person.cpp"
 
-//解決方式2，將聲明和實現寫到一起，文件後綴名改爲.hpp
+
+// ============第二種解決方式============
+// 解決方式:將 .h 和 .cpp中的內容寫到一起，將後綴名改為 .hpp文件
+// 編譯方式: g++ -o main 1.3.7_類模板分文件編寫.cpp
 #include "person.hpp"
+
+
 void test01()
 {
-	Person<string, int> p("Tom", 10);
-	p.showPerson();
+    Person<string, int> p("李多惠", 24);
+    p.showPerson();
 }
 
-int main() {
 
-	test01();
-
-	system("pause");
-
+// ============main函數============
+int main()
+{
+    test01();
 	return 0;
 }
 ```
 
-總結：主流的解決方式是第二種，將類模板成員函數寫到一起，並將後綴名改爲.hpp
+**總結：主流的解決方式是第二種，將類模板成員函數寫到一起，並將後綴名改爲.hpp**
 
 
 
@@ -1368,79 +1417,86 @@ int main() {
 **示例：**
 
 ```C++
-#include <string>
+# include <iostream>
+using namespace std;
+#include <typeinfo> 
 
-//2、全局函數配合友元  類外實現 - 先做函數模板聲明，下方在做函數模板定義，在做友元
-template<class T1, class T2> class Person;
+//通過全局函數打印Person的信息
 
-//如果聲明瞭函數模板，可以將實現寫到後面，否則需要將實現體寫到類的前面讓編譯器提前看到
-//template<class T1, class T2> void printPerson2(Person<T1, T2> & p); 
+// 7. 提前讓編譯器知道Person的存在，因為在 步驟<6> 使用到了Person
+// 全局函數配合友元  類外實現 - 先做函數模板聲明，下方在做函數模板定義，在做友元
+template<class T1, class T2> 
+class Person;
 
-template<class T1, class T2>
-void printPerson2(Person<T1, T2> & p)
+// 6. 全局函數 類外實現
+// 如果聲明瞭函數模板，可以將實現寫到後面，否則需要將實現體寫到類的前面讓編譯器提前看到
+template<typename T1, typename T2>
+void PrintPerson02(Person<T1, T2> p)
 {
-	cout << "類外實現 ---- 姓名： " << p.m_Name << " 年齡：" << p.m_Age << endl;
+    cout<<"類外實現------"<<"姓名:"<<p.m_name<<"\t"<<"年齡"<<p.m_age<<endl;
 }
 
-template<class T1, class T2>
+// 1. 定義類模板
+template<typename T1, typename T2>
 class Person
 {
-	//1、全局函數配合友元   類內實現
-	friend void printPerson(Person<T1, T2> & p)
-	{
-		cout << "姓名： " << p.m_Name << " 年齡：" << p.m_Age << endl;
-	}
+    // 2. 全局函數 類內實現
+    friend void PrintPerson01(Person<T1, T2> p)
+    {
+        cout<<"姓名:"<<p.m_name<<"\t"<<"年齡"<<p.m_age<<endl;
+    }
 
-
-	//全局函數配合友元  類外實現
-	friend void printPerson2<>(Person<T1, T2> & p);
+    // 3. 全局函數 類外實現 定義
+    // friend void PrintPerson02(Person<T1, T2> p);  //這是普通函數的聲明
+    // 加
+    // 如果全局函數 是類外實現，需要讓編譯器提前知道這個函數的存在
+    friend void PrintPerson02<>(Person<T1, T2> p);  //這是函數模板的聲明
 
 public:
-
-	Person(T1 name, T2 age)
-	{
-		this->m_Name = name;
-		this->m_Age = age;
-	}
-
+    // 4. 定義構造函數
+    Person(T1 name, T2 age);
 
 private:
-	T1 m_Name;
-	T2 m_Age;
-
+    T1 m_name;
+    T2 m_age;
 };
 
-//1、全局函數在類內實現
+// 5. 構造函數的類外實現
+template<typename T1, typename T2>
+//Person::Person(T1 name, T2 age)   // 這是普通構造函數的類外實現，我們要類模板的普通構造函數類外實現
+Person<T1,T2>::Person(T1 name, T2 age)
+{
+    this->m_name = name;
+    this->m_age = age;
+};
+
+
+// 8. 全局函數在類內實現
 void test01()
 {
-	Person <string, int >p("Tom", 20);
-	printPerson(p);
+    Person<string, int> p("孫悟空", 100);
+    PrintPerson01(p);
 }
 
-
-//2、全局函數在類外實現
+// 9. 全局函數在類外實現
 void test02()
 {
-	Person <string, int >p("Jerry", 30);
-	printPerson2(p);
+    Person<string, int> p("孫悟空", 100);
+    PrintPerson02(p);
 }
 
-int main() {
 
-	//test01();
 
-	test02();
-
-	system("pause");
-
+// ============main函數============
+int main()
+{
+    test01();
+    test02();
 	return 0;
 }
 ```
 
-總結：建議全局函數做類內實現，用法簡單，而且編譯器可以直接識別
-
-
-
+**總結：建議全局函數做類內實現，用法簡單，而且編譯器可以直接識別**
 
 
 
@@ -1470,113 +1526,257 @@ int main() {
 **示例：**
 
 myArray.hpp中代碼
-
 ```C++
 #pragma once
-#include <iostream>
+# include <iostream>
 using namespace std;
+#include <typeinfo> 
 
-template<class T>
+template<typename T>
 class MyArray
 {
 public:
-    
-	//構造函數
-	MyArray(int capacity)
-	{
-		this->m_Capacity = capacity;
-		this->m_Size = 0;
-		pAddress = new T[this->m_Capacity];
-	}
+    // 有參構造函數 
+    MyArray(int capacity) // 參數 容量
+    {
+        cout<<"MyArray的有參構造函數調用"<<endl;
+        this->m_capacity = capacity;
+        this->m_size = 0;
+        this->p_address = new T[this->m_capacity];  // 開闢新的堆區
+    };
 
-	//拷貝構造
-	MyArray(const MyArray & arr)
-	{
-		this->m_Capacity = arr.m_Capacity;
-		this->m_Size = arr.m_Size;
-		this->pAddress = new T[this->m_Capacity];
-		for (int i = 0; i < this->m_Size; i++)
-		{
-			//如果T爲對象，而且還包含指針，必須需要重載 = 操作符，因爲這個等號不是 構造 而是賦值，
-			// 普通類型可以直接= 但是指針類型需要深拷貝
-			this->pAddress[i] = arr.pAddress[i];
-		}
-	}
+    // 拷貝構造函數
+    MyArray(const MyArray & arr)
+    {
+        cout<<"MyArray的拷貝構造函數調用"<<endl;
+        this->m_capacity = arr.m_capacity;
+        this->m_size = arr.m_size;
 
-	//重載= 操作符  防止淺拷貝問題
-	MyArray& operator=(const MyArray& myarray) {
+        // 普通類型可以直接 = 但是指針類型需要深拷貝
+        //this->p_address = arr.p_address; // 指針不能附值給指針
 
-		if (this->pAddress != NULL) {
-			delete[] this->pAddress;
-			this->m_Capacity = 0;
-			this->m_Size = 0;
-		}
+        // 深拷貝
+        this->p_address = new T[arr.m_capacity];
 
-		this->m_Capacity = myarray.m_Capacity;
-		this->m_Size = myarray.m_Size;
-		this->pAddress = new T[this->m_Capacity];
-		for (int i = 0; i < this->m_Size; i++) {
-			this->pAddress[i] = myarray[i];
-		}
-		return *this;
-	}
+        // 將arr中的數據都拷貝過來
+        for (int i = 0 ; i < this->m_size ; i++)
+        {
+            //如果T爲對象，而且還包含指針，必須需要重載 = 操作符，因爲這個等號不是 構造 而是賦值
+            this->p_address[i] = arr.p_address[i];
+        }
+    }
 
-	//重載[] 操作符  arr[0]
-	T& operator [](int index)
-	{
-		return this->pAddress[index]; //不考慮越界，用戶自己去處理
-	}
+    // operator= 操作符 防止淺拷貝問題 
+    MyArray & operator=(const MyArray & arr)
+    {
+        cout<<"MyArray的 operator= 調用"<<endl;
+        // 先判斷原來堆區是否有數據，如果有，先釋放
+        if(this->p_address != NULL)
+        {
+            delete[] this->p_address;
+            this->p_address = NULL;
+            this->m_capacity = 0;
+            this->m_size = 0;
+        }
 
-	//尾插法
-	void Push_back(const T & val)
-	{
-		if (this->m_Capacity == this->m_Size)
-		{
-			return;
-		}
-		this->pAddress[this->m_Size] = val;
-		this->m_Size++;
-	}
+        // 深拷貝
+        this->m_capacity = arr.m_capacity;
+        this->m_size = arr.m_size;
+        this->p_address = new T[arr.m_capacity];
+        for (int i = 0; i < this->m_size ; i++)
+        {
+            this->p_address[i] = arr.p_address[i];
+        }
+        return *this; // 因為這個函數是 MyArray 開頭，所以要返回自己
+    }
 
-	//尾刪法
-	void Pop_back()
-	{
-		if (this->m_Size == 0)
-		{
-			return;
-		}
-		this->m_Size--;
-	}
-
-	//獲取數組容量
-	int getCapacity()
-	{
-		return this->m_Capacity;
-	}
-
-	//獲取數組大小
-	int	getSize()
-	{
-		return this->m_Size;
-	}
-
-
-	//析構
-	~MyArray()
-	{
-		if (this->pAddress != NULL)
-		{
-			delete[] this->pAddress;
-			this->pAddress = NULL;
-			this->m_Capacity = 0;
-			this->m_Size = 0;
-		}
-	}
+    // 析構函數
+    ~MyArray()
+    {
+        cout<<"MyArray的析構函數調用"<<endl;
+        if (this->p_address != NULL)
+        {
+            delete[] this->p_address;
+            this->p_address = NULL;
+        }
+    }
 
 private:
-	T * pAddress;  //指向一個堆空間，這個空間存儲真正的數據
-	int m_Capacity; //容量
-	int m_Size;   // 大小
+    T * p_address;  // 指針指向堆區開闢的真實數組
+    int m_capacity; // 數組容量
+    int m_size; // 數組大小
+};
+```
+main.cpp
+```C++
+# include <iostream>
+using namespace std;
+#include <typeinfo> 
+
+#include "myarray.hpp"
+
+void test01()
+{
+    MyArray<int>arr01(5);
+    MyArray<int>arr02(arr01);
+
+    MyArray<int>arr03(100);
+    arr03 = arr01;
+};
+
+
+int main()
+{
+    test01();
+}
+```
+
+輸出結果是：
+```
+MyArray的有參構造函數調用
+MyArray的拷貝構造函數調用
+MyArray的有參構造函數調用
+MyArray的 operator= 調用
+MyArray的析構函數調用
+MyArray的析構函數調用
+MyArray的析構函數調用
+```
+
+
+接著我們繼續修改裡面的代碼
+
+myArray.hpp中代碼
+
+```C++
+#pragma once
+# include <iostream>
+using namespace std;
+#include <typeinfo> 
+
+// 1. 創建類模板
+template<typename T>
+class MyArray
+{
+private:
+    T * p_address;  // 指針指向堆區開闢的真實數組
+    int m_capacity; // 數組容量
+    int m_size; // 數組大小
+    
+public:
+    // 2. 有參構造函數 
+    MyArray(int capacity) // 參數 容量
+    {
+        cout<<"MyArray的有參構造函數調用"<<endl;
+        this->m_capacity = capacity;  // 總共的Array容量
+        this->m_size = 0;  // Array 裡面現在佔滿幾個空間
+        this->p_address = new T[this->m_capacity];  // 開闢新的堆區
+    };
+
+    // 3. 拷貝構造函數
+    MyArray(const MyArray & arr)
+    {
+        cout<<"MyArray的拷貝構造函數調用"<<endl;
+        this->m_capacity = arr.m_capacity;
+        this->m_size = arr.m_size;
+
+        // 普通類型可以直接 = 但是指針類型需要深拷貝
+        //this->p_address = arr.p_address; // 指針不能附值給指針
+
+        // 深拷貝
+        this->p_address = new T[arr.m_capacity];
+
+        // 將arr中的數據都拷貝過來
+        for (int i = 0 ; i < this->m_size ; i++)
+        {
+            //如果T爲對象，而且還包含指針，必須需要重載 = 操作符，因爲這個等號不是 構造 而是賦值
+            this->p_address[i] = arr.p_address[i];
+        }
+    }
+
+    // 4. operator= 操作符 防止淺拷貝問題 
+    MyArray & operator=(const MyArray & arr)
+    {
+        cout<<"MyArray的 operator= 調用"<<endl;
+        // 先判斷原來堆區是否有數據，如果有，先釋放
+        if(this->p_address != NULL)
+        {
+            delete[] this->p_address;
+            this->p_address = NULL;
+            this->m_capacity = 0;
+            this->m_size = 0;
+        }
+
+        // 深拷貝
+        this->m_capacity = arr.m_capacity;
+        this->m_size = arr.m_size;
+        this->p_address = new T[arr.m_capacity];
+        for (int i = 0; i < this->m_size ; i++)
+        {
+            this->p_address[i] = arr.p_address[i];
+        }
+        return *this; // 因為這個函數是 MyArray 開頭，所以要返回自己
+    }
+
+    // 5. 尾插法
+    void PuahBack(const T & val) // 使用 const 是因為防止修改val
+    {
+        // 判斷容量是否等於大小
+        if(this->m_capacity == this->m_size)
+        {
+            return;
+        }
+        this->p_address[this->m_size] = val; // 在數組的末尾插入數據
+        this->m_size++; // 更新數組大小
+    }
+
+    // 6. 尾刪法
+    void PopBack()
+    {
+        //讓用戶訪問不到最後一個元素，即為尾刪，邏輯刪除
+        if (this->m_size == 0)
+        {
+            return;
+        }
+        this->m_size--;
+    }
+
+    // 7. 讓用戶通過下標的方式訪問數組中的元素 arr[0] = 100
+    T & operator[] (int index)
+    {
+        return this->p_address[index];
+    }
+
+    // 8. 返回數組容量
+    int GetCapacity()
+    {
+        return this->m_capacity;
+    }
+
+    // 9. 返回數組大小
+    int GetSize()
+    {
+        return this->m_size;
+    }
+
+    // 10. 設計PrintArray函數
+    void PrintArray()
+    {
+        for (int i = 0 ; i < this->m_size ; i++ )
+        {
+            cout<<this->p_address[i]<<endl;
+        }
+    }
+
+    // 11. 析構函數
+    ~MyArray()
+    {
+        cout<<"MyArray的析構函數調用"<<endl;
+        if (this->p_address != NULL)
+        {
+            delete[] this->p_address;
+            this->p_address = NULL;
+        }
+    }
 };
 ```
 
@@ -1585,97 +1785,96 @@ private:
 類模板案例—數組類封裝.cpp中
 
 ```C++
-#include "myArray.hpp"
-#include <string>
+# include <iostream>
+using namespace std;
+#include <typeinfo> 
 
-void printIntArray(MyArray<int>& arr) {
-	for (int i = 0; i < arr.getSize(); i++) {
-		cout << arr[i] << " ";
-	}
-	cout << endl;
-}
+#include "myarray.hpp"
 
-//測試內置數據類型
 void test01()
 {
-	MyArray<int> array1(10);
-	for (int i = 0; i < 10; i++)
-	{
-		array1.Push_back(i);
-	}
-	cout << "array1打印輸出：" << endl;
-	printIntArray(array1);
-	cout << "array1的大小：" << array1.getSize() << endl;
-	cout << "array1的容量：" << array1.getCapacity() << endl;
+    int capacity = 5;
 
-	cout << "--------------------------" << endl;
+    // 1. 查看構造函數是否啟用
+    MyArray<int>arr01(capacity);
+    // 2. 查看拷貝構造函數是否啟用
+    MyArray<int>arr02(arr01);
+    // 3. 查看 operator= 是否啟用
+    MyArray<int>arr03(100);
+    arr03 = arr01;
 
-	MyArray<int> array2(array1);
-	array2.Pop_back();
-	cout << "array2打印輸出：" << endl;
-	printIntArray(array2);
-	cout << "array2的大小：" << array2.getSize() << endl;
-	cout << "array2的容量：" << array2.getCapacity() << endl;
-}
+    // 4. 利用尾插法向數組中插入數據
+    for (int i = 0; i < capacity ; i++)
+    {
+        arr01.PuahBack(i);
+    }
+    
+    arr01.PrintArray();
+    cout<<"GetCapacity = "<<arr01.GetCapacity()<<endl;  
+    cout<<"GetSize = "<<arr01.GetSize()<<endl;
 
-//測試自定義數據類型
-class Person {
-public:
-	Person() {} 
-		Person(string name, int age) {
-		this->m_Name = name;
-		this->m_Age = age;
-	}
-public:
-	string m_Name;
-	int m_Age;
+
+    // 5. 利用尾刪法向數組中刪除數據
+    arr01.PopBack();
+    cout<<"尾刪後"<<endl; 
+    cout<<"GetCapacity = "<<arr01.GetCapacity()<<endl;  
+    cout<<"GetSize = "<<arr01.GetSize()<<endl;
 };
 
-void printPersonArray(MyArray<Person>& personArr)
+// 6. 測試自訂數據類型
+class Person
 {
-	for (int i = 0; i < personArr.getSize(); i++) {
-		cout << "姓名：" << personArr[i].m_Name << " 年齡： " << personArr[i].m_Age << endl;
-	}
+public:
+    Person(){} // 默認構造
+    Person(string name, int age) // 有參構造函數
+    {
+        this->m_age = age;
+        this->m_name = name;
+    }
+    string m_name;
+    int m_age;
+};
 
+// 7. 設計一個打印 Person 數據類型的函數
+void PrintPersonArray(MyArray<Person> & person_array)
+{
+    for (int i = 0 ; i < person_array.GetSize() ; i++ )
+    {
+        cout << "姓名：" << person_array[i].m_name << " 年齡： " << person_array[i].m_age << endl;
+    }
 }
 
 void test02()
 {
-	//創建數組
-	MyArray<Person> pArray(10);
-	Person p1("孫悟空", 30);
-	Person p2("韓信", 20);
-	Person p3("妲己", 18);
-	Person p4("王昭君", 15);
-	Person p5("趙雲", 24);
+    // 8. 創建一個 person 的 array
+    MyArray<Person> person_arr(10);
+    Person p1("孫悟空", 999);
+    Person p2("韓信", 20);
+    Person p3("流川風", 16);
+    Person p4("李佳惠", 24);
+    Person p5("趙雲", 30);
 
-	//插入數據
-	pArray.Push_back(p1);
-	pArray.Push_back(p2);
-	pArray.Push_back(p3);
-	pArray.Push_back(p4);
-	pArray.Push_back(p5);
+    // 9. 將數據插入到數組中
+    person_arr.PuahBack(p1);
+    person_arr.PuahBack(p2);
+    person_arr.PuahBack(p3);
+    person_arr.PuahBack(p4);
+    person_arr.PuahBack(p5);
 
-	printPersonArray(pArray);
+    // 10. 打印 Person 數據類型
+    PrintPersonArray(person_arr);
 
-	cout << "pArray的大小：" << pArray.getSize() << endl;
-	cout << "pArray的容量：" << pArray.getCapacity() << endl;
-
+	cout << "pArray的大小：" << person_arr.GetSize() << endl;
+	cout << "pArray的容量：" << person_arr.GetCapacity() << endl;
 }
 
-int main() {
-
-	//test01();
-
-	test02();
-
-	system("pause");
-
-	return 0;
+int main()
+{
+    test01();
 }
 ```
 
-總結：
+**總結：**
 
 能夠利用所學知識點實現通用的數組
 
