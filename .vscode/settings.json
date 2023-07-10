@@ -44,6 +44,7 @@
         "xutility": "cpp",
         "fstream": "cpp",
         "vector": "cpp",
-        "algorithm": "cpp"
+        "algorithm": "cpp",
+        "string": "cpp"
     }
 }
