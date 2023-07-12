@@ -390,7 +390,7 @@ int main() {
 
 ### 2.7 布爾類型 bool
 
-**作用：**布爾數據類型代表真或假的值 
+**作用**：布爾數據類型代表真或假的值 
 
 bool類型只有兩個值：
 
@@ -402,21 +402,32 @@ bool類型只有兩個值：
 示例：
 
 ```C++
+#include <iostream>
+using namespace std;
+#include <typeinfo>
+
 int main() {
 
 	bool flag = true;
-	cout << flag << endl; // 1
+	cout << "true = " <<flag << endl; // 1
 
 	flag = false;
-	cout << flag << endl; // 0
+	cout << "false = " << flag << endl; // 0
 
 	cout << "size of bool = " << sizeof(bool) << endl; //1
-	
+
+    cout << "flag 的數據類型為 = " <<typeid(flag).name() << endl;  // 需要 #include <typeinfo>
 
 	return 0;
 }
 ```
 
+```
+true = 1
+false = 0
+size of bool = 1
+flag 的數據類型為 = b
+```
 
 
 
@@ -435,9 +446,9 @@ int main() {
 
 **作用：用於從鍵盤獲取數據**
 
-**關鍵字：**cin
+**關鍵字**：cin
 
-**語法：** `cin >> 變量 `
+**語法**： `cin >> 變量 `
 
 示例：
 
