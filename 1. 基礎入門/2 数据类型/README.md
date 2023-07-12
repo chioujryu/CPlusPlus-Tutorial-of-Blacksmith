@@ -7,7 +7,7 @@ C++規定在創建一個變量或者常量時，必須要指定出相應的數�
 
 ### 2.1 整型
 
-**作用**：整型變量表示的是==整數類型==的數據
+**作用**：整型變量表示的是**整數類型**的數據
 
 C++中能夠表示整型的類型有以下幾種方式，**區別在於所佔內存空間不同**：
 
@@ -15,15 +15,9 @@ C++中能夠表示整型的類型有以下幾種方式，**區別在於所佔內
 | ------------------- | ----------------------------------------------- | ---------------- |
 | short(短整型)       | 2字節                                           | (-2^15 ~ 2^15-1) |
 | int(整型)           | 4字節                                           | (-2^31 ~ 2^31-1) |
+| unsigned int(無符號整型)  | 4字節                                           | (0 ~ 2^31-1) |
 | long(長整形)        | Windows為4字節，Linux為4字節(32位)，8字節(64位) | (-2^31 ~ 2^31-1) |
 | long long(長長整形) | 8字節                                           | (-2^63 ~ 2^63-1) |
-
-
-
-
-
-
-
 
 
 
@@ -48,21 +42,66 @@ int main() {
 
 	cout << "int 類型所佔內存空間為： " << sizeof(int) << endl;
 
-	cout << "float 類型所佔內存空間為： " << sizeof(float) << endl;
-
-	cout << "double 類型所佔內存空間為： " << sizeof(double) << endl;
-
 	cout << "long 類型所佔內存空間為： " << sizeof(long) << endl;
 
 	cout << "long long 類型所佔內存空間為： " << sizeof(long long) << endl;
 
+	cout << "\n"<< endl;
 
+	cout << "unsigned short 類型所佔內存空間為： " << sizeof(unsigned short) << endl;
+
+	cout << "unsigned int 類型所佔內存空間為： " << sizeof(unsigned int) << endl;
+
+	cout << "unsigned long 類型所佔內存空間為： " << sizeof(unsigned long) << endl;
+
+	cout << "unsigned long long 類型所佔內存空間為： " << sizeof(unsigned long long) << endl;
+
+	// 建議用下面方式來定義數據類型，因為這樣程式碼跨平台會比較不會有Bug
+
+	cout << "\n"<< endl;
+
+	cout << "int8_t 類型所佔內存空間為： " << sizeof(int8_t) << endl;
+
+	cout << "uint8_t 類型所佔內存空間為： " << sizeof(uint8_t) << endl;
+
+	cout << "int16_t 類型所佔內存空間為： " << sizeof(int16_t) << endl;
+
+	cout << "uint16_t 類型所佔內存空間為： " << sizeof(uint16_t) << endl;
+
+	cout << "int32_t 類型所佔內存空間為： " << sizeof(int32_t) << endl;
+
+	cout << "uint32_t 類型所佔內存空間為： " << sizeof(uint32_t) << endl;
+
+	cout << "int64_t 類型所佔內存空間為： " << sizeof(int64_t) << endl;
+
+	cout << "uint64_t 類型所佔內存空間為： " << sizeof(uint64_t) << endl;
 
 	return 0;
 }
 ```
 
+```
+short 類型所佔內存空間為： 2
+int 類型所佔內存空間為： 4
+long 類型所佔內存空間為： 4
+long long 類型所佔內存空間為： 8
 
+
+unsigned short 類型所佔內存空間為： 2
+unsigned int 類型所佔內存空間為： 4
+unsigned long 類型所佔內存空間為： 4
+unsigned long long 類型所佔內存空間為： 8
+
+
+int8_t 類型所佔內存空間為： 1
+uint8_t 類型所佔內存空間為： 1
+int16_t 類型所佔內存空間為： 2
+uint16_t 類型所佔內存空間為： 2
+int32_t 類型所佔內存空間為： 4
+uint32_t 類型所佔內存空間為： 4
+int64_t 類型所佔內存空間為： 8
+uint64_t 類型所佔內存空間為： 8
+```
 
 
 
@@ -129,7 +168,14 @@ int main() {
 }
 ```
 
-
+```
+3.14
+3.14
+float  sizeof = 4
+double sizeof = 8
+f2 = 300
+f3 = 0.03
+```
 
 
 
@@ -163,22 +209,32 @@ int main() {
 ```C++
 #include <iostream>
 using namespace std;
+#include <typeinfo>
 
 int main() {
 	
 	char ch = 'a';
-	cout << ch << endl;
-	cout << sizeof(char) << endl;
+	cout << "ch = " << ch << endl;
+	cout << "sizeof(char) = " <<sizeof(char) << endl;
+	cout << "ch 的數據類型為 = " <<typeid(ch).name() << endl;  // 需要 #include <typeinfo>
 
 	//ch = "abcde"; //錯誤，不可以用雙引號
 	//ch = 'abcde'; //錯誤，單引號內只能引用一個字符
 
 	cout << "'a'的 ASCII 碼 = " <<(int)ch << endl;  //查看字符a對應的ASCII碼
 	ch = 97; //可以直接用ASCII給字符型變量賦值
-	cout << ch << endl;
+	cout << "ch = 97時，ASCII碼為 " << ch << endl;
 
 	return 0;
 }
+```
+
+```
+ch = a
+sizeof(char) = 1
+ch 的數據類型為 = c
+'a'的 ASCII 碼 = 97
+ch = 97時，ASCII碼為 a
 ```
 
 ASCII碼錶格：
