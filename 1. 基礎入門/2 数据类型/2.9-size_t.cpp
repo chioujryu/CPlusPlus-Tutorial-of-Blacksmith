@@ -16,8 +16,8 @@ using namespace std;
 
 int main(void) {
     cout<< "size_t 的大小為 " <<sizeof(size_t)<<endl;
-    cout << "int数据类型最大值：" << (numeric_limits<size_t>::max)() << endl; 
-    cout << "int数据类型最大值：" << (numeric_limits<size_t>::min)() << endl;
+    cout << "size_t 数据类型最大值：" << (numeric_limits<size_t>::max)() << endl; 
+    cout << "size_t 数据类型最大值：" << (numeric_limits<size_t>::min)() << endl;
 
     //size_t 的大小這邊如果是 4 byte，代表可能是編譯器調整成 32 bit 了
 
