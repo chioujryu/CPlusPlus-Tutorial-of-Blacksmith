@@ -33,6 +33,8 @@ int main() {
 
 	cout << "uint16_t 類型所佔內存空間為： " << sizeof(uint16_t) << endl;
 
+	cout << "size_t 類型所佔內存空間為： " << sizeof(size_t) << endl;
+
 	cout << "int32_t 類型所佔內存空間為： " << sizeof(int32_t) << endl;
 
 	cout << "uint32_t 類型所佔內存空間為： " << sizeof(uint32_t) << endl;
