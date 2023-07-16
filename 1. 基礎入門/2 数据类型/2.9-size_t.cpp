@@ -27,5 +27,4 @@ int main(void) {
 
     cout<<ptr[-2]<<endl;
 
-    
 }

@@ -56,7 +56,7 @@ int main() {
 
 	cout << "unsigned long long 類型所佔內存空間為： " << sizeof(unsigned long long) << endl;
 
-	// 建議用下面方式來定義數據類型，因為這樣程式碼跨平台會比較不會有Bug
+	// 建議用下面方式來定義數據類型，因為這樣程式碼跨平臺會比較不會有Bug
 
 	cout << "\n"<< endl;
 
@@ -487,4 +487,295 @@ int main(){
 	system("pause");
 	return EXIT_SUCCESS;
 }
+```
+
+### 2.9 typedef size_t
+
+size_t的含義是size type，是一種計數類型。取值範圍與機器架構與操作系統相關。32 位機器一般是unsigned int，佔 4 字節；而 64 位機器一般是unsigned long，佔 8 字節。
+
+size_t類型常被用作計數用途，例如：sizeof運算符得到對象所佔的字節數；字符串函數strlen返回字符串的長度等等，其返回值都為size_t類型。
+
+size_t類型隱含著本機理論所能容納建立最大對象的字節數大小的含義，因此常被用於數組索引、內存管理函數中。
+
+最初設計size_t類型初衷，是為了程序的跨平臺兼容性考慮。
+
+在需要通過數組下標來訪問數組時，通常建議將下標定義size_t類型，因為一般來說在進行下標訪問時，下標都是正的。當然，也不是所有的下標訪問操作下標都是正的，比如以下代碼：
+
+示例：
+```c++
+#include <iostream>
+using namespace std;
+
+#include <limits>
+
+int main(void) {
+    cout<< "size_t 的大小為 " <<sizeof(size_t)<<endl;
+    cout << "int數據類型最大值：" << (numeric_limits<size_t>::max)() << endl; 
+    cout << "int數據類型最大值：" << (numeric_limits<size_t>::min)() << endl;
+
+    //size_t 的大小這邊如果是 4 byte，代表可能是編譯器調整成 32 bit 了
+
+    int a[10]={1,2,3,4,5,6,7,8,9,10};
+
+    int * ptr = &(a[4]);
+
+    cout<<ptr[-2]<<endl;
+
+}
+```
+
+### 2.10 所有數據類型統整
+```c++
+#include <iostream>
+using namespace std;
+
+#include <limits>
+
+#include <iomanip>
+
+#include <typeinfo>
+
+
+int main(void) {
+
+	//強制使用小數,防止使用科學計數法
+    //cout << fixed;
+
+    //控制顯示的精度，控制小數點後面的位數。而整數太大時也會使用科學計數法，要輸出完整的整數時就可以將下面改成setprecision(0)
+    // cout << setprecision(0);
+
+    cout << " *************** 浮點數 *************** "<< endl;
+	cout << "float 類型所佔內存空間為： " << sizeof(float) << endl;
+    cout << "float 數據類型最大值：" << (numeric_limits<float>::max)() << endl; 
+    cout << "float 數據類型最小值：" << (numeric_limits<float>::min)() << endl;
+
+    cout << "" << endl;
+
+	cout << "double 類型所佔內存空間為： " << sizeof(double) << endl;
+    cout << "double 數據類型最大值：" << (numeric_limits<double>::max)() << endl; 
+    cout << "double 數據類型最小值：" << (numeric_limits<double>::min)() << endl;
+
+    cout << "" << endl;
+
+	cout << "long double 類型所佔內存空間為： " << sizeof(long double) << endl;
+    cout << "long double 數據類型最大值：" << (numeric_limits<long double>::max)() << endl; 
+    cout << "long double 數據類型最小值：" << (numeric_limits<long double>::min)() << endl;
+
+	cout << "" << endl;
+
+    cout << " *************** 整數 *************** "<< endl;
+	cout << "short 類型所佔內存空間為： " << sizeof(short) << endl;
+    cout << "short 數據類型最大值：" << (numeric_limits<short>::max)() << endl; 
+    cout << "short 數據類型最小值：" << (numeric_limits<short>::min)() << endl;
+
+	cout << "" << endl;
+
+	cout << "unsigned short 類型所佔內存空間為： " << sizeof(unsigned short) << endl;
+    cout << "unsigned short 數據類型最大值：" << (numeric_limits<unsigned short>::max)() << endl; 
+    cout << "unsigned short 數據類型最小值：" << (numeric_limits<unsigned short>::min)() << endl;
+
+    cout << "" << endl;
+
+	cout << "int 類型所佔內存空間為： " << sizeof(int) << endl;
+    cout << "int 數據類型最大值：" << (numeric_limits<int>::max)() << endl; 
+    cout << "int 數據類型最小值：" << (numeric_limits<int>::min)() << endl;
+
+    cout << "" << endl;
+
+	cout << "unsigned int 類型所佔內存空間為： " << sizeof(unsigned int) << endl;
+    cout << "unsigned int 數據類型最大值：" << (numeric_limits<unsigned int>::max)() << endl; 
+    cout << "unsigned int 數據類型最小值：" << (numeric_limits<unsigned int>::min)() << endl;
+
+	cout << "" << endl;
+
+	cout << "long 類型所佔內存空間為： " << sizeof(long) << endl;
+    cout << "long 數據類型最大值：" << (numeric_limits<long>::max)() << endl; 
+    cout << "long 數據類型最小值：" << (numeric_limits<long>::min)() << endl;
+
+	cout << "" << endl;
+
+	cout << "unsigned long 類型所佔內存空間為： " << sizeof(unsigned long) << endl;
+    cout << "unsigned long 數據類型最大值：" << (numeric_limits<unsigned long>::max)() << endl; 
+    cout << "unsigned long 數據類型最小值：" << (numeric_limits<unsigned long>::min)() << endl;
+
+	cout << "" << endl;
+
+	cout << "long long 類型所佔內存空間為： " << sizeof(long long) << endl;
+    cout << "long long 數據類型最大值：" << (numeric_limits<long long>::max)() << endl; 
+    cout << "long long 數據類型最小值：" << (numeric_limits<long long>::min)() << endl;
+
+	cout << "" << endl;
+
+	cout << "unsigned long long 類型所佔內存空間為： " << sizeof(unsigned long long) << endl;
+    cout << "unsigned long long 數據類型最大值：" << (numeric_limits<unsigned long long>::max)() << endl; 
+    cout << "unsigned long long 數據類型最小值：" << (numeric_limits<unsigned long long>::min)() << endl;
+
+	cout << "\n"<< endl;
+
+	cout << " *************** typedef  *************** "<< endl;
+	// 建議用下面方式來定義數據類型，因為這樣程式碼跨平臺會比較不會有Bug
+	
+	cout << "int8_t 類型所佔內存空間為： " << sizeof(int8_t) << endl;
+	cout << "int8_t 的型別為： " << typeid(int8_t).name() << endl;
+
+	cout << "" << endl;
+
+	cout << "uint8_t 類型所佔內存空間為： " << sizeof(uint8_t) << endl;
+	cout << "uint8_t 的型別為： " << typeid(uint8_t).name() << endl;
+
+	cout << "" << endl;
+
+	cout << "int16_t 類型所佔內存空間為： " << sizeof(int16_t) << endl;
+    cout << "int16_t 數據類型最大值：" << (numeric_limits<int16_t>::max)() << endl; 
+    cout << "int16_t 數據類型最小值：" << (numeric_limits<int16_t>::min)() << endl;
+
+	cout << "" << endl;
+
+	cout << "uint16_t 類型所佔內存空間為： " << sizeof(uint16_t) << endl;
+    cout << "uint16_t 數據類型最大值：" << (numeric_limits<uint16_t>::max)() << endl; 
+    cout << "uint16_t 數據類型最小值：" << (numeric_limits<uint16_t>::min)() << endl;
+
+	cout << "" << endl;
+
+	cout << "size_t 類型所佔內存空間為： " << sizeof(size_t) << endl;
+    cout << "size_t 數據類型最大值：" << (numeric_limits<size_t>::max)() << endl; 
+    cout << "size_t 數據類型最小值：" << (numeric_limits<size_t>::min)() << endl;
+
+	cout << "" << endl;
+
+	cout << "int32_t 類型所佔內存空間為： " << sizeof(int32_t) << endl;
+    cout << "int32_t 數據類型最大值：" << (numeric_limits<int32_t>::max)() << endl; 
+    cout << "int32_t 數據類型最小值：" << (numeric_limits<int32_t>::min)() << endl;
+
+	cout << "" << endl;
+
+	cout << "uint32_t 類型所佔內存空間為： " << sizeof(uint32_t) << endl;
+    cout << "uint32_t 數據類型最大值：" << (numeric_limits<uint32_t>::max)() << endl; 
+    cout << "uint32_t 數據類型最小值：" << (numeric_limits<uint32_t>::min)() << endl;
+
+	cout << "" << endl;
+
+	cout << "int64_t 類型所佔內存空間為： " << sizeof(int64_t) << endl;
+    cout << "int64_t 數據類型最大值：" << (numeric_limits<int64_t>::max)() << endl; 
+    cout << "int64_t 數據類型最小值：" << (numeric_limits<int64_t>::min)() << endl;
+
+	cout << "" << endl;
+
+	cout << "uint64_t 類型所佔內存空間為： " << sizeof(uint64_t) << endl;
+    cout << "uint64_t 數據類型最大值：" << (numeric_limits<uint64_t>::max)() << endl; 
+    cout << "uint64_t 數據類型最小值：" << (numeric_limits<uint64_t>::min)() << endl;
+
+	cout << "" << endl;
+
+	cout << " *************** char  *************** "<< endl;
+
+	cout << "char 類型所佔內存空間為： " << sizeof(char) << endl;
+	cout << "string 類型所佔內存空間為： " << sizeof(string) << endl;
+
+	cout << "" << endl;
+
+	cout << " *************** bool  *************** "<< endl;
+    cout<< "bool 類型所佔內存空間為： " <<sizeof(bool)<<endl;
+    cout << "bool 數據類型最大值：" << (numeric_limits<bool>::max)() << endl; 
+    cout << "bool 數據類型最小值：" << (numeric_limits<bool>::min)() << endl;
+
+	cout << " *************** pointer  *************** "<< endl;
+    cout<< "pointer 類型所佔內存空間為： " <<sizeof(void *)<<endl;
+
+
+}
+```
+```
+ *************** 浮點數 *************** 
+float 類型所佔內存空間為： 4
+float 數據類型最大值：3.40282e+038
+float 數據類型最小值：1.17549e-038
+
+double 類型所佔內存空間為： 8
+double 數據類型最大值：1.79769e+308
+double 數據類型最小值：2.22507e-308
+
+long double 類型所佔內存空間為： 12
+long double 數據類型最大值：1.18973e+4932
+long double 數據類型最小值：3.3621e-4932
+
+ *************** 整數 *************** 
+short 類型所佔內存空間為： 2
+short 數據類型最大值：32767
+short 數據類型最小值：-32768
+
+unsigned short 類型所佔內存空間為： 2
+unsigned short 數據類型最大值：65535
+unsigned short 數據類型最小值：0
+
+int 類型所佔內存空間為： 4
+int 數據類型最大值：2147483647
+int 數據類型最小值：-2147483648
+
+unsigned int 類型所佔內存空間為： 4
+unsigned int 數據類型最大值：4294967295
+unsigned int 數據類型最小值：0
+
+long 類型所佔內存空間為： 4
+long 數據類型最大值：2147483647
+long 數據類型最小值：-2147483648
+
+unsigned long 類型所佔內存空間為： 4
+unsigned long 數據類型最大值：4294967295
+unsigned long 數據類型最小值：0
+
+long long 類型所佔內存空間為： 8
+long long 數據類型最大值：9223372036854775807
+long long 數據類型最小值：-9223372036854775808
+
+unsigned long long 類型所佔內存空間為： 8
+unsigned long long 數據類型最大值：18446744073709551615
+unsigned long long 數據類型最小值：0
+
+
+ *************** typedef  *************** 
+int8_t 類型所佔內存空間為： 1
+int8_t 的型別為： a
+
+uint8_t 類型所佔內存空間為： 1
+uint8_t 的型別為： h
+
+int16_t 類型所佔內存空間為： 2
+int16_t 數據類型最大值：32767
+int16_t 數據類型最小值：-32768
+
+uint16_t 類型所佔內存空間為： 2
+uint16_t 數據類型最大值：65535
+uint16_t 數據類型最小值：0
+
+size_t 類型所佔內存空間為： 4
+size_t 數據類型最大值：4294967295
+size_t 數據類型最小值：0
+
+int32_t 類型所佔內存空間為： 4
+int32_t 數據類型最大值：2147483647
+int32_t 數據類型最小值：-2147483648
+
+uint32_t 類型所佔內存空間為： 4
+uint32_t 數據類型最大值：4294967295
+uint32_t 數據類型最小值：0
+
+int64_t 類型所佔內存空間為： 8
+int64_t 數據類型最大值：9223372036854775807
+int64_t 數據類型最小值：-9223372036854775808
+
+uint64_t 類型所佔內存空間為： 8
+uint64_t 數據類型最大值：18446744073709551615
+uint64_t 數據類型最小值：0
+
+ *************** char  *************** 
+char 類型所佔內存空間為： 1
+string 類型所佔內存空間為： 24
+
+ *************** bool  *************** 
+bool 類型所佔內存空間為： 1
+bool 數據類型最大值：1
+bool 數據類型最小值：0
+ *************** pointer  *************** 
+pointer 類型所佔內存空間為： 4
 ```
